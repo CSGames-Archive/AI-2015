@@ -13,3 +13,5 @@
 *.sdf
 *.exe
 *.ilk
+*.ipch
+*.pch
