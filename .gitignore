@@ -11,3 +11,5 @@
 *.user
 *.opensdf
 *.sdf
+*.exe
+*.ilk
