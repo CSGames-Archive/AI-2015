@@ -1,0 +1,13 @@
+*.log
+*.lastbuildstate
+*.unsuccessfulbuild
+*.obj
+*.tlog
+*.idb
+*.pdb
+*.suo
+*.vcxproj
+*.filters
+*.user
+*.opensdf
+*.sdf
