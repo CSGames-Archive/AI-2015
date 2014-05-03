@@ -26,7 +26,6 @@ BaseApplication::BaseApplication(void)
     mResourcesCfg(Ogre::StringUtil::BLANK),
     mPluginsCfg(Ogre::StringUtil::BLANK),
     mTrayMgr(0),
-    mCameraMan(0),
     mDetailsPanel(0),
     mCursorWasVisible(false),
     mShutDown(false),
@@ -42,7 +41,6 @@ BaseApplication::~BaseApplication(void)
 {
 	//Fix for 1.9
 	if (mTrayMgr) delete mTrayMgr;
-    if (mCameraMan) delete mCameraMan;
 	if (mOverlaySystem) delete mOverlaySystem;
 
     //Remove ourself as a Window listener
@@ -79,20 +77,7 @@ void BaseApplication::chooseSceneManager(void)
     mOverlaySystem = new Ogre::OverlaySystem();
     mSceneMgr->addRenderQueueListener(mOverlaySystem);
 }
-//-------------------------------------------------------------------------------------
-void BaseApplication::createCamera(void)
-{
-    // Create the camera
-    mCamera = mSceneMgr->createCamera("PlayerCam");
 
-    // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0,0,80));
-    // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,0,-300));
-    mCamera->setNearClipDistance(5);
-
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
-}
 //-------------------------------------------------------------------------------------
 void BaseApplication::createFrameListener(void)
 {
@@ -244,7 +229,7 @@ bool BaseApplication::setup(void)
     if (!carryOn) return false;
 
     chooseSceneManager();
-    createCamera();
+    //createCamera();
     createViewports();
 
     // Set default mipmap level (NB some APIs ignore this)
