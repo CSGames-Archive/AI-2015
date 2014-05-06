@@ -2,13 +2,15 @@
 #define __Sinbad_H__
 
 #include "stdafx.h"
+#include <Terrain/OgreTerrain.h>
+#include <Terrain/OgreTerrainGroup.h>
 
 using namespace Ogre;
 
 #define NUM_ANIMS 13           // number of animations the character has
 #define CHAR_HEIGHT 5          // height of character's center of mass above ground
 #define CAM_HEIGHT 2           // height of camera above character's center of mass
-#define RUN_SPEED 17           // character running speed in units per second
+#define RUN_SPEED 50           // character running speed in units per second
 #define TURN_SPEED 500.0f      // character turning in degrees per second
 #define ANIM_FADE_SPEED 7.5f   // animation crossfade speed in % of full weight per second
 #define JUMP_ACCEL 30.0f       // character jump acceleration in upward units per squared second
@@ -41,8 +43,9 @@ private:
 
 public:
 	
-	SinbadCharacterController(Camera* cam)
+	SinbadCharacterController(Camera* cam, TerrainGroup* mTerrainGroup)
 	{
+		this->mTerrainGroup = mTerrainGroup;
 		setupBody(cam->getSceneManager());
 		setupCamera(cam);
 		setupAnimations();
@@ -161,9 +164,10 @@ private:
 	void setupBody(SceneManager* sceneMgr)
 	{
 		// create main model
-		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(Vector3::UNIT_Y * CHAR_HEIGHT);
+		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
 		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
+		updateHeight();
 
 		// create swords and attach to sheath
 		LogManager::getSingleton().logMessage("Creating swords");
@@ -276,6 +280,8 @@ private:
 			// move in current body direction (not the goal direction)
 			mBodyNode->translate(0, 0, deltaTime * RUN_SPEED * mAnims[mBaseAnimID]->getWeight(),
 				Node::TS_LOCAL);
+
+			updateHeight();
 		}
 
 		if (mBaseAnimID == ANIM_JUMP_LOOP)
@@ -294,6 +300,13 @@ private:
 				mTimer = 0;
 			}
 		}
+	}
+
+	void updateHeight()
+	{
+		Vector3 pos = mBodyNode->getPosition();
+		pos.y = mTerrainGroup->getHeightAtWorldPosition(pos,0) + CHAR_HEIGHT;
+		mBodyNode->setPosition(pos);
 	}
 
 	void updateAnimations(Real deltaTime)
@@ -521,6 +534,7 @@ private:
 	Vector3 mGoalDirection;     // actual intended direction in world-space
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
+	TerrainGroup* mTerrainGroup;
 };
 
 #endif

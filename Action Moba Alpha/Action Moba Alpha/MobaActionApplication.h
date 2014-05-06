@@ -16,11 +16,24 @@
 #define __MobaActionApplication_h_
 
 #include "stdafx.h"
+
+#include <Terrain/OgreTerrain.h>
+#include <Terrain/OgreTerrainGroup.h>
 #include "BaseApplication.h"
 #include "SinbadCharacterController.h"
 
 class MobaActionApplication : public BaseApplication
 {
+private:
+	Ogre::TerrainGlobalOptions* mTerrainGlobals;
+    Ogre::TerrainGroup* mTerrainGroup;
+    bool mTerrainsImported;
+	OgreBites::Label* mInfoLabel;
+
+	void defineTerrain(long x, long y);
+    void initBlendMaps(Ogre::Terrain* terrain);
+    void configureTerrainDefaults(Ogre::Light* light);
+
 public:
     MobaActionApplication(void);
     virtual ~MobaActionApplication(void);
@@ -33,6 +46,7 @@ protected:
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+	virtual void createFrameListener(void);
 
     // OIS::KeyListener
     virtual bool keyPressed( const OIS::KeyEvent &arg );
