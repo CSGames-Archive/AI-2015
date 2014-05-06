@@ -87,7 +87,7 @@ void MobaActionApplication::initBlendMaps(Ogre::Terrain* terrain)
 void MobaActionApplication::configureTerrainDefaults(Ogre::Light* light)
 {
 	// Configure global
-    mTerrainGlobals->setMaxPixelError(20);
+    mTerrainGlobals->setMaxPixelError(8);
     // testing composite map
     mTerrainGlobals->setCompositeMapDistance(3000);
 	//Light configuration
@@ -98,7 +98,7 @@ void MobaActionApplication::configureTerrainDefaults(Ogre::Light* light)
 	// Configure default import settings for if we use imported image
     Ogre::Terrain::ImportData& defaultimp = mTerrainGroup->getDefaultImportSettings();
     defaultimp.terrainSize = 513;
-    defaultimp.worldSize = 3000.0f;
+    defaultimp.worldSize = 12000.0f;
     defaultimp.inputScale = 600; // due terrain.png is 8 bpp
     defaultimp.minBatchSize = 33;
     defaultimp.maxBatchSize = 65;

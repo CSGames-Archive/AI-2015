@@ -10,7 +10,8 @@ using namespace Ogre;
 #define NUM_ANIMS 13           // number of animations the character has
 #define CHAR_HEIGHT 5          // height of character's center of mass above ground
 #define CAM_HEIGHT 2           // height of camera above character's center of mass
-#define RUN_SPEED 50           // character running speed in units per second
+#define WALK_SPEED 50          // character walking speed in units per second
+#define RUN_SPEED 100          // character running speed in units per second
 #define TURN_SPEED 500.0f      // character turning in degrees per second
 #define ANIM_FADE_SPEED 7.5f   // animation crossfade speed in % of full weight per second
 #define JUMP_ACCEL 30.0f       // character jump acceleration in upward units per squared second
@@ -45,10 +46,13 @@ public:
 	
 	SinbadCharacterController(Camera* cam, TerrainGroup* mTerrainGroup)
 	{
+		mCurrentSpeed = WALK_SPEED;
+
 		this->mTerrainGroup = mTerrainGroup;
 		setupBody(cam->getSceneManager());
 		setupCamera(cam);
 		setupAnimations();
+		updateHeight();
 	}
 
 	void addTime(Real deltaTime)
@@ -94,10 +98,13 @@ public:
 
 		else if (evt.key == OIS::KC_SPACE && (mTopAnimID == ANIM_IDLE_TOP || mTopAnimID == ANIM_RUN_TOP))
 		{
-			// jump if on ground
+			//Activate turbo boost
+			mCurrentSpeed = RUN_SPEED;
+			/*
 			setBaseAnimation(ANIM_JUMP_START, true);
 			setTopAnimation(ANIM_NONE);
 			mTimer = 0;
+			*/
 		}
 
 		if (!mKeyDirection.isZeroLength() && mBaseAnimID == ANIM_IDLE_BASE)
@@ -115,6 +122,11 @@ public:
 		else if (evt.key == OIS::KC_A && mKeyDirection.x == -1) mKeyDirection.x = 0;
 		else if (evt.key == OIS::KC_S && mKeyDirection.z == 1) mKeyDirection.z = 0;
 		else if (evt.key == OIS::KC_D && mKeyDirection.x == 1) mKeyDirection.x = 0;
+		else if (evt.key == OIS::KC_SPACE && (mTopAnimID == ANIM_IDLE_TOP || mTopAnimID == ANIM_RUN_TOP))
+		{
+			//Deactivate turbo speed
+			mCurrentSpeed = WALK_SPEED;
+		}
 
 		if (mKeyDirection.isZeroLength() && mBaseAnimID == ANIM_RUN_BASE)
 		{
@@ -167,7 +179,6 @@ private:
 		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
 		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
-		updateHeight();
 
 		// create swords and attach to sheath
 		LogManager::getSingleton().logMessage("Creating swords");
@@ -278,7 +289,7 @@ private:
 			mBodyNode->yaw(Degree(yawToGoal));
 
 			// move in current body direction (not the goal direction)
-			mBodyNode->translate(0, 0, deltaTime * RUN_SPEED * mAnims[mBaseAnimID]->getWeight(),
+			mBodyNode->translate(0, 0, deltaTime * mCurrentSpeed * mAnims[mBaseAnimID]->getWeight(),
 				Node::TS_LOCAL);
 
 			updateHeight();
@@ -515,6 +526,7 @@ private:
 		}
 	}
 
+	int mCurrentSpeed;
 	SceneNode* mBodyNode;
 	SceneNode* mCameraPivot;
 	SceneNode* mCameraGoal;
