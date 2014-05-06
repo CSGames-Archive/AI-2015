@@ -6,7 +6,6 @@
 *.idb
 *.pdb
 *.suo
-*.vcxproj
 *.filters
 *.user
 *.opensdf
