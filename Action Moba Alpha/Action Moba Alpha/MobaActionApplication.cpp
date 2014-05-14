@@ -176,6 +176,7 @@ void MobaActionApplication::createScene(void)
 
 	//Must be create after the terrain group
 	mChara = new SinbadCharacterController(mCamera, mTerrainGroup);
+	mNPC = new NPCController(mCamera, mTerrainGroup);
 }
 
 void MobaActionApplication::destroyScene(void)

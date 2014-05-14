@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="MobaActionApplication.h" />
     <ClInclude Include="SinbadCharacterController.h" />
     <ClInclude Include="stdafx.h" />
