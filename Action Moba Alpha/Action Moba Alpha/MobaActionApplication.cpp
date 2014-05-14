@@ -182,6 +182,13 @@ void MobaActionApplication::destroyScene(void)
 		delete mChara;
 		mChara = 0;
     }
+
+	if (mNPC)
+	{
+		delete mNPC;
+		mNPC = 0;
+    }
+
 	OGRE_DELETE mTerrainGroup;
     OGRE_DELETE mTerrainGlobals;
 }

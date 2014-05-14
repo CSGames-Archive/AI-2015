@@ -46,29 +46,38 @@ public:
 	{
 		mCurrentSpeed = WALK_SPEED;
 
+		this->mSceneMgr = sceneMgr;
 		this->mTerrainGroup = mTerrainGroup;
 		setupBody(sceneMgr);
 		setupAnimations();
 		updateHeight();
+
+		mKeyDirection.z = -1;
+		setBaseAnimation(ANIM_RUN_BASE, true);
+		setTopAnimation(ANIM_RUN_TOP, true);
 	}
 
 	void addTime(Real deltaTime)
 	{
+		stalkIt();
 		updateBody(deltaTime);
 		updateAnimations(deltaTime);
 	}
 
 	
 private:
-
+	void stalkIt()
+	{
+		Vector3 allo;
+		allo = mSceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition();
+	}
+	
 	void setupBody(SceneManager* sceneMgr)
 	{
 		// create main model
 		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
 		mBodyEnt = sceneMgr->createEntity("NPCBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
-
-		
 		mKeyDirection = Vector3::ZERO;
 		mVerticalVelocity = 0;
 	}
@@ -107,6 +116,8 @@ private:
 		if (mKeyDirection != Vector3::ZERO && mBaseAnimID != ANIM_DANCE)
 		{
 			// calculate actually goal direction in world based on player's key directions
+			
+			
 			mGoalDirection.y = 0;
 			mGoalDirection.normalise();
 
@@ -261,6 +272,8 @@ private:
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
 	TerrainGroup* mTerrainGroup;
+	SceneManager* mSceneMgr;
 };
+
 
 #endif
