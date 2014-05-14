@@ -45,6 +45,7 @@ public:
 	NPCController(SceneManager* sceneMgr, TerrainGroup* mTerrainGroup)
 	{
 		mCurrentSpeed = WALK_SPEED;
+		this->mSceneMgr = sceneMgr;
 
 		this->mTerrainGroup = mTerrainGroup;
 		setupBody(sceneMgr);
@@ -67,7 +68,6 @@ private:
 		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
 		mBodyEnt = sceneMgr->createEntity("NPCBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
-
 		mKeyDirection = Vector3::ZERO;
 		mVerticalVelocity = 0;
 	}
@@ -317,6 +317,7 @@ private:
 
 	int mCurrentSpeed;
 	SceneNode* mBodyNode;
+	SceneManager* mSceneMgr;
 	Real mPivotPitch;
 	Entity* mBodyEnt;
 	Entity* mSword1;
