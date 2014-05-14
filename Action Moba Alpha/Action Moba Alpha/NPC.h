@@ -42,12 +42,12 @@ private:
 
 public:
 	
-	NPCController(TerrainGroup* mTerrainGroup)
+	NPCController(SceneManager* sceneMgr, TerrainGroup* mTerrainGroup)
 	{
 		mCurrentSpeed = WALK_SPEED;
 
 		this->mTerrainGroup = mTerrainGroup;
-		setupBody();
+		setupBody(sceneMgr);
 		setupAnimations();
 		updateHeight();
 	}
@@ -65,23 +65,10 @@ private:
 	{
 		// create main model
 		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
-		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
+		mBodyEnt = sceneMgr->createEntity("NPCBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
 
-		// create swords and attach to sheath
-		LogManager::getSingleton().logMessage("Creating swords");
-		mSword1 = sceneMgr->createEntity("SinbadSword1", "Sword.mesh");
-		mSword2 = sceneMgr->createEntity("SinbadSword2", "Sword.mesh");
-		mBodyEnt->attachObjectToBone("Sheath.L", mSword1);
-		mBodyEnt->attachObjectToBone("Sheath.R", mSword2);
-
-		LogManager::getSingleton().logMessage("Creating the chains");
-		// create a couple of ribbon trails for the swords, just for fun
-		NameValuePairList params;
-		params["numberOfChains"] = "2";
-		params["maxElements"] = "80";
-		mSwordTrail = (RibbonTrail*)sceneMgr->createMovableObject("RibbonTrail", &params);
-
+		
 		mKeyDirection = Vector3::ZERO;
 		mVerticalVelocity = 0;
 	}
@@ -110,8 +97,7 @@ private:
 
 		// relax the hands since we're not holding anything
 		mAnims[ANIM_HANDS_RELAXED]->setEnabled(true);
-
-		mSwordsDrawn = false;
+		
 	}
 
 	void updateBody(Real deltaTime)
@@ -178,79 +164,7 @@ private:
 
 		mTimer += deltaTime;
 
-		if (mTopAnimID == ANIM_DRAW_SWORDS)
-		{
-			// flip the draw swords animation if we need to put it back
-			topAnimSpeed = mSwordsDrawn ? -1 : 1;
-
-			// half-way through the animation is when the hand grasps the handles...
-			if (mTimer >= mAnims[mTopAnimID]->getLength() / 2 &&
-				mTimer - deltaTime < mAnims[mTopAnimID]->getLength() / 2)
-			{
-				// so transfer the swords from the sheaths to the hands
-				mBodyEnt->detachAllObjectsFromBone();
-				mBodyEnt->attachObjectToBone(mSwordsDrawn ? "Sheath.L" : "Handle.L", mSword1);
-				mBodyEnt->attachObjectToBone(mSwordsDrawn ? "Sheath.R" : "Handle.R", mSword2);
-				// change the hand state to grab or let go
-				mAnims[ANIM_HANDS_CLOSED]->setEnabled(!mSwordsDrawn);
-				mAnims[ANIM_HANDS_RELAXED]->setEnabled(mSwordsDrawn);
-			}
-
-			if (mTimer >= mAnims[mTopAnimID]->getLength())
-			{
-				// animation is finished, so return to what we were doing before
-				if (mBaseAnimID == ANIM_IDLE_BASE) setTopAnimation(ANIM_IDLE_TOP);
-				else
-				{
-					setTopAnimation(ANIM_RUN_TOP);
-					mAnims[ANIM_RUN_TOP]->setTimePosition(mAnims[ANIM_RUN_BASE]->getTimePosition());
-				}
-				mSwordsDrawn = !mSwordsDrawn;
-			}
-		}
-		else if (mTopAnimID == ANIM_SLICE_VERTICAL || mTopAnimID == ANIM_SLICE_HORIZONTAL)
-		{
-			if (mTimer >= mAnims[mTopAnimID]->getLength())
-			{
-				// animation is finished, so return to what we were doing before
-				if (mBaseAnimID == ANIM_IDLE_BASE) setTopAnimation(ANIM_IDLE_TOP);
-				else
-				{
-					setTopAnimation(ANIM_RUN_TOP);
-					mAnims[ANIM_RUN_TOP]->setTimePosition(mAnims[ANIM_RUN_BASE]->getTimePosition());
-				}
-			}
-
-			// don't sway hips from side to side when slicing. that's just embarrassing.
-			if (mBaseAnimID == ANIM_IDLE_BASE) baseAnimSpeed = 0;
-		}
-		else if (mBaseAnimID == ANIM_JUMP_START)
-		{
-			if (mTimer >= mAnims[mBaseAnimID]->getLength())
-			{
-				// takeoff animation finished, so time to leave the ground!
-				setBaseAnimation(ANIM_JUMP_LOOP, true);
-				// apply a jump acceleration to the character
-				mVerticalVelocity = JUMP_ACCEL;
-			}
-		}
-		else if (mBaseAnimID == ANIM_JUMP_END)
-		{
-			if (mTimer >= mAnims[mBaseAnimID]->getLength())
-			{
-				// safely landed, so go back to running or idling
-				if (mKeyDirection == Vector3::ZERO)
-				{
-					setBaseAnimation(ANIM_IDLE_BASE);
-					setTopAnimation(ANIM_IDLE_TOP);
-				}
-				else
-				{
-					setBaseAnimation(ANIM_RUN_BASE, true);
-					setTopAnimation(ANIM_RUN_TOP, true);
-				}
-			}
-		}
+		
 
 		// increment the current base and top animation times
 		if (mBaseAnimID != ANIM_NONE) mAnims[mBaseAnimID]->addTime(deltaTime * baseAnimSpeed);
