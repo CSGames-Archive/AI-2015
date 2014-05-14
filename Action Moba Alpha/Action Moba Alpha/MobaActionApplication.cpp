@@ -138,7 +138,7 @@ void MobaActionApplication::createScene(void)
 	plane.d = 1000;
 	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-
+	//
 	//Setup the terrain
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 	
@@ -242,7 +242,6 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     {
         mChara->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
 		mNPC->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
-
         if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
         {
             mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
