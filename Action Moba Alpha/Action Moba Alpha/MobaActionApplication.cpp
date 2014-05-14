@@ -139,10 +139,6 @@ void MobaActionApplication::createScene(void)
 	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
-	//LogManager::getSingleton().logMessage("creating sinbad");
-	//mChara = new SinbadCharacterController(mCamera, mTerrainGroup);
-
-	//
 	//Setup the terrain
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 	
@@ -176,7 +172,7 @@ void MobaActionApplication::createScene(void)
 
 	//Must be create after the terrain group
 	mChara = new SinbadCharacterController(mCamera, mTerrainGroup);
-	mNPC = new NPCController(mCamera, mTerrainGroup);
+	mNPC = new NPCController(mSceneMgr, mTerrainGroup);
 }
 
 void MobaActionApplication::destroyScene(void)
@@ -186,6 +182,13 @@ void MobaActionApplication::destroyScene(void)
 		delete mChara;
 		mChara = 0;
     }
+
+	if (mNPC)
+	{
+		delete mNPC;
+		mNPC = 0;
+    }
+
 	OGRE_DELETE mTerrainGroup;
     OGRE_DELETE mTerrainGlobals;
 }
@@ -238,6 +241,8 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if (!mTrayMgr->isDialogVisible())
     {
         mChara->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
+		mNPC->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
+
         if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
         {
             mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
