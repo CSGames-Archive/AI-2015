@@ -45,8 +45,8 @@ public:
 	NPCController(SceneManager* sceneMgr, TerrainGroup* mTerrainGroup)
 	{
 		mCurrentSpeed = WALK_SPEED;
-
 		this->mSceneMgr = sceneMgr;
+
 		this->mTerrainGroup = mTerrainGroup;
 		setupBody(sceneMgr);
 		setupAnimations();
@@ -254,6 +254,7 @@ private:
 
 	int mCurrentSpeed;
 	SceneNode* mBodyNode;
+	SceneManager* mSceneMgr;
 	Real mPivotPitch;
 	Entity* mBodyEnt;
 	Entity* mSword1;
@@ -270,7 +271,6 @@ private:
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
 	TerrainGroup* mTerrainGroup;
-	SceneManager* mSceneMgr;
 };
 
 
