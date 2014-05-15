@@ -47,7 +47,6 @@ public:
 		mCurrentSpeed = WALK_SPEED;
 		this->mSceneMgr = sceneMgr;
 
-		this->mSceneMgr = sceneMgr;
 		this->mTerrainGroup = mTerrainGroup;
 		setupBody(sceneMgr);
 		setupAnimations();
@@ -274,7 +273,6 @@ private:
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
 	TerrainGroup* mTerrainGroup;
-	SceneManager* mSceneMgr;
 };
 
 
