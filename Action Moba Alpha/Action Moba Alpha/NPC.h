@@ -68,8 +68,6 @@ public:
 private:
 	void stalkIt()
 	{
-		Vector3 allo;
-		allo = mSceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition();
 	}
 	
 	void setupBody(SceneManager* sceneMgr)
@@ -117,7 +115,7 @@ private:
 		{
 			// calculate actually goal direction in world based on player's key directions
 			
-			
+			mGoalDirection = mSceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition() - mSceneMgr->getEntity("NPCBody")->getParentNode()->getPosition();
 			mGoalDirection.y = 0;
 			mGoalDirection.normalise();
 
