@@ -68,6 +68,18 @@ public:
 private:
 	void stalkIt()
 	{
+		if (!mKeyDirection.isZeroLength() && mBaseAnimID == ANIM_IDLE_BASE)
+		{
+			// start running if not already moving and the player wants to move
+			setBaseAnimation(ANIM_RUN_BASE, true);
+			if (mTopAnimID == ANIM_IDLE_TOP) setTopAnimation(ANIM_RUN_TOP, true);
+		}
+		else if (mKeyDirection.isZeroLength() && mBaseAnimID == ANIM_RUN_BASE)
+		{
+			// stop running if already moving and the player doesn't want to move
+			setBaseAnimation(ANIM_IDLE_BASE);
+			if (mTopAnimID == ANIM_RUN_TOP) setTopAnimation(ANIM_IDLE_TOP);
+		}
 	}
 	
 	void setupBody(SceneManager* sceneMgr)
@@ -109,15 +121,20 @@ private:
 
 	void updateBody(Real deltaTime)
 	{
-		mGoalDirection = Vector3::ZERO;   // we will calculate this
+		mGoalDirection = mSceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition() - mSceneMgr->getEntity("NPCBody")->getParentNode()->getPosition();
+		if(mGoalDirection.length() < (Real)15)
+		{
+			mKeyDirection = Vector3::ZERO;
+		}
+		else
+		{
+			mGoalDirection.normalise();
+			mKeyDirection = mKeyDirection.z = -1;
+		}
 
 		if (mKeyDirection != Vector3::ZERO && mBaseAnimID != ANIM_DANCE)
 		{
 			// calculate actually goal direction in world based on player's key directions
-			
-			mGoalDirection = mSceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition() - mSceneMgr->getEntity("NPCBody")->getParentNode()->getPosition();
-			mGoalDirection.y = 0;
-			mGoalDirection.normalise();
 
 			Quaternion toGoal = mBodyNode->getOrientation().zAxis().getRotationTo(mGoalDirection);
 
