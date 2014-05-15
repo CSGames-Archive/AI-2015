@@ -180,6 +180,8 @@ private:
 		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
 
+		sceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition();
+
 		// create swords and attach to sheath
 		LogManager::getSingleton().logMessage("Creating swords");
 		mSword1 = sceneMgr->createEntity("SinbadSword1", "Sword.mesh");

@@ -21,6 +21,7 @@
 #include <Terrain/OgreTerrainGroup.h>
 #include "BaseApplication.h"
 #include "SinbadCharacterController.h"
+#include "NPC.h"
 
 class MobaActionApplication : public BaseApplication
 {
@@ -55,8 +56,9 @@ protected:
     virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
-
+	
 	SinbadCharacterController* mChara;
+	NPCController* mNPC;
 };
 
 #endif // #ifndef __MobaActionApplication_h_
