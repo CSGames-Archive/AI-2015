@@ -103,13 +103,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost;$(OGRE_HOME)\include\OGRE\Overlay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;C:\Program Files\boost\boost_1_55_0;$(OGRE_HOME)\include\OGRE\Overlay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OGRE_HOME)\lib\$(Configuration);$(OGRE_HOME)\boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OGRE_HOME)\lib\$(Configuration);C:\Program Files\boost\boost_1_55_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;OgreOverlay_d.lib;OgreTerrain_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -165,11 +165,19 @@
   <ItemGroup>
     <ClCompile Include="AICompetitionApplication.cpp" />
     <ClCompile Include="BaseApplication.cpp" />
+    <ClCompile Include="NetCommandController.cpp" />
+    <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="NetPlayerController.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AICompetitionApplication.h" />
     <ClInclude Include="BaseApplication.h" />
+    <ClInclude Include="NetCommandController.h" />
+    <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="NetPlayerController.h" />
+    <ClInclude Include="NetworkController.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="SinbadCharacterController.h" />
     <ClInclude Include="stdafx.h" />

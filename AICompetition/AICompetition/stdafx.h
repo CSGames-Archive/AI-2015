@@ -1,5 +1,13 @@
 // stdafx.h
- 
+
+//Remove warning for Boost library
+#define NOMINMAX
+
+// Boost
+#include <boost/asio.hpp>
+#include <boost/array.hpp>
+#include <boost/thread.hpp>
+
 // Ogre headers you need
 #include <OgreException.h>
 #include <OgreRoot.h>
@@ -10,7 +18,7 @@
 #include <OgreRenderWindow.h>
 #include <OgreEntity.h>
 #include <OgreWindowEventUtilities.h>
- 
+
 // any other header can be included, as usual
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

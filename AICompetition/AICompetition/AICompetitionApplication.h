@@ -17,11 +17,14 @@
 
 #include "stdafx.h"
 
+#include "NetworkController.h"
+
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
 #include "BaseApplication.h"
 #include "SinbadCharacterController.h"
 #include "NPC.h"
+#include "NetPlayerController.h"
 
 class MobaActionApplication : public BaseApplication
 {
@@ -34,6 +37,10 @@ private:
 	void defineTerrain(long x, long y);
     void initBlendMaps(Ogre::Terrain* terrain);
     void configureTerrainDefaults(Ogre::Light* light);
+
+	// Networking
+	NetworkController netController;
+	NetPlayerController netPlayerController;
 
 public:
     MobaActionApplication(void);
