@@ -13,7 +13,7 @@
 ** -------------------------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "MobaActionApplication.h"
+#include "AICompetitionApplication.h"
 
 //-------------------------------------------------------------------------------------
 MobaActionApplication::MobaActionApplication(void)

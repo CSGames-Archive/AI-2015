@@ -163,14 +163,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AICompetitionApplication.cpp" />
     <ClCompile Include="BaseApplication.cpp" />
-    <ClCompile Include="MobaActionApplication.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AICompetitionApplication.h" />
     <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="NPC.h" />
-    <ClInclude Include="MobaActionApplication.h" />
     <ClInclude Include="SinbadCharacterController.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
