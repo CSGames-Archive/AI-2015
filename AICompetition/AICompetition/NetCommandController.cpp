@@ -36,7 +36,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		break;
 
 	case Command::WaitingPosX:
-		for (int i = strlen(token)-1; i > 0; i--)
+		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
 				bIsDigit = false;
@@ -45,7 +45,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.x = atoi(token);
+			position.x = Ogre::Real(atoi(token));
 			mState = Command::WaitingPosY;
 		}
 		else
@@ -55,7 +55,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		break;
 
 	case Command::WaitingPosY:
-		for (int i = strlen(token)-1; i > 0; i--)
+		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
 				bIsDigit = false;
@@ -64,7 +64,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.z = atoi(token);
+			position.z = Ogre::Real(atoi(token));
 			mState = Command::WaitingId;
 		}
 		else
@@ -74,7 +74,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		break;
 
 	case Command::WaitingId:
-		for (int i = strlen(token)-1; i > 0; i--)
+		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
 				bIsDigit = false;
