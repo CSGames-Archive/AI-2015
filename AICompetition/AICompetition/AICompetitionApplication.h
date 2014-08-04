@@ -23,7 +23,6 @@
 #include <Terrain/OgreTerrainGroup.h>
 #include "BaseApplication.h"
 #include "SinbadCharacterController.h"
-#include "NPC.h"
 #include "NetPlayerController.h"
 
 class MobaActionApplication : public BaseApplication
@@ -65,7 +64,6 @@ protected:
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
 	
 	SinbadCharacterController* mChara;
-	NPCController* mNPC;
 };
 
 #endif // #ifndef __MobaActionApplication_h_

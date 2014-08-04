@@ -178,7 +178,6 @@
     <ClInclude Include="NetPlayer.h" />
     <ClInclude Include="NetPlayerController.h" />
     <ClInclude Include="NetworkController.h" />
-    <ClInclude Include="NPC.h" />
     <ClInclude Include="SinbadCharacterController.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

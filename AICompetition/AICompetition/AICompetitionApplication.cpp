@@ -173,7 +173,6 @@ void MobaActionApplication::createScene(void)
 
 	//Must be create after the terrain group
 	mChara = new SinbadCharacterController(mCamera, mTerrainGroup, &netController);
-	mNPC = new NPCController(mSceneMgr, mTerrainGroup);
 }
 
 void MobaActionApplication::destroyScene(void)
@@ -182,12 +181,6 @@ void MobaActionApplication::destroyScene(void)
 	{
 		delete mChara;
 		mChara = 0;
-	}
-
-	if (mNPC)
-	{
-		delete mNPC;
-		mNPC = 0;
 	}
 
 	OGRE_DELETE mTerrainGroup;
@@ -247,7 +240,7 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	if (!mTrayMgr->isDialogVisible())
 	{
 		mChara->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
-		mNPC->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
+
 		// Update Net Players
 		netPlayerController.addTime(evt.timeSinceLastFrame);
 
