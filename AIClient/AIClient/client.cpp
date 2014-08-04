@@ -8,12 +8,6 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		//if (argc != 2)
-		//{
-		//	std::cerr << "Usage: client <host> <port>" << std::endl;
-		//	return 1;
-		//}
-
 		for(int i = 0; i < argc; i++)
 			printf("arg %d: %s\n", i, argv[i]);
 
@@ -51,6 +45,6 @@ int main(int argc, char* argv[])
 	}
 	catch (std::exception& e)
 	{
-	
+		std::cout << e.what() << std::endl;
 	}
 }
