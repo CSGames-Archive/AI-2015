@@ -6,29 +6,34 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
-** The Character that is controlled by the AI
+** GameMap.h
+** Map that contain all the objet
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetCharacter_h_
-#define __NetCharacter_h_
+#ifndef __GameMap_h_
+#define __GameMap_h_
 
 #include <iostream>
+#include <map>
 
-class NetCharacter
+#include "Player.h"
+
+class GameMap
 {
 private:
-	std::string tagName;
-	double x;
-	double y;
+	std::map<int, Player*> players;
+	int yourId;
+	int opponentId;
 
 public:
-	NetCharacter();
-	NetCharacter(std::string tagName, double x, double y);
-	~NetCharacter();
-	void moveCharacter(double x, double y);
+	GameMap();
+	~GameMap();
+	void printSelf();
+	void addPlayer(int id, std::string playerName, std::string characterNames[maxCharacter]);
+	void quitPlayer(int id);
+	void moveCharacter(int playerId, int characterId, double x, double y);
 };
 
-#endif // #ifndef __NetCharacter_h_
+#endif // #ifndef __GameMap_h_

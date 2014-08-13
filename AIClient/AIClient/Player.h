@@ -6,29 +6,34 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
-** The Character that is controlled by the AI
+** Player.h
+** The player that controle a character team
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetCharacter_h_
-#define __NetCharacter_h_
+#ifndef __Player_h_
+#define __Player_h_
 
 #include <iostream>
+#include <map>
 
-class NetCharacter
+#include "Character.h"
+
+#define maxCharacter 2
+
+class Player
 {
 private:
 	std::string tagName;
-	double x;
-	double y;
+	std::map<int, Character*> characters;
 
 public:
-	NetCharacter();
-	NetCharacter(std::string tagName, double x, double y);
-	~NetCharacter();
-	void moveCharacter(double x, double y);
+	Player();
+	Player(std::string tagName, std::string characterNames[maxCharacter]);
+	~Player();
+	void printSelf();
+	void moveCharacter(int id, double x, double y);
 };
 
-#endif // #ifndef __NetCharacter_h_
+#endif // #ifndef __Player_h_

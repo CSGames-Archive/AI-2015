@@ -1,47 +1,53 @@
-#include <iostream>
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
+**
+** Main.cpp
+** The main function to test the ai client
+**
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
-using boost::asio::ip::tcp;
+#include <iostream>
+
+#include "NetworkController.h"
+#include "GameMap.h"
 
 int main(int argc, char* argv[])
 {
 	try
 	{
-		boost::asio::io_service io_service;
-		tcp::resolver resolver(io_service);
+		GameMap gameMap;
+		NetworkController netController(&gameMap);
 
-		tcp::resolver::query query("localhost", "1337");
+		netController.init();
 
-		tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
-		tcp::socket socket(io_service);
-		boost::asio::connect(socket, endpoint_iterator);
+		bool exit = false;
 
-		std::string message = "Test";
-		boost::system::error_code ignored_error;
-		boost::asio::write(socket, boost::asio::buffer(message),
-						   boost::asio::transfer_all(), ignored_error);
+		std::string message = "";
 
-		for (;;)
+		while(!exit)
 		{
-			//Buffer used to catch the message
-			boost::array<char, 128> buf;
-			boost::system::error_code error;
+			std::cin >> message;
 
-			//we read the buffer to put the message in the buffer
-			size_t len = socket.read_some(boost::asio::buffer(buf), error);
-
-			if (error == boost::asio::error::eof)
-				break; // Connection closed cleanly by peer.
-			else if (error)
-				throw boost::system::system_error(error); // Some other error.
-
-			//We show what's in the buffer
-			std::cout.write(buf.data(), len);
+			if(message == "exit")
+			{
+				exit = true;
+			}
+			else
+			{
+				netController.addMessageToQueue(message);
+			}
 		}
+
+		netController.close();
 	}
 	catch (std::exception& e)
 	{
-		std::cout << e.what() << std::endl;
+		printf("Exception in main : %s\n", e.what());
 	}
 }

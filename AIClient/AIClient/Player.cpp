@@ -6,29 +6,46 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
-** The Character that is controlled by the AI
+** Player.cpp
+** Implementation of the Player
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetCharacter_h_
-#define __NetCharacter_h_
+#include "Player.h"
 
-#include <iostream>
-
-class NetCharacter
+Player::Player()
 {
-private:
-	std::string tagName;
-	double x;
-	double y;
+	this->tagName = "NoName";
 
-public:
-	NetCharacter();
-	NetCharacter(std::string tagName, double x, double y);
-	~NetCharacter();
-	void moveCharacter(double x, double y);
-};
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		characters[i] = new Character("NoName", 0, 0);
+	}
+}
 
-#endif // #ifndef __NetCharacter_h_
+Player::Player(std::string tagName, std::string characterNames[maxCharacter])
+{
+	this->tagName = "NoName";
+
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		characters[i] = new Character(characterNames[i], 0, 0);
+	}
+}
+
+Player::~Player()
+{
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		if(characters[i])
+		{
+			delete characters[i];
+		}
+	}
+}
+
+void Player::moveCharacter(int id, double x, double y)
+{
+	characters[id]->moveCharacter(x, y);
+}

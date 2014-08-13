@@ -6,29 +6,32 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
-** The Character that is controlled by the AI
+** Character.h
+** Implementation of the Character
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetCharacter_h_
-#define __NetCharacter_h_
+#include "Character.h"
 
-#include <iostream>
-
-class NetCharacter
+Character::Character()
 {
-private:
-	std::string tagName;
-	double x;
-	double y;
 
-public:
-	NetCharacter();
-	NetCharacter(std::string tagName, double x, double y);
-	~NetCharacter();
-	void moveCharacter(double x, double y);
-};
+}
 
-#endif // #ifndef __NetCharacter_h_
+Character::Character(std::string tagName, double x, double y)
+{
+	this->tagName = tagName;
+	moveCharacter(x, y);
+}
+
+Character::~Character()
+{
+
+}
+
+void Character::moveCharacter(double x, double y)
+{
+	this->x = x;
+	this->y = y;
+}

@@ -47,5 +47,5 @@ NetPlayer::~NetPlayer()
 
 void NetPlayer::moveCharacter(int id, double x, double y)
 {
-	netCharacters[id]->movePlayer(x, y);
+	netCharacters[id]->moveCharacter(x, y);
 }

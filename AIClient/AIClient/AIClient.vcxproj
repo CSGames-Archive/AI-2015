@@ -146,6 +146,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="NetCommandController.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="GameMap.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameMap.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="NetCommandController.h" />
+    <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
