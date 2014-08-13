@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
+#include "NetworkController.h"
 
 using namespace Ogre;
 
@@ -43,16 +44,23 @@ private:
 	};
 
 public:
-	
-	SinbadCharacterController(Camera* cam, TerrainGroup* mTerrainGroup)
+
+	SinbadCharacterController(Camera* cam, TerrainGroup* mTerrainGroup, NetworkController* netController)
 	{
 		mCurrentSpeed = WALK_SPEED;
 
 		this->mTerrainGroup = mTerrainGroup;
+		this->netController = netController;
 		setupBody(cam->getSceneManager());
 		setupCamera(cam);
 		setupAnimations();
 		updateHeight();
+		oldPosition = getEntityPosition();
+	}
+
+	Vector3 getEntityPosition()
+	{
+		return mBodyNode->getPosition();
 	}
 
 	void addTime(Real deltaTime)
@@ -100,12 +108,7 @@ public:
 		{
 			//Activate turbo boost
 			mCurrentSpeed = RUN_SPEED;
-			/*
-			setBaseAnimation(ANIM_JUMP_START, true);
-			setTopAnimation(ANIM_NONE);
-			mTimer = 0;
-			*/
-		}
+		} 
 
 		if (!mKeyDirection.isZeroLength() && mBaseAnimID == ANIM_IDLE_BASE)
 		{
@@ -148,7 +151,7 @@ public:
 		if (mSwordsDrawn && (mTopAnimID == ANIM_IDLE_TOP || mTopAnimID == ANIM_RUN_TOP))
 		{
 			// if swords are out, and character's not doing something weird, then SLICE!
-            setTopAnimation(ANIM_SLICE_VERTICAL, true);
+			setTopAnimation(ANIM_SLICE_VERTICAL, true);
 			mTimer = 0;
 		}
 	}
@@ -180,8 +183,6 @@ private:
 		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
 
-		sceneMgr->getEntity("SinbadBody")->getParentNode()->getPosition();
-
 		// create swords and attach to sheath
 		LogManager::getSingleton().logMessage("Creating swords");
 		mSword1 = sceneMgr->createEntity("SinbadSword1", "Sword.mesh");
@@ -203,7 +204,7 @@ private:
 
 		for (int i = 0; i < 2; i++)
 		{
-			mSwordTrail->setInitialColour(i, 1, 0.8, 0);
+			mSwordTrail->setInitialColour(i, Ogre::Real(1), Ogre::Real(0.8), Ogre::Real(0));
 			mSwordTrail->setColourChange(i, 0.75, 1.25, 1.25, 1.25);
 			mSwordTrail->setWidthChange(i, 1);
 			mSwordTrail->setInitialWidth(i, 0.5);
@@ -256,7 +257,7 @@ private:
 		mCameraNode->setFixedYawAxis(true);
 
 		// our model is quite small, so reduce the clipping planes
-		cam->setNearClipDistance(0.1);
+		cam->setNearClipDistance(Ogre::Real(0.1));
 		cam->setFarClipDistance(CAMERA_CLIP_FAR);
 		mCameraNode->attachObject(cam);
 
@@ -287,7 +288,7 @@ private:
 			// turn as much as we can, but not more than we need to
 			if (yawToGoal < 0) yawToGoal = std::min<Real>(0, std::max<Real>(yawToGoal, yawAtSpeed)); //yawToGoal = Math::Clamp<Real>(yawToGoal, yawAtSpeed, 0);
 			else if (yawToGoal > 0) yawToGoal = std::max<Real>(0, std::min<Real>(yawToGoal, yawAtSpeed)); //yawToGoal = Math::Clamp<Real>(yawToGoal, 0, yawAtSpeed);
-			
+
 			mBodyNode->yaw(Degree(yawToGoal));
 
 			// move in current body direction (not the goal direction)
@@ -295,6 +296,15 @@ private:
 				Node::TS_LOCAL);
 
 			updateHeight();
+
+			// Test for network
+			Vector3 position = getEntityPosition();
+			Vector3 diffPosition = oldPosition-getEntityPosition();
+			if(diffPosition.length() > Ogre::Real(10.0))
+			{
+				netController->updatePosition(position.x, position.z);
+				oldPosition = position;
+			}
 		}
 
 		if (mBaseAnimID == ANIM_JUMP_LOOP)
@@ -302,7 +312,7 @@ private:
 			// if we're jumping, add a vertical offset too, and apply gravity
 			mBodyNode->translate(0, mVerticalVelocity * deltaTime, 0, Node::TS_LOCAL);
 			mVerticalVelocity -= GRAVITY * deltaTime;
-			
+
 			Vector3 pos = mBodyNode->getPosition();
 			if (pos.y <= CHAR_HEIGHT)
 			{
@@ -472,7 +482,7 @@ private:
 			mCameraPivot->pitch(Degree(deltaPitch), Node::TS_LOCAL);
 			mPivotPitch += deltaPitch;
 		}
-		
+
 		Real dist = mCameraGoal->_getDerivedPosition().distance(mCameraPivot->_getDerivedPosition());
 		Real distChange = deltaZoom * dist;
 
@@ -549,6 +559,9 @@ private:
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
 	TerrainGroup* mTerrainGroup;
+	//network
+	NetworkController* netController;
+	Vector3 oldPosition;
 };
 
 #endif
