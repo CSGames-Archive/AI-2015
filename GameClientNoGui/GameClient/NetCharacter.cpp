@@ -22,7 +22,7 @@ NetCharacter::NetCharacter()
 NetCharacter::NetCharacter(std::string tagName, double x, double y)
 {
 	this->tagName = tagName;
-	movePlayer(x, y);
+	moveCharacter(x, y);
 }
 
 NetCharacter::~NetCharacter()
@@ -30,7 +30,7 @@ NetCharacter::~NetCharacter()
 
 }
 
-void NetCharacter::movePlayer(double x, double y)
+void NetCharacter::moveCharacter(double x, double y)
 {
 	this->x = x;
 	this->y = y;
