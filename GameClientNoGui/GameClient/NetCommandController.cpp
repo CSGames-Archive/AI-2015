@@ -5,10 +5,10 @@ NetCommandController::NetCommandController(NetPlayerController* netPlayerControl
 	this->netPlayerController = netPlayerController;
 	mState = Command::Init;
 	mType = Command::None;
-	position.x = 0;
-	position.y = 0;
-	position.z = 0;
-	id = 0;
+	x = 0;
+	z = 0;
+	playerId = 0;
+	characterId = 0;
 }
 
 void NetCommandController::UpdateStateMachine(char* token)
@@ -45,7 +45,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.x = Ogre::Real(atoi(token));
+			x = atoi(token);
 			mState = Command::WaitingPosY;
 		}
 		else
@@ -64,7 +64,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.z = Ogre::Real(atoi(token));
+			z = atoi(token);
 			mState = Command::WaitingId;
 		}
 		else
@@ -83,7 +83,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			id = atoi(token);
+			playerId = atoi(token);
 			if(mType == Command::Join)
 				PlayerJoin();
 			else if (mType == Command::Move)
@@ -105,19 +105,21 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 void NetCommandController::PlayerJoin()
 {
-	std::cout << "Player " << id << " joined at X:" << position.x << ",Y:" << position.z << std::endl;
+	std::cout << "Player " << playerId << " joined at X:" << x << ",Y:" << z << std::endl;
 
-	netPlayerController->joinPlayer(id, position);
+	netPlayerController->joinPlayer(playerId, "NoName", NULL);
 }
 
 void NetCommandController::PlayerMove()
 {
-	std::cout << "Player " << id << " moved at X:" << position.x << ",Y:" << position.z << std::endl;
-	netPlayerController->movePlayer(id, position);
+	std::cout << "Player " << playerId << " moved at X:" << x << ",Y:" << z << std::endl;
+
+	netPlayerController->moveCharacter(playerId, characterId, x, z);
 }
 
 void NetCommandController::PlayerExit()
 {
-	std::cout << "Player " << id << " disconnected from the game" << std::endl;
-	netPlayerController->quitPlayer(id);
+	std::cout << "Player " << playerId << " disconnected from the game" << std::endl;
+
+	netPlayerController->quitPlayer(playerId);
 }

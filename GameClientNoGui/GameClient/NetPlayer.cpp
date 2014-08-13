@@ -6,47 +6,46 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Main.cpp
-** The main function to test the game client
+** NetPlayer.cpp
+** Implementation of the NetPlayer
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#include <iostream>
+#include "NetPLayer.h"
 
-#include "NetworkController.h"
-
-int main(int argc, char* argv[])
+NetPlayer::NetPlayer()
 {
-	try
+	this->tagName = "NoName";
+
+	for(int i = 0; i < maxCharacter; ++i)
 	{
-		NetPlayerController netPlayerController;
-		NetworkController netController(&netPlayerController);
+		netCharacters[i] = new NetCharacter("NoName", 0, 0);
+	}
+}
 
-		netController.init();
+NetPlayer::NetPlayer(std::string tagName, std::string characterNames[maxCharacter])
+{
+	this->tagName = "NoName";
 
-		bool exit = false;
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		netCharacters[i] = new NetCharacter(characterNames[i], 0, 0);
+	}
+}
 
-		std::string message = "";
-
-		while(!exit)
+NetPlayer::~NetPlayer()
+{
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		if(netCharacters[i])
 		{
-			std::cin >> message;
-
-			if(message == "exit")
-			{
-				exit = true;
-			}
-			else
-			{
-				netController.addMessageToQueue(message);
-			}
+			delete netCharacters[i];
 		}
+	}
+}
 
-		netController.close();
-	}
-	catch (std::exception& e)
-	{
-		printf("Exception in main : %s\n", e.what());
-	}
+void NetPlayer::moveCharacter(int id, double x, double y)
+{
+	netCharacters[id]->movePlayer(x, y);
 }

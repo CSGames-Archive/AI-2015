@@ -16,8 +16,10 @@ private:
 	NetPlayerController* netPlayerController;
 	Command::State mState;
 	Command::CommandType mType;
-	Vector3 position;
-	int id;
+	double x;
+	double z;
+	int playerId;
+	int characterId;
 
 public:
 	NetCommandController(NetPlayerController* netPlayerController);

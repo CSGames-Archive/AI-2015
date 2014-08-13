@@ -6,47 +6,33 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Main.cpp
-** The main function to test the game client
+** NetPlayer.h
+** The player that controle a character team
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
+#ifndef __NetPlayer_h_
+#define __NetPlayer_h_
+
 #include <iostream>
+#include <map>
 
-#include "NetworkController.h"
+#include "NetCharacter.h"
 
-int main(int argc, char* argv[])
+#define maxCharacter 2
+
+class NetPlayer
 {
-	try
-	{
-		NetPlayerController netPlayerController;
-		NetworkController netController(&netPlayerController);
+private:
+	std::string tagName;
+	std::map<int, NetCharacter*> netCharacters;
 
-		netController.init();
+public:
+	NetPlayer();
+	NetPlayer(std::string tagName, std::string characterNames[maxCharacter]);
+	~NetPlayer();
+	void moveCharacter(int id, double x, double y);
+};
 
-		bool exit = false;
-
-		std::string message = "";
-
-		while(!exit)
-		{
-			std::cin >> message;
-
-			if(message == "exit")
-			{
-				exit = true;
-			}
-			else
-			{
-				netController.addMessageToQueue(message);
-			}
-		}
-
-		netController.close();
-	}
-	catch (std::exception& e)
-	{
-		printf("Exception in main : %s\n", e.what());
-	}
-}
+#endif // #ifndef __NetCharacter_h_

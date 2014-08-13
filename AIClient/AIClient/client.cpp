@@ -8,9 +8,6 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		for(int i = 0; i < argc; i++)
-			printf("arg %d: %s\n", i, argv[i]);
-
 		boost::asio::io_service io_service;
 		tcp::resolver resolver(io_service);
 

@@ -146,6 +146,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="NetCharacter.cpp" />
+    <ClCompile Include="NetCommandController.cpp" />
+    <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="NetPlayerController.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NetCharacter.h" />
+    <ClInclude Include="NetCommandController.h" />
+    <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="NetPlayerController.h" />
+    <ClInclude Include="NetworkController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

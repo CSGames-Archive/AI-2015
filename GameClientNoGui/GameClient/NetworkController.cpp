@@ -1,18 +1,17 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
 ** NetworkController.cpp
-** Controller that manage all the network information
+** Implementation of the NetworkController
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
-#include "stdafx.h"
 #include "NetworkController.h"
 
 NetworkController::NetworkController(NetPlayerController* netPlayerController) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(netPlayerController)
@@ -22,12 +21,19 @@ NetworkController::NetworkController(NetPlayerController* netPlayerController) :
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
-
-		//init();
 	}
 
 NetworkController::~NetworkController()
 {
+	if(readerThread)
+	{
+		delete readerThread;
+	}
+
+	if(writerThread)
+	{
+		delete writerThread;
+	}
 }
 
 void NetworkController::writeFunc()
@@ -85,26 +91,6 @@ void NetworkController::init()
 	}
 }
 
-void NetworkController::waitTerminate()
-{
-	readerThread->join();
-	writerThread->join();
-}
-
-void NetworkController::reset()
-{
-	try
-	{
-		boost::asio::connect(socket, endpoint_iterator);
-		//TODO: add restart to all thread
-		//readerThread.start_thread();
-	}
-	catch (std::exception& e)
-	{
-		printf("Exception in init : %s\n", e.what());
-	}
-}
-
 void  NetworkController::addMessageToQueue(std::string message)
 {
 	messageQueue.push(message);
@@ -153,7 +139,19 @@ void NetworkController::readerFunc()
 	}
 }
 
-// Character spésifics commandes
+void NetworkController::close()
+{
+	std::string message = "exit";
+	addMessageToQueue(message);
+
+	if(readerThread)
+		readerThread->join();
+
+	if(writerThread)
+		writerThread->join();
+}
+
+// TODO: outdated function need the controle for multiple characters
 void NetworkController::updatePosition(int x, int y)
 {
 	char numstr[21]; // enough to hold all numbers up to 64-bits
@@ -163,11 +161,5 @@ void NetworkController::updatePosition(int x, int y)
 	message += ":";
 	sprintf(numstr, "%d", y);
 	message += numstr;
-	addMessageToQueue(message);
-}
-
-void NetworkController::close()
-{
-	std::string message = "exit";
 	addMessageToQueue(message);
 }

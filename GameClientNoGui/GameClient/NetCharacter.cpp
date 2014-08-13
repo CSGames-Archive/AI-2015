@@ -6,47 +6,32 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Main.cpp
-** The main function to test the game client
+** NetCharacter.h
+** Implementation of the NetCharacter
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#include <iostream>
+#include "NetCharacter.h"
 
-#include "NetworkController.h"
-
-int main(int argc, char* argv[])
+NetCharacter::NetCharacter()
 {
-	try
-	{
-		NetPlayerController netPlayerController;
-		NetworkController netController(&netPlayerController);
 
-		netController.init();
+}
 
-		bool exit = false;
+NetCharacter::NetCharacter(std::string tagName, double x, double y)
+{
+	this->tagName = tagName;
+	movePlayer(x, y);
+}
 
-		std::string message = "";
+NetCharacter::~NetCharacter()
+{
 
-		while(!exit)
-		{
-			std::cin >> message;
+}
 
-			if(message == "exit")
-			{
-				exit = true;
-			}
-			else
-			{
-				netController.addMessageToQueue(message);
-			}
-		}
-
-		netController.close();
-	}
-	catch (std::exception& e)
-	{
-		printf("Exception in main : %s\n", e.what());
-	}
+void NetCharacter::movePlayer(double x, double y)
+{
+	this->x = x;
+	this->y = y;
 }
