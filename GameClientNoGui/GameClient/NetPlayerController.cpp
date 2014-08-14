@@ -26,7 +26,15 @@ NetPlayerController::~NetPlayerController()
 
 void NetPlayerController::addPlayer(int id, char* playerName, char* characterNames[maxCharacter])
 {
-	netPlayers[id] = new NetPlayer(messageQueue, playerName, characterNames);
+	netPlayers[id] = new NetPlayer(messageQueue, playerName, id, characterNames);
+
+	messageQueue->push(NetUtility::updatePlayer(id));
+	
+	for( int i=0; i<maxCharacter; ++i)
+	{
+		// TODO: use the map to check the starting position
+		netPlayers[id]->moveCharacter(i, i*100, i*100);
+	}
 }
 
 void NetPlayerController::quitPlayer(int id)

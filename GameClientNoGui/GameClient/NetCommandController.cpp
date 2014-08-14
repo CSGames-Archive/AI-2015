@@ -171,7 +171,7 @@ void NetCommandController::Disconnect()
 
 void NetCommandController::AddPlayer()
 {
-	std::cout << "Player " << playerId << " join with name" << playerName << std::endl;
+	std::cout << "Player " << playerId << " join with name " << playerName << std::endl;
 	for( int i=0; i<maxCharacter; ++i)
 	{
 		std::cout << "    * Character " << characterNames[i] << " enter the battlefield" << std::endl;

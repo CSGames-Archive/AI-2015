@@ -61,8 +61,6 @@ public:
 
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);
-	void updatePlayer(int playerId, double x[maxCharacter], double z[maxCharacter]);
-	void moveCharacter(int playerId, double x, double z);
 	void close();
 };
 

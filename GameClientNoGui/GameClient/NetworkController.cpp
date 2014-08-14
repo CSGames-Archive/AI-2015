@@ -82,6 +82,8 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
+
+		messageQueue.push("GameClientReady");
 	}
 	catch (std::exception& e)
 	{
@@ -147,41 +149,4 @@ void NetworkController::close()
 
 	if(writerThread)
 		writerThread->join();
-}
-
-void NetworkController::updatePlayer(int playerId, double x[maxCharacter], double z[maxCharacter])
-{
-	char numstr[21]; // enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", playerId);
-	std::string message = "UpdatePlayer:";
-	message += numstr;
-
-	for(int i=0; i<maxCharacter; ++i)
-	{
-		message += ":";
-		sprintf(numstr, "%d", x[i]);
-		message += numstr;
-		message += ":";
-		sprintf(numstr, "%d", z[i]);
-		message += numstr;
-	}
-
-	addMessageToQueue(message);
-}
-
-void NetworkController::moveCharacter(int playerId, double x, double z)
-{
-	char numstr[21]; // enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", playerId);
-	std::string message = "UpdateCharacter:";
-	message += numstr;
-
-	message += ":";
-	sprintf(numstr, "%d", x);
-	message += numstr;
-	message += ":";
-	sprintf(numstr, "%d", z);
-	message += numstr;
-
-	addMessageToQueue(message);
 }
