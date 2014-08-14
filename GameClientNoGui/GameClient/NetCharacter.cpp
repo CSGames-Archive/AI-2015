@@ -14,15 +14,17 @@
 
 #include "NetCharacter.h"
 
-NetCharacter::NetCharacter()
+NetCharacter::NetCharacter(std::queue<std::string>* messageQueue)
 {
-
+	this->messageQueue = messageQueue;
 }
 
-NetCharacter::NetCharacter(std::string tagName, double x, double y)
+NetCharacter::NetCharacter(std::queue<std::string>* messageQueue, std::string tagName, double x, double y)
 {
+	this->messageQueue = messageQueue;
 	this->tagName = tagName;
-	moveCharacter(x, y);
+	this->x = x;
+	this->y = y;
 }
 
 NetCharacter::~NetCharacter()

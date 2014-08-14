@@ -8,6 +8,7 @@ var PORT = 1337;
 var clients = [];
 var currentClientId = 1;
 var currentClientConnected = 0;
+var gameClientId = 0;
 
 net.createServer(function (socket) {
 
@@ -25,14 +26,45 @@ net.createServer(function (socket) {
 			
 	// Handle incoming messages from clients.
 	socket.on('data', function (data) {
-		if (data == 'exit')
+		if (data == 'Exit')
 		{
-			socket.write('ok');
+			socket.write('OkForExit');
+		}
+		else if (data == 'GameClientReady')
+		{
+			if(gameClientId == 0)
+			{
+				gameClientId = socket.id;
+				if (Debug)
+					process.stdout.write(' - Game Client Ready - ' + '\n');
+			}
+			else
+			{
+				socket.write('Error: Game client already connected');
+			}
+		}
+		else if (data == 'AIClientReady')
+		{
+			if(gameClientId != 0)
+			{
+				socket.write('YourId:' + socket.id);
+			}
+			else
+			{
+				socket.write('Error: Game client not connected');
+			}
 		}
 		else
 		{
-			data += ':' + "clientId" + ':' + socket.id;
-			broadcast(data, socket);
+			if(gameClientId != 0)
+			{
+				data += ':' + socket.id;
+				broadcast(data, socket);
+			}
+			else
+			{
+				socket.write('Error: Game client not connected');
+			}
 		}
 	});
 
@@ -40,7 +72,7 @@ net.createServer(function (socket) {
 	socket.on('end', function () 
 	{
 		if (Debug)
-			process.stdout.write(' - end - ' + '\n');
+			process.stdout.write(' - End - ' + '\n');
 		removeSocket(socket);
 	});
 
@@ -48,7 +80,7 @@ net.createServer(function (socket) {
 	socket.on('error', function ()
 	{
 		if (Debug)
-			process.stdout.write(' - error - ' + '\n');
+			process.stdout.write(' - Error - ' + '\n');
 		removeSocket(socket);
 	});
   
@@ -63,13 +95,18 @@ net.createServer(function (socket) {
 		});
 
 		if (Debug)
-		process.stdout.write('broadcast - ' + message + '\n');
+			process.stdout.write('Broadcast - ' + message + '\n');
 	}
 
 	function removeSocket(socket)
 	{
+		if(socket.id == gameClientId)
+		{
+			process.exit();
+		}
+		
 		clients.splice(clients.indexOf(socket), 1);
-		broadcast('exit:' + socket.id);
+		broadcast('ClientDisconnect:' + socket.id);
 	}
 
 }).listen(PORT, HOST);

@@ -14,10 +14,8 @@
 
 #include "NetworkController.h"
 
-NetworkController::NetworkController(NetPlayerController* netPlayerController) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(netPlayerController)
+NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(&messageQueue), netCommandController(&netPlayerController)
 	{
-		this->netPlayerController = netPlayerController;
-
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
@@ -50,7 +48,7 @@ void NetworkController::writeFunc()
 				message = messageQueue.back();
 				messageQueue.pop();
 
-				if(message == "exit")
+				if(message == "Exit")
 				{
 					exit = true;
 				}
@@ -113,7 +111,7 @@ void NetworkController::readerFunc()
 
 			buf.data()[len] = '\0';
 
-			if(!std::strcmp(buf.data(), "ok"))
+			if(!std::strcmp(buf.data(), "OkForExit"))
 			{
 				exit = true;
 				break;
@@ -141,7 +139,7 @@ void NetworkController::readerFunc()
 
 void NetworkController::close()
 {
-	std::string message = "exit";
+	std::string message = "Exit";
 	addMessageToQueue(message);
 
 	if(readerThread)
@@ -151,15 +149,39 @@ void NetworkController::close()
 		writerThread->join();
 }
 
-// TODO: outdated function need the controle for multiple characters
-void NetworkController::updatePosition(int x, int y)
+void NetworkController::updatePlayer(int playerId, double x[maxCharacter], double z[maxCharacter])
 {
 	char numstr[21]; // enough to hold all numbers up to 64-bits
+	sprintf(numstr, "%d", playerId);
+	std::string message = "UpdatePlayer:";
+	message += numstr;
+
+	for(int i=0; i<maxCharacter; ++i)
+	{
+		message += ":";
+		sprintf(numstr, "%d", x[i]);
+		message += numstr;
+		message += ":";
+		sprintf(numstr, "%d", z[i]);
+		message += numstr;
+	}
+
+	addMessageToQueue(message);
+}
+
+void NetworkController::moveCharacter(int playerId, double x, double z)
+{
+	char numstr[21]; // enough to hold all numbers up to 64-bits
+	sprintf(numstr, "%d", playerId);
+	std::string message = "UpdateCharacter:";
+	message += numstr;
+
+	message += ":";
 	sprintf(numstr, "%d", x);
-	std::string message = "move:";
 	message += numstr;
 	message += ":";
-	sprintf(numstr, "%d", y);
+	sprintf(numstr, "%d", z);
 	message += numstr;
+
 	addMessageToQueue(message);
 }

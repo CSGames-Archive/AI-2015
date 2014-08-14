@@ -14,9 +14,9 @@
 
 #include "NetPlayerController.h"
 
-NetPlayerController::NetPlayerController()
+NetPlayerController::NetPlayerController(std::queue<std::string>* messageQueue)
 {
-
+	this->messageQueue = messageQueue;
 }
 
 NetPlayerController::~NetPlayerController()
@@ -24,9 +24,9 @@ NetPlayerController::~NetPlayerController()
 
 }
 
-void NetPlayerController::joinPlayer(int id, std::string playerName, std::string characterNames[maxCharacter])
+void NetPlayerController::addPlayer(int id, char* playerName, char* characterNames[maxCharacter])
 {
-	netPlayers[id] = new NetPlayer(playerName, characterNames);
+	netPlayers[id] = new NetPlayer(messageQueue, playerName, characterNames);
 }
 
 void NetPlayerController::quitPlayer(int id)

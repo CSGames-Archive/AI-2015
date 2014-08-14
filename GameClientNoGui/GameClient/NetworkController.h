@@ -48,10 +48,10 @@ private:
 	boost::thread* writerThread;
 
 	// Attributes for the world
-	NetPlayerController* netPlayerController;
+	NetPlayerController netPlayerController;
 
 public:
-    NetworkController(NetPlayerController* netPlayerController);
+    NetworkController();
     virtual ~NetworkController();
 
 	// Threads functions
@@ -61,7 +61,8 @@ public:
 
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);
-	void updatePosition(int x, int y);
+	void updatePlayer(int playerId, double x[maxCharacter], double z[maxCharacter]);
+	void moveCharacter(int playerId, double x, double z);
 	void close();
 };
 
