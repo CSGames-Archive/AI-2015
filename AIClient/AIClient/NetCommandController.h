@@ -2,19 +2,19 @@
 #define __NetCommandController__
 
 #include <iostream>
-#include "NetPlayerController.h"
+#include "GameMap.h"
 
 namespace Command
 {
-	enum State { Init, WaitingDescription, WaitingPlayerId, WaitingPlayerName, WaitingCharacterName,
-				 WaitingPosX, WaitingPosZ, WaitingCharacterId };
-	enum CommandType { None, Error, Disconnect, AddPlayer, Move };
+	enum State { Init, WaitingDescription, WaitingPlayerId, WaitingPosX, WaitingPosZ, 
+				 WaitingCharacterId, WaitingGameClientId };
+	enum CommandType { None, Error, YourId, UpdatePlayer, UpdateCharacter };
 };
 
 class NetCommandController
 {
 private:
-	NetPlayerController* netPlayerController;
+	GameMap* gameMap;
 	Command::State mState;
 	Command::CommandType mType;
 	double x;
@@ -22,19 +22,15 @@ private:
 	int playerId;
 	int characterId;
 	char* description;
-	char* playerName;
-
-	int characterCount;
-	char* characterNames[maxCharacter];
 
 public:
-	NetCommandController(NetPlayerController* netPlayerController);
+	NetCommandController(GameMap* gameMap);
 	void UpdateStateMachine(char* token);
 	
 	void Error();
-	void Disconnect();
-	void AddPlayer();
-	void MoveCharacter();
+	void YourId();
+	void UpdatePlayer();
+	void UpdateCharacter();
 	void OkForExit();
 };
 

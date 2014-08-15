@@ -14,8 +14,10 @@
 
 #include "NetworkController.h"
 
-NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(&messageQueue), netCommandController(&netPlayerController)
+NetworkController::NetworkController(GameMap* gameMap) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(gameMap)
 	{
+		this->gameMap = gameMap;
+
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
@@ -83,7 +85,7 @@ void NetworkController::init()
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
 
-		messageQueue.push("GameClientReady");
+		messageQueue.push("AIClientReady");
 	}
 	catch (std::exception& e)
 	{

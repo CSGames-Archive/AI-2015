@@ -20,16 +20,16 @@
 class Character
 {
 private:
-	std::string tagName;
+	char* tagName;
 	double x;
-	double y;
+	double z;
 
 public:
 	Character();
-	Character(std::string tagName, double x, double y);
+	Character(char* tagName, double x, double z);
 	~Character();
 	void printSelf();
-	void moveCharacter(double x, double y);
+	void moveCharacter(double x, double z);
 };
 
 #endif // #ifndef __Character_h_

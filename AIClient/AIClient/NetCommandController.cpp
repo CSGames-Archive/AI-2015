@@ -1,8 +1,8 @@
 #include "NetCommandController.h"
 
-NetCommandController::NetCommandController(NetPlayerController* netPlayerController)
+NetCommandController::NetCommandController(GameMap* gameMap)
 {
-	this->netPlayerController = netPlayerController;
+	this->gameMap = gameMap;
 	mState = Command::Init;
 	mType = Command::None;
 	x = 0;
@@ -10,13 +10,6 @@ NetCommandController::NetCommandController(NetPlayerController* netPlayerControl
 	playerId = 0;
 	characterId = 0;
 	description = "";
-	playerName = "";
-	characterCount = 0;
-	
-	for( int i=0; i<maxCharacter; ++i)
-	{
-		characterNames[i] = "";
-	}
 }
 
 void NetCommandController::UpdateStateMachine(char* token)
@@ -31,20 +24,20 @@ void NetCommandController::UpdateStateMachine(char* token)
 			mType = Command::Error;
 			mState = Command::WaitingDescription;
 		}
-		else if(!strcmp(token, "Disconnect"))
+		else if(!strcmp(token, "YourId"))
 		{
-			mType = Command::Disconnect;
+			mType = Command::YourId;
 			mState = Command::WaitingPlayerId;
 		}
-		else if(!strcmp(token, "AddPlayer"))
+		else if(!strcmp(token, "UpdatePlayer"))
 		{
-			mType = Command::AddPlayer;
-			mState = Command::WaitingPlayerName;
+			mType = Command::UpdatePlayer;
+			mState = Command::WaitingPlayerId;
 		}
-		else if(!strcmp(token, "Move"))
+		else if(!strcmp(token, "UpdateCharacter"))
 		{
-			mType = Command::Move;
-			mState = Command::WaitingPosX;
+			mType = Command::UpdateCharacter;
+			mState = Command::WaitingPlayerId;
 		}
 		break;
 
@@ -89,7 +82,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			z = atoi(token);
-			mState = Command::WaitingCharacterId;
+			mState = Command::WaitingGameClientId;
 		}
 		else
 		{
@@ -108,27 +101,12 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			characterId = atoi(token);
-			mState = Command::WaitingPlayerId;
+			mState = Command::WaitingPosX;
 		}
 		else
 		{
 			mState = Command::Init;
 			mType = Command::None;
-		}
-		break;
-
-	case Command::WaitingPlayerName:
-		playerName = token;
-		mState = Command::WaitingCharacterName;
-		characterCount = 0;
-		break;
-
-	case Command::WaitingCharacterName:
-		characterNames[characterCount++] = token;
-
-		if(characterCount > maxCharacter-1)
-		{
-			mState = Command::WaitingPlayerId;
 		}
 		break;
 
@@ -143,14 +121,28 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			playerId = atoi(token);
-			if(mType == Command::AddPlayer)
-				AddPlayer();
-			else if (mType == Command::Move)
-				MoveCharacter();
-			else if (mType == Command::Disconnect)
-				Disconnect();
+			if(mType == Command::YourId)
+				YourId();
+			else if (mType == Command::UpdatePlayer)
+				UpdatePlayer();
 		}
 
+		if (mType == Command::UpdateCharacter)
+		{
+			mState = Command::WaitingCharacterId;
+		}
+		else
+		{
+			mState = Command::Init;
+			mType = Command::None;
+		}
+		break;
+
+	case Command::WaitingGameClientId:
+		if(mType = Command::UpdateCharacter)
+		{
+			UpdateCharacter();
+		}
 		mState = Command::Init;
 		mType = Command::None;
 		break;
@@ -162,30 +154,25 @@ void NetCommandController::Error()
 	std::cout << "Error :" << description << std::endl;
 }
 
-void NetCommandController::Disconnect()
+void NetCommandController::YourId()
 {
-	std::cout << "Player " << playerId << " disconnected from the game" << std::endl;
-
-	netPlayerController->quitPlayer(playerId);
+	std::cout << "You receive the id:  " << playerId << std::endl;
+	gameMap->setYourID(playerId);
 }
 
-void NetCommandController::AddPlayer()
+void NetCommandController::UpdatePlayer()
 {
-	std::cout << "Player " << playerId << " join with name " << playerName << std::endl;
-	for( int i=0; i<maxCharacter; ++i)
-	{
-		std::cout << "    * Character " << characterNames[i] << " enter the battlefield" << std::endl;
-	}
-	
-	netPlayerController->addPlayer(playerId, playerName, characterNames);
+	std::cout << "New player with id:  " << playerId << std::endl;
+	gameMap->addPlayer(playerId);
 }
 
-void NetCommandController::MoveCharacter()
+
+void NetCommandController::UpdateCharacter()
 {
 	std::cout << "Player " << playerId << " move character " << characterId << 
 				 " to (" << x << "," << z << ")" << std::endl;
 
-	netPlayerController->moveCharacter(playerId, characterId, x, z);
+	gameMap->moveCharacter(playerId, characterId, x, z);
 }
 
 void NetCommandController::OkForExit()
