@@ -23,7 +23,7 @@
 #include <boost/thread.hpp>
 
 #include "NetCommandController.h"
-#include "GameMap.h"
+#include "NetPlayerController.h"
 
 using boost::asio::ip::tcp;
 
@@ -48,10 +48,10 @@ private:
 	boost::thread* writerThread;
 
 	// Attributes for the world
-	GameMap* gameMap;
+	NetPlayerController netPlayerController;
 
 public:
-    NetworkController(GameMap* gameMap);
+    NetworkController();
     virtual ~NetworkController();
 
 	// Threads functions
@@ -61,7 +61,6 @@ public:
 
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);
-	void updatePosition(int x, int y);
 	void close();
 };
 

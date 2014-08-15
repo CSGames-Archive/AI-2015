@@ -2,31 +2,40 @@
 #define __NetCommandController__
 
 #include <iostream>
-#include "GameMap.h"
+#include "NetPlayerController.h"
 
 namespace Command
 {
-	enum State { Init, WaitingPosX, WaitingPosY, WaitingId, ExitFunc };
-	enum CommandType { None, Join, Move, Exit };
+	enum State { Init, WaitingDescription, WaitingPlayerId, WaitingPlayerName, WaitingCharacterName,
+				 WaitingPosX, WaitingPosZ, WaitingCharacterId };
+	enum CommandType { None, Error, Disconnect, AddPlayer, Move };
 };
 
 class NetCommandController
 {
 private:
-	GameMap* gameMap;
+	NetPlayerController* netPlayerController;
 	Command::State mState;
 	Command::CommandType mType;
 	double x;
 	double z;
 	int playerId;
 	int characterId;
+	char* description;
+	char* playerName;
+
+	int characterCount;
+	char* characterNames[maxCharacter];
 
 public:
-	NetCommandController(GameMap* gameMap);
+	NetCommandController(NetPlayerController* netPlayerController);
 	void UpdateStateMachine(char* token);
-	void PlayerJoin();
-	void PlayerMove();
-	void PlayerExit();
+	
+	void Error();
+	void Disconnect();
+	void AddPlayer();
+	void MoveCharacter();
+	void OkForExit();
 };
 
 #endif
