@@ -74,7 +74,7 @@ net.createServer(function (socket) {
 		{
 			if(gameClientId != 0)
 			{
-				msg += ':' + socket.id;
+				msg += ':' + socket.id + ':';
 				broadcast(msg, socket);
 			}
 			else
