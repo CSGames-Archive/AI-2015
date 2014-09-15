@@ -45,13 +45,16 @@ void NetworkController::writeFunc()
 		{
 			if(!messageQueue.empty())
 			{
-				message = messageQueue.back();
+				message = messageQueue.front();
 				messageQueue.pop();
 
 				if(message == "Exit")
 				{
 					exit = true;
 				}
+
+				// To be sure that message don't overlap
+				message += '\n';
 
 				boost::system::error_code ignored_error;
 				boost::asio::write(socket, boost::asio::buffer(message),

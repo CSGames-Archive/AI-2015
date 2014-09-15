@@ -15,7 +15,9 @@ net.createServer(function (socket) {
 	// Identify this client
 	socket.adress = socket.remoteAddress + ":" + socket.remotePort;
 	socket.id = currentClientId;
-
+	socket.msg = ''; // Current message, per connection
+	socket.setEncoding('utf8');
+	
 	// Put this new client in the list
 	clients.push(socket);
 	currentClientConnected++;
@@ -26,11 +28,25 @@ net.createServer(function (socket) {
 			
 	// Handle incoming messages from clients.
 	socket.on('data', function (data) {
-		if (data == 'Exit')
+		//socket.msg += data.toString('utf8');
+		
+		var arr = data.split('\n');
+		arr.forEach(function (chunk)
+		{
+			if(chunk.length > 1)
+			{
+				process.stdout.write(' - Chunk - ' + chunk + '\n');
+				socket.emit('message', chunk);
+			}
+		});
+	});
+
+	socket.on('message', function(msg) {
+		if (msg == 'Exit')
 		{
 			socket.write('OkForExit');
 		}
-		else if (data == 'GameClientReady')
+		else if (msg == 'GameClientReady')
 		{
 			if(gameClientId == 0)
 			{
@@ -43,7 +59,7 @@ net.createServer(function (socket) {
 				socket.write('Error: Game client already connected');
 			}
 		}
-		else if (data == 'AIClientReady')
+		else if (msg == 'AIClientReady')
 		{
 			if(gameClientId != 0)
 			{
@@ -58,8 +74,8 @@ net.createServer(function (socket) {
 		{
 			if(gameClientId != 0)
 			{
-				data += ':' + socket.id;
-				broadcast(data, socket);
+				msg += ':' + socket.id;
+				broadcast(msg, socket);
 			}
 			else
 			{
@@ -67,7 +83,7 @@ net.createServer(function (socket) {
 			}
 		}
 	});
-
+	
 	// Remove the client from the list when it leaves
 	socket.on('end', function () 
 	{
