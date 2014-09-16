@@ -20,8 +20,7 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		NetPlayerController netPlayerController;
-		NetworkController netController(&netPlayerController);
+		NetworkController netController;
 
 		netController.init();
 
@@ -33,7 +32,7 @@ int main(int argc, char* argv[])
 		{
 			std::cin >> message;
 
-			if(message == "exit")
+			if(message == "Exit")
 			{
 				exit = true;
 			}

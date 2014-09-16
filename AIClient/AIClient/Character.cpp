@@ -19,10 +19,10 @@ Character::Character()
 
 }
 
-Character::Character(std::string tagName, double x, double y)
+Character::Character(char* tagName, double x, double z)
 {
 	this->tagName = tagName;
-	moveCharacter(x, y);
+	moveCharacter(x, z);
 }
 
 Character::~Character()
@@ -30,8 +30,13 @@ Character::~Character()
 
 }
 
-void Character::moveCharacter(double x, double y)
+void Character::moveCharacter(double x, double z)
 {
 	this->x = x;
-	this->y = y;
+	this->z = z;
+}
+
+void Character::printSelf()
+{
+	std::cout << "	*Character: " << tagName << " at (" << x << "," << z << ")" << std::endl;
 }

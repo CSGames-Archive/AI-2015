@@ -14,23 +14,27 @@
 
 #include "NetPLayer.h"
 
-NetPlayer::NetPlayer()
+NetPlayer::NetPlayer(std::queue<std::string>* messageQueue, int playerId)
 {
 	this->tagName = "NoName";
+	this->messageQueue = messageQueue;
+	this->playerId = playerId;
 
 	for(int i = 0; i < maxCharacter; ++i)
 	{
-		netCharacters[i] = new NetCharacter("NoName", 0, 0);
+		netCharacters[i] = new NetCharacter(messageQueue, "NoName", 0, 0, playerId, i);
 	}
 }
 
-NetPlayer::NetPlayer(std::string tagName, std::string characterNames[maxCharacter])
+NetPlayer::NetPlayer(std::queue<std::string>* messageQueue, char* tagName, int playerId, char* characterNames[maxCharacter])
 {
 	this->tagName = "NoName";
+	this->messageQueue = messageQueue;
+	this->playerId = playerId;
 
 	for(int i = 0; i < maxCharacter; ++i)
 	{
-		netCharacters[i] = new NetCharacter(characterNames[i], 0, 0);
+		netCharacters[i] = new NetCharacter(messageQueue, characterNames[i], 0, 0, playerId, i);
 	}
 }
 

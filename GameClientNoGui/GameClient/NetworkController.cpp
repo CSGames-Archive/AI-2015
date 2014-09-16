@@ -14,10 +14,8 @@
 
 #include "NetworkController.h"
 
-NetworkController::NetworkController(NetPlayerController* netPlayerController) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(netPlayerController)
+NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(&messageQueue), netCommandController(&netPlayerController)
 	{
-		this->netPlayerController = netPlayerController;
-
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
@@ -47,13 +45,16 @@ void NetworkController::writeFunc()
 		{
 			if(!messageQueue.empty())
 			{
-				message = messageQueue.back();
+				message = messageQueue.front();
 				messageQueue.pop();
 
-				if(message == "exit")
+				if(message == "Exit")
 				{
 					exit = true;
 				}
+
+				// To be sure that message don't overlap
+				message += '\n';
 
 				boost::system::error_code ignored_error;
 				boost::asio::write(socket, boost::asio::buffer(message),
@@ -84,6 +85,8 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
+
+		messageQueue.push("GameClientReady");
 	}
 	catch (std::exception& e)
 	{
@@ -113,7 +116,7 @@ void NetworkController::readerFunc()
 
 			buf.data()[len] = '\0';
 
-			if(!std::strcmp(buf.data(), "ok"))
+			if(!std::strcmp(buf.data(), "OkForExit"))
 			{
 				exit = true;
 				break;
@@ -141,7 +144,7 @@ void NetworkController::readerFunc()
 
 void NetworkController::close()
 {
-	std::string message = "exit";
+	std::string message = "Exit";
 	addMessageToQueue(message);
 
 	if(readerThread)
@@ -149,17 +152,4 @@ void NetworkController::close()
 
 	if(writerThread)
 		writerThread->join();
-}
-
-// TODO: outdated function need the controle for multiple characters
-void NetworkController::updatePosition(int x, int y)
-{
-	char numstr[21]; // enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", x);
-	std::string message = "move:";
-	message += numstr;
-	message += ":";
-	sprintf(numstr, "%d", y);
-	message += numstr;
-	addMessageToQueue(message);
 }

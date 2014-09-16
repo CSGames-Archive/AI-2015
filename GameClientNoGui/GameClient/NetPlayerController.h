@@ -16,18 +16,20 @@
 #define __NetPlayerController_h_
 
 #include "NetPlayer.h"
-#include <iostream>
+
+#define MAX_PLAYER 2
 
 class NetPlayerController
 {
 private:
+	std::queue<std::string>* messageQueue;
 	std::map<int, NetPlayer*> netPlayers;
 
 public:
-	NetPlayerController();
+	NetPlayerController(std::queue<std::string>* messageQueue);
 	~NetPlayerController();
 
-	void joinPlayer(int id, std::string playerName, std::string characterNames[maxCharacter]);
+	void addPlayer(int id, char* playerName, char* characterNames[maxCharacter]);
 	void quitPlayer(int id);
 	void moveCharacter(int playerId, int characterId, double x, double y);
 };

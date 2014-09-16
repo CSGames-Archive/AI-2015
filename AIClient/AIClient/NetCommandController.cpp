@@ -9,6 +9,7 @@ NetCommandController::NetCommandController(GameMap* gameMap)
 	z = 0;
 	playerId = 0;
 	characterId = 0;
+	description = "";
 }
 
 void NetCommandController::UpdateStateMachine(char* token)
@@ -18,21 +19,37 @@ void NetCommandController::UpdateStateMachine(char* token)
 	switch(mState)
 	{
 	case Command::Init:
-		if(!strcmp(token, "join"))
+		if(!strcmp(token, "Error"))
 		{
-			mType = Command::Join;
-			mState = Command::WaitingPosX;
+			mType = Command::Error;
+			mState = Command::WaitingDescription;
 		}
-		else if(!strcmp(token, "move"))
+		else if(!strcmp(token, "YourId"))
 		{
-			mType = Command::Move;
-			mState = Command::WaitingPosX;
+			mType = Command::YourId;
+			mState = Command::WaitingPlayerId;
 		}
-		else if(!strcmp(token, "exit"))
+		else if(!strcmp(token, "UpdatePlayer"))
 		{
-			mType = Command::Exit;
-			mState = Command::ExitFunc;
+			mType = Command::UpdatePlayer;
+			mState = Command::WaitingPlayerId;
 		}
+		else if(!strcmp(token, "UpdateCharacter"))
+		{
+			mType = Command::UpdateCharacter;
+			mState = Command::WaitingPlayerId;
+		}
+		break;
+
+	case Command::WaitingDescription:
+		description = token;
+
+		if(mType == Command::Error)
+		{
+			Error();
+		}
+		mState = Command::Init;
+		mType = Command::None;
 		break;
 
 	case Command::WaitingPosX:
@@ -46,7 +63,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			x = atoi(token);
-			mState = Command::WaitingPosY;
+			mState = Command::WaitingPosZ;
 		}
 		else
 		{
@@ -54,7 +71,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		}
 		break;
 
-	case Command::WaitingPosY:
+	case Command::WaitingPosZ:
 		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
@@ -65,7 +82,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			z = atoi(token);
-			mState = Command::WaitingId;
+			mState = Command::WaitingGameClientId;
 		}
 		else
 		{
@@ -73,7 +90,27 @@ void NetCommandController::UpdateStateMachine(char* token)
 		}
 		break;
 
-	case Command::WaitingId:
+	case Command::WaitingCharacterId:
+		for (int i = (int) strlen(token)-1; i > 0; i--)
+			if (!isdigit(token[i]))
+			{
+				bIsDigit = false;
+				break;
+			}
+
+		if(bIsDigit)
+		{
+			characterId = atoi(token);
+			mState = Command::WaitingPosX;
+		}
+		else
+		{
+			mState = Command::Init;
+			mType = Command::None;
+		}
+		break;
+
+	case Command::WaitingPlayerId:
 		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
@@ -84,42 +121,63 @@ void NetCommandController::UpdateStateMachine(char* token)
 		if(bIsDigit)
 		{
 			playerId = atoi(token);
-			if(mType == Command::Join)
-				PlayerJoin();
-			else if (mType == Command::Move)
-				PlayerMove();
+			if(mType == Command::YourId)
+				YourId();
+			else if (mType == Command::UpdatePlayer)
+				UpdatePlayer();
 		}
 
-		mState = Command::Init;
-		mType = Command::None;
+		if (mType == Command::UpdateCharacter)
+		{
+			mState = Command::WaitingCharacterId;
+		}
+		else
+		{
+			mState = Command::Init;
+			mType = Command::None;
+		}
 		break;
 
-	case Command::ExitFunc:
+	case Command::WaitingGameClientId:
+		if(mType = Command::UpdateCharacter)
+		{
+			UpdateCharacter();
+		}
 		mState = Command::Init;
 		mType = Command::None;
-
-		PlayerExit();
 		break;
 	}
 }
 
-void NetCommandController::PlayerJoin()
+void NetCommandController::Error()
 {
-	std::cout << "Player " << playerId << " joined at X:" << x << ",Y:" << z << std::endl;
-
-	gameMap->addPlayer(playerId, "NoName", NULL);
+	std::cout << "Error :" << description << std::endl;
 }
 
-void NetCommandController::PlayerMove()
+void NetCommandController::YourId()
 {
-	std::cout << "Player " << playerId << " moved at X:" << x << ",Y:" << z << std::endl;
+	std::cout << "You receive the id:  " << playerId << std::endl;
+	gameMap->setYourID(playerId);
+}
+
+void NetCommandController::UpdatePlayer()
+{
+	std::cout << "New player with id:  " << playerId << std::endl;
+	gameMap->addPlayer(playerId);
+}
+
+
+void NetCommandController::UpdateCharacter()
+{
+	std::cout << "Player " << playerId << " move character " << characterId << 
+				 " to (" << x << "," << z << ")" << std::endl;
 
 	gameMap->moveCharacter(playerId, characterId, x, z);
 }
 
-void NetCommandController::PlayerExit()
+void NetCommandController::OkForExit()
 {
-	std::cout << "Player " << playerId << " disconnected from the game" << std::endl;
+	std::cout << "You are ok to disconnect!" << std::endl;
 
-	gameMap->quitPlayer(playerId);
+	// TODO: check what to do here
 }

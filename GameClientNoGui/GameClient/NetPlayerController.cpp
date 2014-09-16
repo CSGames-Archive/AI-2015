@@ -14,9 +14,9 @@
 
 #include "NetPlayerController.h"
 
-NetPlayerController::NetPlayerController()
+NetPlayerController::NetPlayerController(std::queue<std::string>* messageQueue)
 {
-
+	this->messageQueue = messageQueue;
 }
 
 NetPlayerController::~NetPlayerController()
@@ -24,9 +24,24 @@ NetPlayerController::~NetPlayerController()
 
 }
 
-void NetPlayerController::joinPlayer(int id, std::string playerName, std::string characterNames[maxCharacter])
+void NetPlayerController::addPlayer(int id, char* playerName, char* characterNames[maxCharacter])
 {
-	netPlayers[id] = new NetPlayer(playerName, characterNames);
+	netPlayers[id] = new NetPlayer(messageQueue, playerName, id, characterNames);
+
+	if(netPlayers.size() == MAX_PLAYER)
+	{
+		typedef std::map<int, NetPlayer*>::iterator it_type;
+		for(it_type iterator = netPlayers.begin(); iterator != netPlayers.end(); ++iterator)
+		{
+			messageQueue->push(NetUtility::updatePlayer(iterator->first));
+
+			for( int j=0; j<maxCharacter; ++j)
+			{
+				// TODO: use the map to check the starting position
+				iterator->second->moveCharacter(j, iterator->first*10, j*10);
+			}
+		}
+	}
 }
 
 void NetPlayerController::quitPlayer(int id)

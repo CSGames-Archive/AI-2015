@@ -16,17 +16,23 @@
 #define __NetCharacter_h_
 
 #include <iostream>
+#include <queue>
+
+#include "NetUtility.h"
 
 class NetCharacter
 {
 private:
+	std::queue<std::string>* messageQueue;
 	std::string tagName;
+	int playerId;
+	int characterId;
 	double x;
-	double y;
+	double z;
 
 public:
-	NetCharacter();
-	NetCharacter(std::string tagName, double x, double y);
+	NetCharacter(std::queue<std::string>* messageQueue);
+	NetCharacter(std::queue<std::string>* messageQueue, std::string tagName, double x, double z, int playerId, int characterId);
 	~NetCharacter();
 	void moveCharacter(double x, double y);
 };

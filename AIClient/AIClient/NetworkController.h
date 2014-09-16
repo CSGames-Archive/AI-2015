@@ -61,7 +61,6 @@ public:
 
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);
-	void updatePosition(int x, int y);
 	void close();
 };
 

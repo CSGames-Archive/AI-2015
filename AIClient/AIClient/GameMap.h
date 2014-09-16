@@ -26,14 +26,19 @@ private:
 	std::map<int, Player*> players;
 	int yourId;
 	int opponentId;
+	char* playerName;
+	char* characterNames[maxCharacter];
 
 public:
-	GameMap();
+	GameMap(char* playerName, char* characterNames[maxCharacter]);
 	~GameMap();
 	void printSelf();
-	void addPlayer(int id, std::string playerName, std::string characterNames[maxCharacter]);
+	void addPlayer(int id);
 	void quitPlayer(int id);
 	void moveCharacter(int playerId, int characterId, double x, double y);
+
+	// Getter & Setters
+	void setYourID(int id);
 };
 
 #endif // #ifndef __GameMap_h_

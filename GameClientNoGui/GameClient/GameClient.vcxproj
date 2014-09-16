@@ -157,6 +157,7 @@
     <ClInclude Include="NetCommandController.h" />
     <ClInclude Include="NetPlayer.h" />
     <ClInclude Include="NetPlayerController.h" />
+    <ClInclude Include="NetUtility.h" />
     <ClInclude Include="NetworkController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

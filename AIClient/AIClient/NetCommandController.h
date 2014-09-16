@@ -6,8 +6,9 @@
 
 namespace Command
 {
-	enum State { Init, WaitingPosX, WaitingPosY, WaitingId, ExitFunc };
-	enum CommandType { None, Join, Move, Exit };
+	enum State { Init, WaitingDescription, WaitingPlayerId, WaitingPosX, WaitingPosZ, 
+				 WaitingCharacterId, WaitingGameClientId };
+	enum CommandType { None, Error, YourId, UpdatePlayer, UpdateCharacter };
 };
 
 class NetCommandController
@@ -20,13 +21,17 @@ private:
 	double z;
 	int playerId;
 	int characterId;
+	char* description;
 
 public:
 	NetCommandController(GameMap* gameMap);
 	void UpdateStateMachine(char* token);
-	void PlayerJoin();
-	void PlayerMove();
-	void PlayerExit();
+	
+	void Error();
+	void YourId();
+	void UpdatePlayer();
+	void UpdateCharacter();
+	void OkForExit();
 };
 
 #endif

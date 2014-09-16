@@ -25,12 +25,14 @@
 class NetPlayer
 {
 private:
-	std::string tagName;
+	std::queue<std::string>* messageQueue;
+	char* tagName;
 	std::map<int, NetCharacter*> netCharacters;
+	int playerId;
 
 public:
-	NetPlayer();
-	NetPlayer(std::string tagName, std::string characterNames[maxCharacter]);
+	NetPlayer(std::queue<std::string>* messageQueue, int playerId);
+	NetPlayer(std::queue<std::string>* messageQueue, char* tagName, int playerId, char* characterNames[maxCharacter]);
 	~NetPlayer();
 	void moveCharacter(int id, double x, double y);
 };

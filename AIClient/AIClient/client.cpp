@@ -21,7 +21,14 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		GameMap gameMap;
+		char* playerName = "Rudolf";
+		char* characterName1 = "dodo";
+		char* characterName2 = "potato";
+		char* characterNames[2];
+		characterNames[0] = characterName1;
+		characterNames[1] = characterName1;
+
+		GameMap gameMap(playerName, characterNames);
 		NetworkController netController(&gameMap);
 
 		netController.init();
@@ -34,9 +41,13 @@ int main(int argc, char* argv[])
 		{
 			std::cin >> message;
 
-			if(message == "exit")
+			if(message == "Exit")
 			{
 				exit = true;
+			}
+			else if(message == "Print")
+			{
+				gameMap.printSelf();
 			}
 			else
 			{
