@@ -1,3 +1,17 @@
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
+**
+** NetCommandController.cpp
+** Implementation of NetCommandController
+**
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
+
 #include "NetCommandController.h"
 
 NetCommandController::NetCommandController(NetPlayerController* netPlayerController)
@@ -5,10 +19,18 @@ NetCommandController::NetCommandController(NetPlayerController* netPlayerControl
 	this->netPlayerController = netPlayerController;
 	mState = Command::Init;
 	mType = Command::None;
-	position.x = 0;
-	position.y = 0;
-	position.z = 0;
-	id = 0;
+	x = 0;
+	z = 0;
+	playerId = 0;
+	characterId = 0;
+	description = "";
+	playerName = "";
+	characterCount = 0;
+	
+	for( int i=0; i<maxCharacter; ++i)
+	{
+		characterNames[i] = "";
+	}
 }
 
 void NetCommandController::UpdateStateMachine(char* token)
@@ -18,21 +40,37 @@ void NetCommandController::UpdateStateMachine(char* token)
 	switch(mState)
 	{
 	case Command::Init:
-		if(!strcmp(token, "join"))
+		if(!strcmp(token, "Error"))
 		{
-			mType = Command::Join;
-			mState = Command::WaitingPosX;
+			mType = Command::Error;
+			mState = Command::WaitingDescription;
 		}
-		else if(!strcmp(token, "move"))
+		else if(!strcmp(token, "Disconnect"))
+		{
+			mType = Command::Disconnect;
+			mState = Command::WaitingPlayerId;
+		}
+		else if(!strcmp(token, "AddPlayer"))
+		{
+			mType = Command::AddPlayer;
+			mState = Command::WaitingPlayerName;
+		}
+		else if(!strcmp(token, "Move"))
 		{
 			mType = Command::Move;
 			mState = Command::WaitingPosX;
 		}
-		else if(!strcmp(token, "exit"))
+		break;
+
+	case Command::WaitingDescription:
+		description = token;
+
+		if(mType == Command::Error)
 		{
-			mType = Command::Exit;
-			mState = Command::ExitFunc;
+			Error();
 		}
+		mState = Command::Init;
+		mType = Command::None;
 		break;
 
 	case Command::WaitingPosX:
@@ -45,8 +83,8 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.x = Ogre::Real(atoi(token));
-			mState = Command::WaitingPosY;
+			x = atoi(token);
+			mState = Command::WaitingPosZ;
 		}
 		else
 		{
@@ -54,7 +92,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		}
 		break;
 
-	case Command::WaitingPosY:
+	case Command::WaitingPosZ:
 		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
@@ -64,8 +102,8 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			position.z = Ogre::Real(atoi(token));
-			mState = Command::WaitingId;
+			z = atoi(token);
+			mState = Command::WaitingCharacterId;
 		}
 		else
 		{
@@ -73,7 +111,7 @@ void NetCommandController::UpdateStateMachine(char* token)
 		}
 		break;
 
-	case Command::WaitingId:
+	case Command::WaitingCharacterId:
 		for (int i = (int) strlen(token)-1; i > 0; i--)
 			if (!isdigit(token[i]))
 			{
@@ -83,41 +121,90 @@ void NetCommandController::UpdateStateMachine(char* token)
 
 		if(bIsDigit)
 		{
-			id = atoi(token);
-			if(mType == Command::Join)
-				PlayerJoin();
+			characterId = atoi(token);
+			mState = Command::WaitingPlayerId;
+		}
+		else
+		{
+			mState = Command::Init;
+			mType = Command::None;
+		}
+		break;
+
+	case Command::WaitingPlayerName:
+		playerName = token;
+		mState = Command::WaitingCharacterName;
+		characterCount = 0;
+		break;
+
+	case Command::WaitingCharacterName:
+		characterNames[characterCount++] = token;
+
+		if(characterCount > maxCharacter-1)
+		{
+			mState = Command::WaitingPlayerId;
+		}
+		break;
+
+	case Command::WaitingPlayerId:
+		for (int i = (int) strlen(token)-1; i > 0; i--)
+			if (!isdigit(token[i]))
+			{
+				bIsDigit = false;
+				break;
+			}
+
+		if(bIsDigit)
+		{
+			playerId = atoi(token);
+			if(mType == Command::AddPlayer)
+				AddPlayer();
 			else if (mType == Command::Move)
-				PlayerMove();
+				MoveCharacter();
+			else if (mType == Command::Disconnect)
+				Disconnect();
 		}
 
 		mState = Command::Init;
 		mType = Command::None;
-		break;
-
-	case Command::ExitFunc:
-		mState = Command::Init;
-		mType = Command::None;
-
-		PlayerExit();
 		break;
 	}
 }
 
-void NetCommandController::PlayerJoin()
+void NetCommandController::Error()
 {
-	std::cout << "Player " << id << " joined at X:" << position.x << ",Y:" << position.z << std::endl;
-
-	netPlayerController->joinPlayer(id, position);
+	std::cout << "Error :" << description << std::endl;
 }
 
-void NetCommandController::PlayerMove()
+void NetCommandController::Disconnect()
 {
-	std::cout << "Player " << id << " moved at X:" << position.x << ",Y:" << position.z << std::endl;
-	netPlayerController->movePlayer(id, position);
+	std::cout << "Player " << playerId << " disconnected from the game" << std::endl;
+
+	netPlayerController->quitPlayer(playerId);
 }
 
-void NetCommandController::PlayerExit()
+void NetCommandController::AddPlayer()
 {
-	std::cout << "Player " << id << " disconnected from the game" << std::endl;
-	netPlayerController->quitPlayer(id);
+	std::cout << "Player " << playerId << " join with name " << playerName << std::endl;
+	for( int i=0; i<maxCharacter; ++i)
+	{
+		std::cout << "    * Character " << characterNames[i] << " enter the battlefield" << std::endl;
+	}
+	
+	netPlayerController->addPlayer(playerId, playerName, characterNames);
+}
+
+void NetCommandController::MoveCharacter()
+{
+	std::cout << "Player " << playerId << " move character " << characterId << 
+				 " to (" << x << "," << z << ")" << std::endl;
+
+	netPlayerController->moveCharacter(playerId, characterId, x, z);
+}
+
+void NetCommandController::OkForExit()
+{
+	std::cout << "You are ok to disconnect!" << std::endl;
+
+	// TODO: check what to do here
 }

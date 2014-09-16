@@ -302,7 +302,7 @@ private:
 			Vector3 diffPosition = oldPosition-getEntityPosition();
 			if(diffPosition.length() > Ogre::Real(10.0))
 			{
-				netController->updatePosition(position.x, position.z);
+				//netController->updatePosition(position.x, position.z);
 				oldPosition = position;
 			}
 		}

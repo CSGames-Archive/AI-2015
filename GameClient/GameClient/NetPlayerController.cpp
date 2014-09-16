@@ -1,22 +1,22 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
 ** NetPlayerController.cpp
-** Controller that manage all the network information
+** Implementation of the NetPlayerController
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
-#include "stdafx.h"
 #include "NetPlayerController.h"
 
-NetPlayerController::NetPlayerController()
+NetPlayerController::NetPlayerController(std::queue<std::string>* messageQueue)
 {
+	this->messageQueue = messageQueue;
 }
 
 NetPlayerController::~NetPlayerController()
@@ -24,20 +24,24 @@ NetPlayerController::~NetPlayerController()
 
 }
 
-void NetPlayerController::setup(SceneManager* sceneMgr, TerrainGroup* mTerrainGroup)
+void NetPlayerController::addPlayer(int id, char* playerName, char* characterNames[maxCharacter])
 {
-	this->sceneMgr = sceneMgr;
-	this->mTerrainGroup = mTerrainGroup;
-}
+	netPlayers[id] = new NetPlayer(messageQueue, playerName, id, characterNames);
 
-void NetPlayerController::joinPlayer(int id, Vector3 position)
-{
-	char numstr[21]; // enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", id);
-	std::string tagName = "netplayer";
-	tagName += numstr;
+	if(netPlayers.size() == MAX_PLAYER)
+	{
+		typedef std::map<int, NetPlayer*>::iterator it_type;
+		for(it_type iterator = netPlayers.begin(); iterator != netPlayers.end(); ++iterator)
+		{
+			messageQueue->push(NetUtility::updatePlayer(iterator->first));
 
-	netPlayers[id] = new NetPlayer(sceneMgr, mTerrainGroup, tagName, "Sinbad.mesh", position);
+			for( int j=0; j<maxCharacter; ++j)
+			{
+				// TODO: use the map to check the starting position
+				iterator->second->moveCharacter(j, iterator->first*10, j*10);
+			}
+		}
+	}
 }
 
 void NetPlayerController::quitPlayer(int id)
@@ -48,16 +52,11 @@ void NetPlayerController::quitPlayer(int id)
 	delete disconnectedPlayer;
 }
 
-void NetPlayerController::movePlayer(int id, Vector3 position)
+void NetPlayerController::moveCharacter(int playerId, int characterId, double x, double y)
 {
-	netPlayers.find(id)->second->updateDestination(position);
-}
-
-void NetPlayerController::addTime(Real deltaTime)
-{
-	typedef std::map<int, NetPlayer*>::iterator it_type;
-	for(it_type iterator = netPlayers.begin(); iterator != netPlayers.end(); iterator++)
+	NetPlayer* targetPlayer = netPlayers.find(playerId)->second;
+	if(targetPlayer)
 	{
-		iterator->second->addTime(deltaTime);
+		targetPlayer->moveCharacter(characterId, x, y);
 	}
 }

@@ -1,37 +1,33 @@
-/* ------------------------------------------------------------------------------
-** _________   _________      ________    _____      _____  ___________ _________
-** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
-** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
-** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
-**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
-**        \/        \/             \/         \/         \/        \/        \/ 
+/* ---------------------------------------------------------------------------
+**      _____      _____      _____   
+**     /     \    /  _  \    /  _  \  
+**    /  \ /  \  /  /_\  \  /  /_\  \ 
+**   /    Y    \/    |    \/    |    \
+**   \____|__  /\____|__  /\____|__  /
+**           \/         \/         \/ 
 **
 ** NetworkController.cpp
-** Implementation of the NetworkController
+** Controller that manage all the network information
 **
-** Author: Samuel-Ricardo Carriere
-** ------------------------------------------------------------------------------*/
+** Author: Moba Action Alpha Team
+** -------------------------------------------------------------------------*/
 
+#include "stdafx.h"
 #include "NetworkController.h"
 
-NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(&messageQueue), netCommandController(&netPlayerController)
+NetworkController::NetworkController(NetPlayerController* netPlayerController) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(netPlayerController)
 	{
+		this->netPlayerController = netPlayerController;
+
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
+
+		//init();
 	}
 
 NetworkController::~NetworkController()
 {
-	if(readerThread)
-	{
-		delete readerThread;
-	}
-
-	if(writerThread)
-	{
-		delete writerThread;
-	}
 }
 
 void NetworkController::writeFunc()
@@ -45,16 +41,13 @@ void NetworkController::writeFunc()
 		{
 			if(!messageQueue.empty())
 			{
-				message = messageQueue.front();
+				message = messageQueue.back();
 				messageQueue.pop();
 
-				if(message == "Exit")
+				if(message == "exit")
 				{
 					exit = true;
 				}
-
-				// To be sure that message don't overlap
-				message += '\n';
 
 				boost::system::error_code ignored_error;
 				boost::asio::write(socket, boost::asio::buffer(message),
@@ -85,8 +78,26 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
+	}
+	catch (std::exception& e)
+	{
+		printf("Exception in init : %s\n", e.what());
+	}
+}
 
-		messageQueue.push("GameClientReady");
+void NetworkController::waitTerminate()
+{
+	readerThread->join();
+	writerThread->join();
+}
+
+void NetworkController::reset()
+{
+	try
+	{
+		boost::asio::connect(socket, endpoint_iterator);
+		//TODO: add restart to all thread
+		//readerThread.start_thread();
 	}
 	catch (std::exception& e)
 	{
@@ -116,7 +127,7 @@ void NetworkController::readerFunc()
 
 			buf.data()[len] = '\0';
 
-			if(!std::strcmp(buf.data(), "OkForExit"))
+			if(!std::strcmp(buf.data(), "ok"))
 			{
 				exit = true;
 				break;
@@ -142,14 +153,21 @@ void NetworkController::readerFunc()
 	}
 }
 
+// Character spésifics commandes
+void NetworkController::updatePosition(int x, int y)
+{
+	char numstr[21]; // enough to hold all numbers up to 64-bits
+	sprintf(numstr, "%d", x);
+	std::string message = "move:";
+	message += numstr;
+	message += ":";
+	sprintf(numstr, "%d", y);
+	message += numstr;
+	addMessageToQueue(message);
+}
+
 void NetworkController::close()
 {
-	std::string message = "Exit";
+	std::string message = "exit";
 	addMessageToQueue(message);
-
-	if(readerThread)
-		readerThread->join();
-
-	if(writerThread)
-		writerThread->join();
 }

@@ -1,31 +1,32 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
-** MobaActionApplication.cpp
-** Main application that will run the game
+** GameClientAppliaction.h
+** implementation of the GameClientAppliaction
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "AICompetitionApplication.h"
+#include "GameClientApplication.h"
 
 //-------------------------------------------------------------------------------------
-MobaActionApplication::MobaActionApplication(void) : netPlayerController(), netController(&netPlayerController)
+MobaActionApplication::MobaActionApplication()
 {
 }
 
-MobaActionApplication::~MobaActionApplication(void)
+MobaActionApplication::~MobaActionApplication()
 {
+	netController.close();
 }
 
 //-------------------------------------------------------------------------------------
-
+//TODO: Replace with real map
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 {
 	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -119,15 +120,14 @@ void MobaActionApplication::configureTerrainDefaults(Ogre::Light* light)
 
 //-------------------------------------------------------------------------------------
 
-void MobaActionApplication::createCamera(void)
+void MobaActionApplication::createCamera()
 {
-	// Create the camera
-	mCamera = mSceneMgr->createCamera("PlayerCam");
+	mCamera = mSceneMgr->createCamera("MainCamera");
 }
 
-void MobaActionApplication::createScene(void)
+void MobaActionApplication::createScene()
 {
-
+	//TODO: Refactor with the new map
 	// Set the scene's ambient light
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
@@ -139,10 +139,9 @@ void MobaActionApplication::createScene(void)
 	plane.d = 1000;
 	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-	//
+
 	//Setup the terrain
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
-
 	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
 	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat"));
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
@@ -171,11 +170,11 @@ void MobaActionApplication::createScene(void)
 	//Clean up the map creation resources
 	mTerrainGroup->freeTemporaryResources();
 
-	//Must be create after the terrain group
+	//TODO: Replace with the camera man
 	mChara = new SinbadCharacterController(mCamera, mTerrainGroup, &netController);
 }
 
-void MobaActionApplication::destroyScene(void)
+void MobaActionApplication::destroyScene()
 {
 	if (mChara)
 	{
@@ -187,7 +186,7 @@ void MobaActionApplication::destroyScene(void)
 	OGRE_DELETE mTerrainGlobals;
 }
 
-bool MobaActionApplication::setup(void)
+bool MobaActionApplication::setup()
 {
 	mRoot = new Ogre::Root(mPluginsCfg);
 
@@ -210,10 +209,8 @@ bool MobaActionApplication::setup(void)
 
 	// Create the scene
 	createScene();
-
 	createFrameListener();
 
-	netPlayerController.setup(mSceneMgr, mTerrainGroup); //Setup network controller
 	netController.init();
 
 	return true;
@@ -237,13 +234,12 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	mTrayMgr->frameRenderingQueued(evt);
 
+	//TODO: some refactor with the game workflow
 	if (!mTrayMgr->isDialogVisible())
 	{
-		mChara->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
+		mChara->addTime(evt.timeSinceLastFrame);
 
-		// Update Net Players
-		netPlayerController.addTime(evt.timeSinceLastFrame);
-
+		//TODO: some refactor with the UI
 		if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
 		{
 			mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
@@ -256,8 +252,7 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 		}
 	}
 
-	//Loading terrain UI
-
+	//TODO: some refactor with the map and gameworkflow
 	if (mTerrainGroup->isDerivedDataUpdateInProgress())
 	{
 		mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
@@ -293,6 +288,7 @@ void MobaActionApplication::createFrameListener(void)
 
 bool MobaActionApplication::keyPressed( const OIS::KeyEvent &arg )
 {
+	//TODO: some refactor with the gameworkflow
 	if (!mTrayMgr->isDialogVisible())
 		mChara->injectKeyDown(arg);
 
@@ -301,17 +297,6 @@ bool MobaActionApplication::keyPressed( const OIS::KeyEvent &arg )
 		netController.close();
 		mShutDown = true;
 	}
-	// Network debug key
-	else if (arg.key == OIS::KC_P)
-	{
-		Vector3 position = mChara->getEntityPosition();
-		netController.updatePosition(position.x, position.z);
-	}
-	else if (arg.key == OIS::KC_O)
-	{
-		//TODO: execute next action from network controller
-	}
-
 
 	return true;
 }
@@ -343,11 +328,7 @@ bool MobaActionApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::Mous
 	return true;
 }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
-
+//TODO: some refactor, this code came with the sdk
 #ifdef __cplusplus
 extern "C" {
 #endif
