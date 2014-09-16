@@ -17,6 +17,8 @@
 
 #include "NetPlayer.h"
 
+#define MAX_PLAYER 2
+
 class NetPlayerController
 {
 private:

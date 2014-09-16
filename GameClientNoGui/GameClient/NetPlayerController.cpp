@@ -28,12 +28,19 @@ void NetPlayerController::addPlayer(int id, char* playerName, char* characterNam
 {
 	netPlayers[id] = new NetPlayer(messageQueue, playerName, id, characterNames);
 
-	messageQueue->push(NetUtility::updatePlayer(id));
-	
-	for( int i=0; i<maxCharacter; ++i)
+	if(netPlayers.size() == MAX_PLAYER)
 	{
-		// TODO: use the map to check the starting position
-		netPlayers[id]->moveCharacter(i, i*100, i*100);
+		typedef std::map<int, NetPlayer*>::iterator it_type;
+		for(it_type iterator = netPlayers.begin(); iterator != netPlayers.end(); ++iterator)
+		{
+			messageQueue->push(NetUtility::updatePlayer(iterator->first));
+
+			for( int j=0; j<maxCharacter; ++j)
+			{
+				// TODO: use the map to check the starting position
+				iterator->second->moveCharacter(j, iterator->first*10, j*10);
+			}
+		}
 	}
 }
 
