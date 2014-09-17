@@ -15,6 +15,8 @@
 #ifndef __NetCommandController__
 #define __NetCommandController__
 
+#include "stdafx.h"
+
 #include <iostream>
 #include "NetPlayerController.h"
 

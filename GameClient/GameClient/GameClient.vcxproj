@@ -23,7 +23,7 @@
     <ClCompile Include="GameClientApplication.cpp" />
     <ClCompile Include="NetCharacter.cpp" />
     <ClCompile Include="NetCommandController.cpp" />
-    <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="NetTeam.cpp" />
     <ClCompile Include="NetPlayerController.cpp" />
     <ClCompile Include="NetworkController.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -33,7 +33,7 @@
     <ClInclude Include="GameClientApplication.h" />
     <ClInclude Include="NetCharacter.h" />
     <ClInclude Include="NetCommandController.h" />
-    <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="NetTeam.h" />
     <ClInclude Include="NetPlayerController.h" />
     <ClInclude Include="NetUtility.h" />
     <ClInclude Include="NetworkController.h" />

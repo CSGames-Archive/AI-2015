@@ -15,6 +15,8 @@
 #ifndef __NetworkController_h_
 #define __NetworkController_h_
 
+#include "stdafx.h"
+
 #include <queue>
 #include <iostream>
 
@@ -51,7 +53,7 @@ private:
 	NetPlayerController netPlayerController;
 
 public:
-    NetworkController();
+    NetworkController(SceneManager* sceneManager);
     virtual ~NetworkController();
 
 	// Threads functions
@@ -62,6 +64,8 @@ public:
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);
 	void close();
+
+	void addTime(Real deltaTime);
 };
 
 #endif // #ifndef __NetworkController_h_

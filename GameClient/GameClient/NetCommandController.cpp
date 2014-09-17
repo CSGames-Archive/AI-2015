@@ -12,6 +12,8 @@
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
+#include "stdafx.h"
+
 #include "NetCommandController.h"
 
 NetCommandController::NetCommandController(NetPlayerController* netPlayerController)
@@ -199,7 +201,7 @@ void NetCommandController::MoveCharacter()
 	std::cout << "Player " << playerId << " move character " << characterId << 
 				 " to (" << x << "," << z << ")" << std::endl;
 
-	netPlayerController->moveCharacter(playerId, characterId, x, z);
+	netPlayerController->setTargetPosition(playerId, characterId, x, z);
 }
 
 void NetCommandController::OkForExit()

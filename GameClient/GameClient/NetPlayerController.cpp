@@ -12,11 +12,14 @@
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
+#include "stdafx.h"
+
 #include "NetPlayerController.h"
 
-NetPlayerController::NetPlayerController(std::queue<std::string>* messageQueue)
+NetPlayerController::NetPlayerController(SceneManager* sceneManager, std::queue<std::string>* messageQueue)
 {
 	this->messageQueue = messageQueue;
+	this->sceneManager = sceneManager;
 }
 
 NetPlayerController::~NetPlayerController()
@@ -26,19 +29,20 @@ NetPlayerController::~NetPlayerController()
 
 void NetPlayerController::addPlayer(int id, char* playerName, char* characterNames[maxCharacter])
 {
-	netPlayers[id] = new NetPlayer(messageQueue, playerName, id, characterNames);
+	netTeams[id] = new NetTeam(sceneManager, messageQueue, playerName, id, characterNames);
 
-	if(netPlayers.size() == MAX_PLAYER)
+	if(netTeams.size() == MAX_PLAYER)
 	{
-		typedef std::map<int, NetPlayer*>::iterator it_type;
-		for(it_type iterator = netPlayers.begin(); iterator != netPlayers.end(); ++iterator)
+		typedef std::map<int, NetTeam*>::iterator it_type;
+		for(it_type iterator = netTeams.begin(); iterator != netTeams.end(); ++iterator)
 		{
 			messageQueue->push(NetUtility::updatePlayer(iterator->first));
 
 			for( int j=0; j<maxCharacter; ++j)
 			{
 				// TODO: use the map to check the starting position
-				iterator->second->moveCharacter(j, iterator->first*10, j*10);
+				//Vector3 startingPosition();
+				//iterat second->set(j, iterator->first*10, j*10);
 			}
 		}
 	}
@@ -46,17 +50,27 @@ void NetPlayerController::addPlayer(int id, char* playerName, char* characterNam
 
 void NetPlayerController::quitPlayer(int id)
 {
-	std::map<int, NetPlayer*>::iterator it = netPlayers.find(id);
-	NetPlayer* disconnectedPlayer = it->second;
-	netPlayers.erase(it);
+	std::map<int, NetTeam*>::iterator it = netTeams.find(id);
+	NetTeam* disconnectedPlayer = it->second;
+	netTeams.erase(it);
 	delete disconnectedPlayer;
 }
 
-void NetPlayerController::moveCharacter(int playerId, int characterId, double x, double y)
+void NetPlayerController::setTargetPosition(int teamId, int characterId, double x, double y)
 {
-	NetPlayer* targetPlayer = netPlayers.find(playerId)->second;
-	if(targetPlayer)
+	Vector3 targetPosition(x, 0, y);
+	NetTeam* targetTeam = netTeams.find(teamId)->second;
+	if(targetTeam)
 	{
-		targetPlayer->moveCharacter(characterId, x, y);
+		targetTeam->setTargetPosition(characterId, targetPosition);
+	}
+}
+
+void NetPlayerController::addTime(Real deltaTime)
+{
+	typedef std::map<int, NetTeam*>::iterator it_type;
+	for(it_type iterator = netTeams.begin(); iterator != netTeams.end(); ++iterator)
+	{
+		iterator->second->addTime(deltaTime);
 	}
 }

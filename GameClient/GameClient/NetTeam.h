@@ -6,14 +6,16 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetPlayer.h
-** The player that controle a character team
+** NetTeam.h
+** NetTeam that controle a character
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetPlayer_h_
-#define __NetPlayer_h_
+#ifndef __NetTeam_h_
+#define __NetTeam_h_
+
+#include "stdafx.h"
 
 #include <iostream>
 #include <map>
@@ -22,19 +24,19 @@
 
 #define maxCharacter 2
 
-class NetPlayer
+class NetTeam
 {
 private:
 	std::queue<std::string>* messageQueue;
-	char* tagName;
+	char* name;
 	std::map<int, NetCharacter*> netCharacters;
-	int playerId;
+	int teamId;
 
 public:
-	NetPlayer(std::queue<std::string>* messageQueue, int playerId);
-	NetPlayer(std::queue<std::string>* messageQueue, char* tagName, int playerId, char* characterNames[maxCharacter]);
-	~NetPlayer();
-	void moveCharacter(int id, double x, double y);
+	NetTeam(SceneManager* sceneManager, std::queue<std::string>* messageQueue, char* name, int teamId, char* characterNames[maxCharacter]);
+	~NetTeam();
+	void setTargetPosition(int characterId, Vector3 targetPosition);
+	void addTime(Real deltaTime);
 };
 
-#endif // #ifndef __NetCharacter_h_
+#endif // #ifndef __NetTeam_h_

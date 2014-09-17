@@ -28,31 +28,21 @@
 //TODO: change for the camera man
 #include "SinbadCharacterController.h"
 
-class MobaActionApplication : public BaseApplication
+class GameClientApplication : public BaseApplication
 {
 private:
-	//TODO: change for the generated terrain
-	Ogre::TerrainGlobalOptions* mTerrainGlobals;
-    Ogre::TerrainGroup* mTerrainGroup;
-    bool mTerrainsImported;
-	OgreBites::Label* mInfoLabel;
-
-	void defineTerrain(long x, long y);
-    void initBlendMaps(Ogre::Terrain* terrain);
-    void configureTerrainDefaults(Ogre::Light* light);
-
 	// Networking
-	NetworkController netController;
+	NetworkController* netController;
 
 public:
-    MobaActionApplication();
-    virtual ~MobaActionApplication();
+    GameClientApplication();
+    virtual ~GameClientApplication();
 
 protected:
     virtual void createScene();
     virtual void destroyScene();
 	virtual bool setup();
-	void MobaActionApplication::createCamera();
+	void createCamera();
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);

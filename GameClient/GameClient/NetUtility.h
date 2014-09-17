@@ -15,6 +15,8 @@
 #ifndef __NetUtility_h_
 #define __NetUtility_h_
 
+#include "stdafx.h"
+
 #include <iostream>
 
 namespace NetUtility

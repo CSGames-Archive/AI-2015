@@ -12,14 +12,16 @@
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
+#include "stdafx.h"
+
 #include "NetworkController.h"
 
-NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(&messageQueue), netCommandController(&netPlayerController)
-	{
-		endpoint_iterator = resolver.resolve(query);
-		readerThread = NULL;
-		writerThread = NULL;
-	}
+NetworkController::NetworkController(SceneManager* sceneManager) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(sceneManager, &messageQueue), netCommandController(&netPlayerController)
+{
+	endpoint_iterator = resolver.resolve(query);
+	readerThread = NULL;
+	writerThread = NULL;
+}
 
 NetworkController::~NetworkController()
 {
@@ -152,4 +154,9 @@ void NetworkController::close()
 
 	if(writerThread)
 		writerThread->join();
+}
+
+void NetworkController::addTime(Real deltaTime)
+{
+	netPlayerController.addTime(deltaTime);
 }

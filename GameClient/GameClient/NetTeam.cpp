@@ -6,39 +6,33 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetPlayer.cpp
-** Implementation of the NetPlayer
+** NetTeam.cpp
+** Implementation of the NetTeam
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#include "NetPLayer.h"
+#include "stdafx.h"
 
-NetPlayer::NetPlayer(std::queue<std::string>* messageQueue, int playerId)
+#include "NetTeam.h"
+
+NetTeam::NetTeam(SceneManager* sceneManager, std::queue<std::string>* messageQueue, char* name, int teamId, char* characterNames[maxCharacter])
 {
-	this->tagName = "NoName";
+	this->name = "NoName";
 	this->messageQueue = messageQueue;
-	this->playerId = playerId;
+	this->teamId = teamId;
+
+	std::string meshName = "Sinbad.mesh";
+	//TODO: update with the map
+	Vector3 startingPosition = Vector3::ZERO;
 
 	for(int i = 0; i < maxCharacter; ++i)
 	{
-		netCharacters[i] = new NetCharacter(messageQueue, "NoName", 0, 0, playerId, i);
+		netCharacters[i] = new NetCharacter(sceneManager, messageQueue, characterNames[i], meshName, startingPosition, teamId, i);
 	}
 }
 
-NetPlayer::NetPlayer(std::queue<std::string>* messageQueue, char* tagName, int playerId, char* characterNames[maxCharacter])
-{
-	this->tagName = "NoName";
-	this->messageQueue = messageQueue;
-	this->playerId = playerId;
-
-	for(int i = 0; i < maxCharacter; ++i)
-	{
-		netCharacters[i] = new NetCharacter(messageQueue, characterNames[i], 0, 0, playerId, i);
-	}
-}
-
-NetPlayer::~NetPlayer()
+NetTeam::~NetTeam()
 {
 	for(int i = 0; i < maxCharacter; ++i)
 	{
@@ -49,7 +43,15 @@ NetPlayer::~NetPlayer()
 	}
 }
 
-void NetPlayer::moveCharacter(int id, double x, double y)
+void NetTeam::setTargetPosition(int characterId, Vector3 targetPosition)
 {
-	netCharacters[id]->moveCharacter(x, y);
+	netCharacters[characterId]->setTargetPosition(targetPosition);
+}
+
+void NetTeam::addTime(Real deltaTime)
+{
+	for(int i = 0; i < maxCharacter; ++i)
+	{
+		netCharacters[i]->addTime(deltaTime);
+	}
 }
