@@ -51,11 +51,13 @@ void NetCharacter::addTime(Real deltaTime)
 
 void NetCharacter::setTargetPosition(Vector3 targetPosition)
 {
+	targetPosition.y = CHARACTER_HEIGHT;
 	this->targetPosition = targetPosition;
 }
 
 void NetCharacter::setupBody()
 {
+	targetPosition.y = CHARACTER_HEIGHT;
 	bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode(targetPosition);
 	//TODO: fix multiple same name bug
 	bodyEntity = sceneManager->createEntity(name, meshName);
@@ -75,6 +77,7 @@ void NetCharacter::setupAnimations()
 	{
 		animations[i] = bodyEntity->getAnimationState(animationNames[i]);
 		animations[i]->setLoop(true);
+		animations[i]->setWeight(1.0);
 	}
 
 	setBaseAnimation(ANIM_IDLE_BASE);
@@ -86,18 +89,18 @@ void NetCharacter::updateBody(Real deltaTime)
 	if(bodyNode != NULL)
 	{
 		Vector3 currentPosition = bodyNode->getPosition();
-		Vector3 currentDirection = targetPosition - currentPosition;
+		Vector3 goalDirection = targetPosition - currentPosition;
 
-		if(currentDirection.length() > Ogre::Real(5.0))
+		if(goalDirection.length() > Ogre::Real(1.0))
 		{
-			currentDirection.normalise();
+			goalDirection.normalise();
 		}
 		else
 		{
-			currentDirection = Vector3::ZERO;
+			goalDirection = Vector3::ZERO;
 		}
 
-		if (currentDirection != Vector3::ZERO && baseAnimationID != ANIM_DANCE)
+		if (goalDirection != Vector3::ZERO && baseAnimationID != ANIM_DANCE)
 		{
 			if (baseAnimationID == ANIM_IDLE_BASE)
 			{
@@ -107,8 +110,16 @@ void NetCharacter::updateBody(Real deltaTime)
 					setTopAnimation(ANIM_RUN_TOP, true);
 			}
 
-			bodyNode->setDirection(currentDirection);
-			bodyNode->translate(0, 0, deltaTime * WALK_SPEED * animations[baseAnimationID]->getWeight(),
+
+			// Calculate direction
+			Quaternion currentDirection = bodyNode->getOrientation().zAxis().getRotationTo(goalDirection);
+
+			// Find the rotation in yaw
+			Real yawToGoal = currentDirection.getYaw().valueDegrees();
+
+			bodyNode->yaw(Degree(yawToGoal));
+
+			bodyNode->translate(0, 0, deltaTime * WALK_SPEED /*animations[baseAnimationID]->getWeight()*/,
 				Node::TS_LOCAL);
 		}
 		else if (baseAnimationID == ANIM_RUN_BASE)
@@ -143,7 +154,6 @@ void NetCharacter::setBaseAnimation(AnimationID id, bool reset)
 	if (id != ANIM_NONE)
 	{
 		animations[id]->setEnabled(true);
-		animations[id]->setWeight(0);
 		if (reset)
 			animations[id]->setTimePosition(0);
 	}
@@ -156,7 +166,6 @@ void NetCharacter::setTopAnimation(AnimationID id, bool reset)
 	if (id != ANIM_NONE)
 	{
 		animations[id]->setEnabled(true);
-		animations[id]->setWeight(0);
 		if (reset)
 			animations[id]->setTimePosition(0);
 	}

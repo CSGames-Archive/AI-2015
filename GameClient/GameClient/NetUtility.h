@@ -31,11 +31,12 @@ namespace NetUtility
 		message += ":";
 		message += numstr;
 
+		// TODO: refactor with map
 		message += ":";
-		sprintf_s(numstr, "%g", x);
+		sprintf_s(numstr, "%d", (int)x);
 		message += numstr;
 		message += ":";
-		sprintf_s(numstr, "%g", z);
+		sprintf_s(numstr, "%d", (int)z);
 		message += numstr;
 
 		return message;
