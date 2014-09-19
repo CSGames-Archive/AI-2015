@@ -79,6 +79,9 @@ void NetCharacter::setupAnimations()
 		animations[i]->setLoop(true);
 		animations[i]->setWeight(1.0);
 	}
+	
+	baseAnimationID = ANIM_IDLE_BASE;
+	topAnimationID = ANIM_IDLE_TOP;
 
 	setBaseAnimation(ANIM_IDLE_BASE);
 	setTopAnimation(ANIM_IDLE_TOP);
@@ -149,6 +152,7 @@ void NetCharacter::updateAnimations(Real deltaTime)
 
 void NetCharacter::setBaseAnimation(AnimationID id, bool reset)
 {
+	animations[baseAnimationID]->setEnabled(false);
 	baseAnimationID = id;
 
 	if (id != ANIM_NONE)
@@ -161,6 +165,7 @@ void NetCharacter::setBaseAnimation(AnimationID id, bool reset)
 
 void NetCharacter::setTopAnimation(AnimationID id, bool reset)
 {
+	animations[topAnimationID]->setEnabled(false);
 	topAnimationID = id;
 
 	if (id != ANIM_NONE)
