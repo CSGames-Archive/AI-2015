@@ -1,33 +1,39 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
 ** NetworkController.cpp
-** Controller that manage all the network information
+** Implementation of the NetworkController
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
 #include "stdafx.h"
+
 #include "NetworkController.h"
 
-NetworkController::NetworkController(NetPlayerController* netPlayerController) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netCommandController(netPlayerController)
-	{
-		this->netPlayerController = netPlayerController;
-
-		endpoint_iterator = resolver.resolve(query);
-		readerThread = NULL;
-		writerThread = NULL;
-
-		//init();
-	}
+NetworkController::NetworkController(SceneManager* sceneManager) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(sceneManager, &messageQueue), netCommandController(&netPlayerController)
+{
+	endpoint_iterator = resolver.resolve(query);
+	readerThread = NULL;
+	writerThread = NULL;
+}
 
 NetworkController::~NetworkController()
 {
+	if(readerThread)
+	{
+		delete readerThread;
+	}
+
+	if(writerThread)
+	{
+		delete writerThread;
+	}
 }
 
 void NetworkController::writeFunc()
@@ -41,13 +47,16 @@ void NetworkController::writeFunc()
 		{
 			if(!messageQueue.empty())
 			{
-				message = messageQueue.back();
+				message = messageQueue.front();
 				messageQueue.pop();
 
-				if(message == "exit")
+				if(message == "Exit")
 				{
 					exit = true;
 				}
+
+				// To be sure that message don't overlap
+				message += '\n';
 
 				boost::system::error_code ignored_error;
 				boost::asio::write(socket, boost::asio::buffer(message),
@@ -78,26 +87,8 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
-	}
-	catch (std::exception& e)
-	{
-		printf("Exception in init : %s\n", e.what());
-	}
-}
 
-void NetworkController::waitTerminate()
-{
-	readerThread->join();
-	writerThread->join();
-}
-
-void NetworkController::reset()
-{
-	try
-	{
-		boost::asio::connect(socket, endpoint_iterator);
-		//TODO: add restart to all thread
-		//readerThread.start_thread();
+		messageQueue.push("GameClientReady");
 	}
 	catch (std::exception& e)
 	{
@@ -127,7 +118,7 @@ void NetworkController::readerFunc()
 
 			buf.data()[len] = '\0';
 
-			if(!std::strcmp(buf.data(), "ok"))
+			if(!std::strcmp(buf.data(), "OkForExit"))
 			{
 				exit = true;
 				break;
@@ -153,21 +144,19 @@ void NetworkController::readerFunc()
 	}
 }
 
-// Character spésifics commandes
-void NetworkController::updatePosition(int x, int y)
-{
-	char numstr[21]; // enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", x);
-	std::string message = "move:";
-	message += numstr;
-	message += ":";
-	sprintf(numstr, "%d", y);
-	message += numstr;
-	addMessageToQueue(message);
-}
-
 void NetworkController::close()
 {
-	std::string message = "exit";
+	std::string message = "Exit";
 	addMessageToQueue(message);
+
+	if(readerThread)
+		readerThread->join();
+
+	if(writerThread)
+		writerThread->join();
+}
+
+void NetworkController::addTime(Real deltaTime)
+{
+	netPlayerController.addTime(deltaTime);
 }

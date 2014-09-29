@@ -45,7 +45,7 @@ private:
 
 public:
 
-	SinbadCharacterController(Camera* cam, TerrainGroup* mTerrainGroup, NetworkController* netController)
+	SinbadCharacterController(Camera* cam, NetworkController* netController)
 	{
 		mCurrentSpeed = WALK_SPEED;
 
@@ -54,7 +54,6 @@ public:
 		setupBody(cam->getSceneManager());
 		setupCamera(cam);
 		setupAnimations();
-		updateHeight();
 		oldPosition = getEntityPosition();
 	}
 
@@ -295,14 +294,12 @@ private:
 			mBodyNode->translate(0, 0, deltaTime * mCurrentSpeed * mAnims[mBaseAnimID]->getWeight(),
 				Node::TS_LOCAL);
 
-			updateHeight();
-
 			// Test for network
 			Vector3 position = getEntityPosition();
 			Vector3 diffPosition = oldPosition-getEntityPosition();
 			if(diffPosition.length() > Ogre::Real(10.0))
 			{
-				netController->updatePosition(position.x, position.z);
+				//netController->updatePosition(position.x, position.z);
 				oldPosition = position;
 			}
 		}
@@ -323,13 +320,6 @@ private:
 				mTimer = 0;
 			}
 		}
-	}
-
-	void updateHeight()
-	{
-		Vector3 pos = mBodyNode->getPosition();
-		pos.y = mTerrainGroup->getHeightAtWorldPosition(pos,0) + CHAR_HEIGHT;
-		mBodyNode->setPosition(pos);
 	}
 
 	void updateAnimations(Real deltaTime)

@@ -18,6 +18,28 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BaseApplication.cpp" />
+    <ClCompile Include="GameClientApplication.cpp" />
+    <ClCompile Include="NetCharacter.cpp" />
+    <ClCompile Include="NetCommandController.cpp" />
+    <ClCompile Include="NetTeam.cpp" />
+    <ClCompile Include="NetPlayerController.cpp" />
+    <ClCompile Include="NetworkController.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseApplication.h" />
+    <ClInclude Include="GameClientApplication.h" />
+    <ClInclude Include="NetCharacter.h" />
+    <ClInclude Include="NetCommandController.h" />
+    <ClInclude Include="NetTeam.h" />
+    <ClInclude Include="NetPlayerController.h" />
+    <ClInclude Include="NetUtility.h" />
+    <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="SinbadCharacterController.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{745C7214-69D1-451C-8DE2-ECF9CBC54473}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -162,25 +184,6 @@
       <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="AICompetitionApplication.cpp" />
-    <ClCompile Include="BaseApplication.cpp" />
-    <ClCompile Include="NetCommandController.cpp" />
-    <ClCompile Include="NetPlayer.cpp" />
-    <ClCompile Include="NetPlayerController.cpp" />
-    <ClCompile Include="NetworkController.cpp" />
-    <ClCompile Include="stdafx.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AICompetitionApplication.h" />
-    <ClInclude Include="BaseApplication.h" />
-    <ClInclude Include="NetCommandController.h" />
-    <ClInclude Include="NetPlayer.h" />
-    <ClInclude Include="NetPlayerController.h" />
-    <ClInclude Include="NetworkController.h" />
-    <ClInclude Include="SinbadCharacterController.h" />
-    <ClInclude Include="stdafx.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
