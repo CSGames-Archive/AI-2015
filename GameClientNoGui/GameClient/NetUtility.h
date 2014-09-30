@@ -16,7 +16,7 @@
 #define __NetUtility_h_
 
 #include <iostream>
-#include <stdio>
+#include <stdio.h>
 
 namespace NetUtility
 {
