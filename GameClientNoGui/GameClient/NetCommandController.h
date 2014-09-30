@@ -16,6 +16,9 @@
 #define __NetCommandController__
 
 #include <iostream>
+#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
 #include "NetPlayerController.h"
 
 namespace Command
