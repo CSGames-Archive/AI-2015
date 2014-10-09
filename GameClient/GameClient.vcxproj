@@ -19,26 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseApplication.cpp" />
-    <ClCompile Include="GameClientApplication.cpp" />
-    <ClCompile Include="NetCharacter.cpp" />
-    <ClCompile Include="NetCommandController.cpp" />
-    <ClCompile Include="NetTeam.cpp" />
-    <ClCompile Include="NetPlayerController.cpp" />
-    <ClCompile Include="NetworkController.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClInclude Include="include\BaseApplication.h" />
+    <ClInclude Include="include\GameClientApplication.h" />
+    <ClInclude Include="include\NetCharacter.h" />
+    <ClInclude Include="include\NetCommandController.h" />
+    <ClInclude Include="include\NetPlayerController.h" />
+    <ClInclude Include="include\NetTeam.h" />
+    <ClInclude Include="include\NetUtility.h" />
+    <ClInclude Include="include\NetworkController.h" />
+    <ClInclude Include="include\SinbadCharacterController.h" />
+    <ClInclude Include="include\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseApplication.h" />
-    <ClInclude Include="GameClientApplication.h" />
-    <ClInclude Include="NetCharacter.h" />
-    <ClInclude Include="NetCommandController.h" />
-    <ClInclude Include="NetTeam.h" />
-    <ClInclude Include="NetPlayerController.h" />
-    <ClInclude Include="NetUtility.h" />
-    <ClInclude Include="NetworkController.h" />
-    <ClInclude Include="SinbadCharacterController.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClCompile Include="src\BaseApplication.cpp" />
+    <ClCompile Include="src\GameClientApplication.cpp" />
+    <ClCompile Include="src\NetCharacter.cpp" />
+    <ClCompile Include="src\NetCommandController.cpp" />
+    <ClCompile Include="src\NetPlayerController.cpp" />
+    <ClCompile Include="src\NetTeam.cpp" />
+    <ClCompile Include="src\NetworkController.cpp" />
+    <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{745C7214-69D1-451C-8DE2-ECF9CBC54473}</ProjectGuid>
@@ -90,9 +90,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\samuel\Documents\ai-competition\GameClient\include;C:\Program Files\boost\boost_1_55_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\boost\boost_1_55_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\samuel\Documents\ai-competition\GameClient\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -106,8 +109,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost;$(OGRE_HOME)\include\OGRE\Overlay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\include\OGRE\Overlay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
