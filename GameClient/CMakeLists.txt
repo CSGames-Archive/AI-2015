@@ -35,6 +35,7 @@ set(SOURCE_FILES
   src/stdafx.cpp
 )
 
+
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}
 			${OIS_INCLUDE_DIRS}
