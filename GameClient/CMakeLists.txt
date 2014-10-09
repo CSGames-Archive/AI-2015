@@ -17,7 +17,8 @@ set(HEADER_FILES
   include/BaseApplication.h
   include/GameClientApplication.h
   include/NetCommandController.h
-  include/NetPlayer.h
+  include/NetCharacter.h
+  include/NetTeam.h
   include/NetPlayerController.h
   include/NetworkController.h
   include/SinbadCharacterController.h
@@ -27,7 +28,8 @@ set(SOURCE_FILES
   src/BaseApplication.cpp
   src/GameClientApplication.cpp
   src/NetCommandController.cpp
-  src/NetPlayer.cpp
+  src/NetCharacter.cpp
+  src/NetTeam.cpp
   src/NetPlayerController.cpp
   src/NetworkController.cpp
   src/stdafx.cpp

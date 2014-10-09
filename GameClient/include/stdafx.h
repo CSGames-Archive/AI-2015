@@ -20,16 +20,30 @@
 #include <boost/array.hpp>
 #include <boost/thread.hpp>
 
+#include "Ogre.h"
+#include "OIS.h"
+
+/*
 // Ogre headers
-#include <OgreException.h>
-#include <OgreRoot.h>
-#include <OgreConfigFile.h>
 #include <OgreCamera.h>
-#include <OgreViewport.h>
-#include <OgreSceneManager.h>
-#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
 #include <OgreEntity.h>
+#include <OgreException.h>
+#include <OgreLogManager.h>
+#include <OgreMaterialManager.h>
+#include <OgreRenderWindow.h>
+#include <OgreRoot.h>
+#include <OgreSceneManager.h>
+#include <OgreTextureManager.h>
+#include <OgreViewport.h>
 #include <OgreWindowEventUtilities.h>
+
+// Ogre OIS headers
+#include <OISEvents.h>
+#include <OISInputManager.h>
+#include <OISKeyboard.h>
+#include <OISMouse.h>
+*/
 
 // Check for duplicate include of window.h
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
