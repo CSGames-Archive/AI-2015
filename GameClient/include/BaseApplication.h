@@ -28,6 +28,10 @@ This source file is part of the
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
 
+#include <OgreMaterialManager.h>
+#include <OgreTextureManager.h>
+#include <OgreWindowEventUtilities.h>
+
 #include <OISEvents.h>
 #include <OISInputManager.h>
 #include <OISKeyboard.h>

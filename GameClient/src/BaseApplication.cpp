@@ -14,6 +14,7 @@ This source file is part of the
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
+
 #include "stdafx.h"
 #include "BaseApplication.h"
 
@@ -23,8 +24,8 @@ BaseApplication::BaseApplication(void)
     mCamera(0),
     mSceneMgr(0),
     mWindow(0),
-    mResourcesCfg(Ogre::StringUtil::BLANK),
-    mPluginsCfg(Ogre::StringUtil::BLANK),
+    mResourcesCfg(Ogre::BLANKSTRING),
+    mPluginsCfg(Ogre::BLANKSTRING),
     mTrayMgr(0),
     mDetailsPanel(0),
     mCursorWasVisible(false),
