@@ -1,133 +1,45 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
-** MobaActionApplication.cpp
-** Main application that will run the game
+** GameClientAppliaction.h
+** implementation of the GameClientAppliaction
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "AICompetitionApplication.h"
+#include "GameClientApplication.h"
 
 //-------------------------------------------------------------------------------------
-MobaActionApplication::MobaActionApplication(void) : netPlayerController(), netController(&netPlayerController)
+GameClientApplication::GameClientApplication()
 {
 }
 
-MobaActionApplication::~MobaActionApplication(void)
+GameClientApplication::~GameClientApplication()
 {
-}
-
-//-------------------------------------------------------------------------------------
-
-void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
-{
-	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-	if (flipX)
-		img.flipAroundY();
-	if (flipY)
-		img.flipAroundX();
-}
-
-void MobaActionApplication::defineTerrain(long x, long y)
-{
-	Ogre::String filename = mTerrainGroup->generateFilename(x, y);
-	if (Ogre::ResourceGroupManager::getSingleton().resourceExists(mTerrainGroup->getResourceGroup(), filename))
+	netController->close();
+	if(netController)
 	{
-		mTerrainGroup->defineTerrain(x, y);
+		delete netController;
+		netController = 0;
 	}
-	else
-	{
-		Ogre::Image img;
-		getTerrainImage(x % 2 != 0, y % 2 != 0, img);
-		mTerrainGroup->defineTerrain(x, y, &img);
-		mTerrainsImported = true;
-	}
-}
-
-void MobaActionApplication::initBlendMaps(Ogre::Terrain* terrain)
-{
-	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
-	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
-	Ogre::Real minHeight0 = 70;
-	Ogre::Real fadeDist0 = 40;
-	Ogre::Real minHeight1 = 70;
-	Ogre::Real fadeDist1 = 15;
-	float* pBlend0 = blendMap0->getBlendPointer();
-	float* pBlend1 = blendMap1->getBlendPointer();
-	for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y)
-	{
-		for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
-		{
-			Ogre::Real tx, ty;
-
-			blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
-			Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
-			Ogre::Real val = (height - minHeight0) / fadeDist0;
-			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-			*pBlend0++ = val;
-
-			val = (height - minHeight1) / fadeDist1;
-			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-			*pBlend1++ = val;
-		}
-	}
-	blendMap0->dirty();
-	blendMap1->dirty();
-	blendMap0->update();
-	blendMap1->update();
-}
-
-void MobaActionApplication::configureTerrainDefaults(Ogre::Light* light)
-{
-	// Configure global
-	mTerrainGlobals->setMaxPixelError(8);
-	// testing composite map
-	mTerrainGlobals->setCompositeMapDistance(3000);
-	//Light configuration
-	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
-	mTerrainGlobals->setCompositeMapAmbient(mSceneMgr->getAmbientLight());
-	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
-
-	// Configure default import settings for if we use imported image
-	Ogre::Terrain::ImportData& defaultimp = mTerrainGroup->getDefaultImportSettings();
-	defaultimp.terrainSize = 513;
-	defaultimp.worldSize = 12000.0f;
-	defaultimp.inputScale = 600; // due terrain.png is 8 bpp
-	defaultimp.minBatchSize = 33;
-	defaultimp.maxBatchSize = 65;
-
-	// textures
-	defaultimp.layerList.resize(3);
-	defaultimp.layerList[0].worldSize = 100;
-	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
-	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_normalheight.dds");
-	defaultimp.layerList[1].worldSize = 30;
-	defaultimp.layerList[1].textureNames.push_back("grass_green-01_diffusespecular.dds");
-	defaultimp.layerList[1].textureNames.push_back("grass_green-01_normalheight.dds");
-	defaultimp.layerList[2].worldSize = 200;
-	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_diffusespecular.dds");
-	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
-
 }
 
 //-------------------------------------------------------------------------------------
 
-void MobaActionApplication::createCamera(void)
+void GameClientApplication::createCamera()
 {
-	// Create the camera
-	mCamera = mSceneMgr->createCamera("PlayerCam");
+	mCamera = mSceneMgr->createCamera("MainCamera");
 }
 
-void MobaActionApplication::createScene(void)
+void GameClientApplication::createScene()
 {
-
+	//TODO: Refactor with the new map
 	// Set the scene's ambient light
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
@@ -139,55 +51,31 @@ void MobaActionApplication::createScene(void)
 	plane.d = 1000;
 	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-	//
-	//Setup the terrain
-	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
-	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat"));
-	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+	// create a floor mesh resource
+	MeshManager::getSingleton().createPlane("floor", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+	Plane(Vector3::UNIT_Y, 0), 100, 100, 10, 10, true, 1, 10, 10, Vector3::UNIT_Z);
 
-	configureTerrainDefaults(light);
+	// create a floor entity, give it a material, and place it at the origin
+	Entity* floor = mSceneMgr->createEntity("Floor", "floor");
+	floor->setMaterialName("Examples/Rockwall");
+	floor->setCastShadows(false);
+	mSceneMgr->getRootSceneNode()->attachObject(floor);
 
-	//We just have one terrain for the moment put later it will be usefull
-	for (long x = 0; x <= 0; ++x)
-		for (long y = 0; y <= 0; ++y)
-			defineTerrain(x, y);
-
-	// sync load since we want everything in place when we start
-	mTerrainGroup->loadAllTerrains(true);
-
-	//Blendmaps calculation
-	if (mTerrainsImported)
-	{
-		Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
-		while(ti.hasMoreElements())
-		{
-			Ogre::Terrain* t = ti.getNext()->instance;
-			initBlendMaps(t);
-		}
-	}
-
-	//Clean up the map creation resources
-	mTerrainGroup->freeTemporaryResources();
-
-	//Must be create after the terrain group
-	mChara = new SinbadCharacterController(mCamera, mTerrainGroup, &netController);
+	//TODO: Replace with the camera man
+	mChara = new SinbadCharacterController(mCamera, netController);
 }
 
-void MobaActionApplication::destroyScene(void)
+void GameClientApplication::destroyScene()
 {
 	if (mChara)
 	{
 		delete mChara;
 		mChara = 0;
 	}
-
-	OGRE_DELETE mTerrainGroup;
-	OGRE_DELETE mTerrainGlobals;
 }
 
-bool MobaActionApplication::setup(void)
+bool GameClientApplication::setup()
 {
 	mRoot = new Ogre::Root(mPluginsCfg);
 
@@ -210,16 +98,16 @@ bool MobaActionApplication::setup(void)
 
 	// Create the scene
 	createScene();
-
 	createFrameListener();
 
-	netPlayerController.setup(mSceneMgr, mTerrainGroup); //Setup network controller
-	netController.init();
+	netController = new NetworkController(mSceneMgr);
+
+	netController->init();
 
 	return true;
 };
 
-bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
+bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
 	if(mWindow->isClosed())
 		return false;
@@ -237,13 +125,13 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	mTrayMgr->frameRenderingQueued(evt);
 
+	//TODO: some refactor with the game workflow
 	if (!mTrayMgr->isDialogVisible())
 	{
-		mChara->addTime(evt.timeSinceLastFrame);   // if dialog isn't up, then update the character + camera
+		mChara->addTime(evt.timeSinceLastFrame);
+		netController->addTime(evt.timeSinceLastFrame);
 
-		// Update Net Players
-		netPlayerController.addTime(evt.timeSinceLastFrame);
-
+		//TODO: some refactor with the UI
 		if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
 		{
 			mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
@@ -256,98 +144,58 @@ bool MobaActionApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 		}
 	}
 
-	//Loading terrain UI
-
-	if (mTerrainGroup->isDerivedDataUpdateInProgress())
-	{
-		mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
-		mInfoLabel->show();
-		if (mTerrainsImported)
-		{
-			mInfoLabel->setCaption("Building terrain, please wait...");
-		}
-		else
-		{
-			mInfoLabel->setCaption("Updating textures, patience...");
-		}
-	}
-	else
-	{
-		mTrayMgr->removeWidgetFromTray(mInfoLabel);
-		mInfoLabel->hide();
-		if (mTerrainsImported)
-		{
-			mTerrainGroup->saveAllTerrains(true);
-			mTerrainsImported = false;
-		}
-	}
-
 	return true;
 }
 
-void MobaActionApplication::createFrameListener(void)
+void GameClientApplication::createFrameListener(void)
 {
 	BaseApplication::createFrameListener();
-	mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TInfo", "", 350);
 }
 
-bool MobaActionApplication::keyPressed( const OIS::KeyEvent &arg )
+bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 {
+	//TODO: some refactor with the gameworkflow
 	if (!mTrayMgr->isDialogVisible())
 		mChara->injectKeyDown(arg);
 
 	if (arg.key == OIS::KC_ESCAPE)
 	{
-		netController.close();
+		//TODO: test if call in the destructor
+		netController->close();
 		mShutDown = true;
 	}
-	// Network debug key
-	else if (arg.key == OIS::KC_P)
-	{
-		Vector3 position = mChara->getEntityPosition();
-		netController.updatePosition(position.x, position.z);
-	}
-	else if (arg.key == OIS::KC_O)
-	{
-		//TODO: execute next action from network controller
-	}
-
 
 	return true;
 }
 
-bool MobaActionApplication::keyReleased( const OIS::KeyEvent &arg )
+bool GameClientApplication::keyReleased( const OIS::KeyEvent &arg )
 {
 	if (!mTrayMgr->isDialogVisible())
 		mChara->injectKeyUp(arg);
 	return true;
 }
 
-bool MobaActionApplication::mouseMoved( const OIS::MouseEvent &arg )
+bool GameClientApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
 	if (!mTrayMgr->isDialogVisible())
 		mChara->injectMouseMove(arg);
 	return true;
 }
 
-bool MobaActionApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool GameClientApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
 	if (!mTrayMgr->isDialogVisible())
 		mChara->injectMouseDown(arg, id);
 	return true;
 }
 
-bool MobaActionApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool GameClientApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
 	//TODO: Add some action in here
 	return true;
 }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
-
+//TODO: some refactor, this code came with the sdk
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -359,7 +207,7 @@ extern "C" {
 #endif
 	{
 		// Create application object
-		MobaActionApplication app;
+		GameClientApplication app;
 
 		try {
 			app.go();
