@@ -1,19 +1,19 @@
-/* ---------------------------------------------------------------------------
-**      _____      _____      _____   
-**     /     \    /  _  \    /  _  \  
-**    /  \ /  \  /  /_\  \  /  /_\  \ 
-**   /    Y    \/    |    \/    |    \
-**   \____|__  /\____|__  /\____|__  /
-**           \/         \/         \/ 
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
 **
-** MobaActionApplication.h
-** Main application that will run the game
+** GameClientAppliaction.h
+** The game client appliaction
 **
-** Author: Moba Action Alpha Team
-** -------------------------------------------------------------------------*/
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
 
-#ifndef __MobaActionApplication_h_
-#define __MobaActionApplication_h_
+#ifndef __GameClientAppliaction_h_
+#define __GameClientAppliaction_h_
 
 #include "stdafx.h"
 
@@ -21,39 +21,32 @@
 
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
+
 #include "BaseApplication.h"
-#include "SinbadCharacterController.h"
 #include "NetPlayerController.h"
 
-class MobaActionApplication : public BaseApplication
+//TODO: change for the camera man
+#include "SinbadCharacterController.h"
+
+class GameClientApplication : public BaseApplication
 {
 private:
-	Ogre::TerrainGlobalOptions* mTerrainGlobals;
-    Ogre::TerrainGroup* mTerrainGroup;
-    bool mTerrainsImported;
-	OgreBites::Label* mInfoLabel;
-
-	void defineTerrain(long x, long y);
-    void initBlendMaps(Ogre::Terrain* terrain);
-    void configureTerrainDefaults(Ogre::Light* light);
-
 	// Networking
-	NetworkController netController;
-	NetPlayerController netPlayerController;
+	NetworkController* netController;
 
 public:
-    MobaActionApplication(void);
-    virtual ~MobaActionApplication(void);
+    GameClientApplication();
+    virtual ~GameClientApplication();
 
 protected:
-    virtual void createScene(void);
-    virtual void destroyScene(void);
+    virtual void createScene();
+    virtual void destroyScene();
 	virtual bool setup();
-	void MobaActionApplication::createCamera(void);
+	void createCamera();
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-	virtual void createFrameListener(void);
+	virtual void createFrameListener();
 
     // OIS::KeyListener
     virtual bool keyPressed( const OIS::KeyEvent &arg );
@@ -63,7 +56,8 @@ protected:
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
 	
+	// Change for the camera man
 	SinbadCharacterController* mChara;
 };
 
-#endif // #ifndef __MobaActionApplication_h_
+#endif // #ifndef __GameClientAppliaction_h_
