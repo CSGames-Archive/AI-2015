@@ -6,7 +6,7 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Character.h
+** Character.cpp
 ** Implementation of the Character
 **
 ** Author: Samuel-Ricardo Carriere

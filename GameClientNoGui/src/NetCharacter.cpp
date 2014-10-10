@@ -6,7 +6,7 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
+** NetCharacter.cpp
 ** Implementation of the NetCharacter
 **
 ** Author: Samuel-Ricardo Carriere
