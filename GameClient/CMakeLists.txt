@@ -14,6 +14,7 @@ find_package(OIS REQUIRED)
 
 set(HEADER_FILES
   include/stdafx.h
+  include/NetUtility.h
   include/BaseApplication.h
   include/GameClientApplication.h
   include/NetCommandController.h
