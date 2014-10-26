@@ -25,7 +25,6 @@
 using namespace Ogre;
 
 #define NB_ANIMATIONS 5			// number of animations the character has
-#define CHARACTER_HEIGHT 5		// height of character's center of mass above ground
 #define WALK_SPEED 50			// character walking speed in units per second
 
 class NetCharacter
@@ -56,6 +55,7 @@ private:
 	SceneNode* bodyNode;
 	SceneManager* sceneManager;
 	Entity* bodyEntity;
+	Ogre::Real characterHeight;
 
 	// Animations
 	AnimationState* animations[NB_ANIMATIONS];

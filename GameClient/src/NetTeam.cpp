@@ -22,7 +22,7 @@ NetTeam::NetTeam(SceneManager* sceneManager, std::queue<std::string>* messageQue
 	this->messageQueue = messageQueue;
 	this->teamId = teamId;
 
-	std::string meshName = "Sinbad.mesh";
+	std::string meshName = "Tank.mesh";
 	//TODO: update with the map
 	Vector3 startingPosition = Vector3::ZERO;
 

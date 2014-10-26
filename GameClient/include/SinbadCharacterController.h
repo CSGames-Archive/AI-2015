@@ -175,7 +175,7 @@ private:
 	void setupBody(SceneManager* sceneMgr)
 	{
 		// create main model
-		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(/*Vector3::UNIT_Y * CHAR_HEIGHT*/);
+		mBodyNode = sceneMgr->getRootSceneNode()->createChildSceneNode(Vector3::UNIT_Y * CHAR_HEIGHT);
 		mBodyEnt = sceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 		mBodyNode->attachObject(mBodyEnt);
 

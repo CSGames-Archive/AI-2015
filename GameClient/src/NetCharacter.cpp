@@ -29,6 +29,7 @@ NetCharacter::NetCharacter(SceneManager* sceneManager, std::queue<std::string>* 
 	// Character Infos
 	this->name = name;
 	this->targetPosition = startingPosition;
+	characterHeight = Ogre::Real(2.5);
 
 	// 3D world components
 	this->meshName = meshName;
@@ -36,7 +37,8 @@ NetCharacter::NetCharacter(SceneManager* sceneManager, std::queue<std::string>* 
 	setupBody();
 
 	// Animations
-	setupAnimations();
+	//TODO: create animation
+	//setupAnimations();
 }
 
 NetCharacter::~NetCharacter()
@@ -46,18 +48,19 @@ NetCharacter::~NetCharacter()
 void NetCharacter::addTime(Real deltaTime)
 {
 	updateBody(deltaTime);
-	updateAnimations(deltaTime);
+	//TODO: create animation
+	//updateAnimations(deltaTime);
 }
 
 void NetCharacter::setTargetPosition(Vector3 targetPosition)
 {
-	targetPosition.y = CHARACTER_HEIGHT;
+	targetPosition.y = characterHeight;
 	this->targetPosition = targetPosition;
 }
 
 void NetCharacter::setupBody()
 {
-	targetPosition.y = CHARACTER_HEIGHT;
+	targetPosition.y = characterHeight;
 	bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode(targetPosition);
 	//TODO: fix multiple same name bug
 	bodyEntity = sceneManager->createEntity(name, meshName);
