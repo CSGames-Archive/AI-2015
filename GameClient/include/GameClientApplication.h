@@ -19,9 +19,6 @@
 
 #include "NetworkController.h"
 
-#include <Terrain/OgreTerrain.h>
-#include <Terrain/OgreTerrainGroup.h>
-
 #include "BaseApplication.h"
 #include "NetPlayerController.h"
 

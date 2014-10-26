@@ -12,7 +12,7 @@
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#include "NetPLayer.h"
+#include "NetPlayer.h"
 
 NetPlayer::NetPlayer(std::queue<std::string>* messageQueue, int playerId)
 {

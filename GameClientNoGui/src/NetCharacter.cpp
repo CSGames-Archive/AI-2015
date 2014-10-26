@@ -6,37 +6,38 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Character.h
-** Implementation of the Character
+** NetCharacter.cpp
+** Implementation of the NetCharacter
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#include "Character.h"
+#include "NetCharacter.h"
 
-Character::Character()
+NetCharacter::NetCharacter(std::queue<std::string>* messageQueue)
 {
-
+	this->messageQueue = messageQueue;
 }
 
-Character::Character(char* tagName, double x, double z)
+NetCharacter::NetCharacter(std::queue<std::string>* messageQueue, std::string tagName, double x, double z, int playerId, int characterId)
 {
+	this->messageQueue = messageQueue;
 	this->tagName = tagName;
-	moveCharacter(x, z);
+	this->x = x;
+	this->z = z;
+	this->playerId = playerId;
+	this->characterId = characterId;
 }
 
-Character::~Character()
+NetCharacter::~NetCharacter()
 {
 
 }
 
-void Character::moveCharacter(double x, double z)
+void NetCharacter::moveCharacter(double x, double z)
 {
 	this->x = x;
 	this->z = z;
-}
 
-void Character::printSelf()
-{
-	std::cout << "	*Character: " << tagName << " at (" << x << "," << z << ")" << std::endl;
+	messageQueue->push(NetUtility::generateMoveCharacterPacket(playerId, characterId, x, z));
 }

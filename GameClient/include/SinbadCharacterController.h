@@ -2,8 +2,7 @@
 #define __Sinbad_H__
 
 #include "stdafx.h"
-#include <Terrain/OgreTerrain.h>
-#include <Terrain/OgreTerrainGroup.h>
+
 #include "NetworkController.h"
 
 using namespace Ogre;
@@ -49,8 +48,6 @@ public:
 	{
 		mCurrentSpeed = WALK_SPEED;
 
-		this->mTerrainGroup = mTerrainGroup;
-		this->netController = netController;
 		setupBody(cam->getSceneManager());
 		setupCamera(cam);
 		setupAnimations();
@@ -548,7 +545,6 @@ private:
 	Vector3 mGoalDirection;     // actual intended direction in world-space
 	Real mVerticalVelocity;     // for jumping
 	Real mTimer;                // general timer to see how long animations have been playing
-	TerrainGroup* mTerrainGroup;
 	//network
 	NetworkController* netController;
 	Vector3 oldPosition;

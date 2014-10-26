@@ -127,12 +127,12 @@ void NetworkController::readerFunc()
 			char* token = NULL;
 			char* next_token = NULL;
 
-			token = strtok_s( message, seps, &next_token);
+			token = strtok(message, seps);
 
 			while(token != NULL)
 			{
 				netCommandController.UpdateStateMachine(token);
-				token = strtok_s( NULL, seps, &next_token);
+				token = strtok(NULL, seps);
 			}
 		}
 	}
