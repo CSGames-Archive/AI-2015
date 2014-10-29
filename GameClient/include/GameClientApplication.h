@@ -22,9 +22,6 @@
 #include "BaseApplication.h"
 #include "NetPlayerController.h"
 
-//TODO: change for the camera man
-#include "SinbadCharacterController.h"
-
 class GameClientApplication : public BaseApplication
 {
 private:
@@ -37,9 +34,7 @@ public:
 
 protected:
     virtual void createScene();
-    virtual void destroyScene();
 	virtual bool setup();
-	void createCamera();
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -52,9 +47,6 @@ protected:
     virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
-	
-	// Change for the camera man
-	SinbadCharacterController* mChara;
 };
 
 #endif // #ifndef __GameClientAppliaction_h_

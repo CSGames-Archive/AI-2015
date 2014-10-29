@@ -23,28 +23,6 @@
 #include "Ogre.h"
 #include "OIS.h"
 
-/*
-// Ogre headers
-#include <OgreCamera.h>
-#include <OgreConfigFile.h>
-#include <OgreEntity.h>
-#include <OgreException.h>
-#include <OgreLogManager.h>
-#include <OgreMaterialManager.h>
-#include <OgreRenderWindow.h>
-#include <OgreRoot.h>
-#include <OgreSceneManager.h>
-#include <OgreTextureManager.h>
-#include <OgreViewport.h>
-#include <OgreWindowEventUtilities.h>
-
-// Ogre OIS headers
-#include <OISEvents.h>
-#include <OISInputManager.h>
-#include <OISKeyboard.h>
-#include <OISMouse.h>
-*/
-
 // Check for duplicate include of window.h
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

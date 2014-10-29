@@ -27,7 +27,6 @@
     <ClInclude Include="include\NetTeam.h" />
     <ClInclude Include="include\NetUtility.h" />
     <ClInclude Include="include\NetworkController.h" />
-    <ClInclude Include="include\SinbadCharacterController.h" />
     <ClInclude Include="include\stdafx.h" />
   </ItemGroup>
   <ItemGroup>

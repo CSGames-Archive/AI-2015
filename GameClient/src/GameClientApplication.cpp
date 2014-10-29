@@ -15,7 +15,6 @@
 #include "stdafx.h"
 #include "GameClientApplication.h"
 
-//-------------------------------------------------------------------------------------
 GameClientApplication::GameClientApplication()
 {
 }
@@ -28,13 +27,6 @@ GameClientApplication::~GameClientApplication()
 		delete netController;
 		netController = 0;
 	}
-}
-
-//-------------------------------------------------------------------------------------
-
-void GameClientApplication::createCamera()
-{
-	mCamera = mSceneMgr->createCamera("MainCamera");
 }
 
 void GameClientApplication::createScene()
@@ -64,18 +56,6 @@ void GameClientApplication::createScene()
 	floor->setMaterialName("SceneMaterial/FloorSand");
 	floor->setCastShadows(false);
 	mSceneMgr->getRootSceneNode()->attachObject(floor);
-
-	//TODO: Replace with the camera man
-	mChara = new SinbadCharacterController(mCamera, netController);
-}
-
-void GameClientApplication::destroyScene()
-{
-	if (mChara)
-	{
-		delete mChara;
-		mChara = 0;
-	}
 }
 
 bool GameClientApplication::setup()
@@ -112,40 +92,35 @@ bool GameClientApplication::setup()
 
 bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-	if(mWindow->isClosed())
-		return false;
+    if(mWindow->isClosed())
+        return false;
 
-	if(mShutDown)
-		return false;
+    if(mShutDown)
+        return false;
 
 	mWindow->setActive(true);
 
-	//Fix for 1.9
-	//Need to capture/update each device
-	/*mKeyboard->capture();
-	mMouse->capture();*/
-	mInputContext.capture();
+    // Need to capture/update each device
+    mKeyboard->capture();
+    mMouse->capture();
 
-	mTrayMgr->frameRenderingQueued(evt);
+    mTrayMgr->frameRenderingQueued(evt);
 
-	//TODO: some refactor with the game workflow
-	if (!mTrayMgr->isDialogVisible())
-	{
-		mChara->addTime(evt.timeSinceLastFrame);
+    if (!mTrayMgr->isDialogVisible())
+    {
 		netController->addTime(evt.timeSinceLastFrame);
-
-		//TODO: some refactor with the UI
-		if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
-		{
-			mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
-			mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
-			mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
-			mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
-			mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
-			mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
-			mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
-		}
-	}
+        mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
+        if (mDetailsPanel->isVisible())          // If details panel is visible, then update its contents
+        {
+            mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
+            mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
+            mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
+            mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
+            mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
+            mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
+            mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
+        }
+    }
 
 	return true;
 }
@@ -157,9 +132,7 @@ void GameClientApplication::createFrameListener(void)
 
 bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 {
-	//TODO: some refactor with the gameworkflow
-	if (!mTrayMgr->isDialogVisible())
-		mChara->injectKeyDown(arg);
+	BaseApplication::keyPressed(arg);
 
 	if (arg.key == OIS::KC_ESCAPE)
 	{
@@ -173,28 +146,29 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 
 bool GameClientApplication::keyReleased( const OIS::KeyEvent &arg )
 {
-	if (!mTrayMgr->isDialogVisible())
-		mChara->injectKeyUp(arg);
+	BaseApplication::keyReleased(arg);
+
 	return true;
 }
 
 bool GameClientApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
-	if (!mTrayMgr->isDialogVisible())
-		mChara->injectMouseMove(arg);
+	BaseApplication::mouseMoved(arg);
+
 	return true;
 }
 
 bool GameClientApplication::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-	if (!mTrayMgr->isDialogVisible())
-		mChara->injectMouseDown(arg, id);
+	BaseApplication::mousePressed(arg, id);
+
 	return true;
 }
 
 bool GameClientApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-	//TODO: Add some action in here
+	BaseApplication::mouseReleased(arg, id);
+
 	return true;
 }
 
