@@ -6,36 +6,30 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetPlayerController.h
-** Controller that manage all the network player information
+** EventController.h
+** Controller that manage all the event
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetPlayerController_h_
-#define __NetPlayerController_h_
+#ifndef __EventController_h_
+#define __EventController_h_
 
 #include "stdafx.h"
 
-#include "NetTeam.h"
+#include "GameEvent.h"
 
-#define MAX_PLAYER 2
-
-class NetPlayerController
+class EventController
 {
 private:
-	std::queue<std::string>* messageQueue;
-	std::map<int, NetTeam*> netTeams;
-	SceneManager* sceneManager;
+	std::queue<GameEvent*> gameEventQueue;
 
 public:
-	NetPlayerController(SceneManager* sceneManager, std::queue<std::string>* messageQueue);
-	~NetPlayerController();
+    EventController();
+    virtual ~EventController();
 
-	void addPlayer(int id, char* playerName, char* characterNames[maxCharacter]);
-	void quitPlayer(int id);
-	void setTargetPosition(int teamId, int characterId, double x, double y);
-	void addTime(Real deltaTime);
+	void executeAllGameEvent(World* world);
+	void addGameEvent(GameEvent* gameEvent);
 };
 
-#endif // #ifndef __NetPlayerController_h_
+#endif // #ifndef __EventController_h_

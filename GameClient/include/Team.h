@@ -6,37 +6,36 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetTeam.h
-** NetTeam that controle a character
+** Team.h
+** Team that control some characters
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __NetTeam_h_
-#define __NetTeam_h_
+#ifndef __Team_h_
+#define __Team_h_
 
 #include "stdafx.h"
 
-#include <iostream>
-#include <map>
+#include "Character.h"
+#include "NetworkController.h"
 
-#include "NetCharacter.h"
-
-#define maxCharacter 2
-
-class NetTeam
+class Team
 {
 private:
-	std::queue<std::string>* messageQueue;
+	NetworkController* networkController;
+	Ogre::SceneManager* sceneManager;
+
+	int id;
 	char* name;
-	std::map<int, NetCharacter*> netCharacters;
-	int teamId;
+	std::map<int, Character*> netCharacters;
 
 public:
-	NetTeam(SceneManager* sceneManager, std::queue<std::string>* messageQueue, char* name, int teamId, char* characterNames[maxCharacter]);
-	~NetTeam();
-	void setTargetPosition(int characterId, Vector3 targetPosition);
-	void addTime(Real deltaTime);
+	Team(Ogre::SceneManager* sceneManager, NetworkController* networkController, char* name, int id);
+	virtual ~Team();
+	void addCharacter(std::string name, int characterId, Ogre::Vector3 startingPosition);
+	Character* getCharacter(int characterId);
+	void addTime(Ogre::Real deltaTime);
 };
 
-#endif // #ifndef __NetTeam_h_
+#endif // #ifndef __Team_h_

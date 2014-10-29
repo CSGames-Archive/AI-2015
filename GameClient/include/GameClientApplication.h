@@ -17,16 +17,18 @@
 
 #include "stdafx.h"
 
-#include "NetworkController.h"
-
 #include "BaseApplication.h"
-#include "NetPlayerController.h"
+
+#include "NetworkController.h"
+#include "EventController.h"
+#include "World.h"
 
 class GameClientApplication : public BaseApplication
 {
 private:
-	// Networking
 	NetworkController* netController;
+	EventController* eventController;
+	World* world;
 
 public:
     GameClientApplication();
@@ -43,7 +45,8 @@ protected:
     // OIS::KeyListener
     virtual bool keyPressed( const OIS::KeyEvent &arg );
     virtual bool keyReleased( const OIS::KeyEvent &arg );
-    // OIS::MouseListener
+
+	// OIS::MouseListener
     virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     virtual bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );

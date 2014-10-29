@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EventController.h" />
+    <ClInclude Include="GameEvent.h" />
     <ClInclude Include="include\BaseApplication.h" />
     <ClInclude Include="include\GameClientApplication.h" />
-    <ClInclude Include="include\NetCharacter.h" />
-    <ClInclude Include="include\NetCommandController.h" />
-    <ClInclude Include="include\NetPlayerController.h" />
-    <ClInclude Include="include\NetTeam.h" />
+    <ClInclude Include="include\Character.h" />
+    <ClInclude Include="include\EventFactory.h" />
+    <ClInclude Include="include\World.h" />
+    <ClInclude Include="include\Team.h" />
     <ClInclude Include="include\NetUtility.h" />
     <ClInclude Include="include\NetworkController.h" />
     <ClInclude Include="include\stdafx.h" />

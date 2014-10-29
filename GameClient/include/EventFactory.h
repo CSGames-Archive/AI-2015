@@ -6,33 +6,35 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** stdafx.h
-** All the precompile headers
+** NetCommandController.h
+** The controler for all the command receive over the network
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-// Remove warning for Boost library
-#define NOMINMAX
+#ifndef __EventFactory__
+#define __EventFactory__
 
-#define MAX_CHARACTER_PER_TEAM 2
-#define MAX_TEAM 2
-#define MESSAGE_MAX_ARGUMENT 16
+#include "stdafx.h"
 
-// Boost
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/thread.hpp>
+#include "EventController.h"
 
-#include "Ogre.h"
-#include "OIS.h"
+class EventFactory
+{
+private:
+	EventController* eventController;
+	GameEvent* currentEvent;
 
-#include <iostream>
-#include <map>
-#include <queue>
+	char* arguments[MESSAGE_MAX_ARGUMENT];
+	int argumentCount;
+	void sendEvent();
+	void createEvent(char* token);
 
-// Check for duplicate include of window.h
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
+public:
+	EventFactory(EventController* eventController);
+    virtual ~EventFactory();
+
+	void fead(char* token);
+};
+
+#endif // #ifndef __EventFactory__

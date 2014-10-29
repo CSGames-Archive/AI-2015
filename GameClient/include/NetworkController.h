@@ -17,15 +17,8 @@
 
 #include "stdafx.h"
 
-#include <queue>
-#include <iostream>
-
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
-#include <boost/thread.hpp>
-
-#include "NetCommandController.h"
-#include "NetPlayerController.h"
+#include "EventFactory.h"
+#include "NetUtility.h"
 
 using boost::asio::ip::tcp;
 
@@ -43,17 +36,14 @@ private:
 	boost::thread* readerThread;
 	boost::array<char, 128> buf;
 	boost::system::error_code error;
-	NetCommandController netCommandController;
+	EventFactory eventFactory;
 
 	// Attributes for writer
 	std::queue<std::string> messageQueue;
 	boost::thread* writerThread;
 
-	// Attributes for the world
-	NetPlayerController netPlayerController;
-
 public:
-    NetworkController(SceneManager* sceneManager);
+    NetworkController(EventController* eventController);
     virtual ~NetworkController();
 
 	// Threads functions
@@ -62,10 +52,9 @@ public:
 	void init();
 
 	// Character specifics commandes
-	void addMessageToQueue(std::string message);
+	void SendMoveCharacterMessage(int playerId, int characterId, double x, double z);
+	void SendUpdateTeam(int playerId);
 	void close();
-
-	void addTime(Real deltaTime);
 };
 
 #endif // #ifndef __NetworkController_h_
