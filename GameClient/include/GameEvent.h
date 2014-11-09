@@ -21,42 +21,56 @@
 
 class GameEvent
 {
+protected:
+	int convertCharToNumeral(char* token);
+
 public:
-    GameEvent();
-    virtual ~GameEvent();
+	GameEvent() {}
+	virtual ~GameEvent() {}
 
 	virtual void execute(World* world) {}
-	virtual bool fillArgument(char* values[]) {}
-	virtual int getNumberOfArgument() {}
+	virtual bool fillArgument(char* values[]) {return true;}
+	virtual int getNumberOfArgument() {return 0;}
 };
 
 class ErrorEvent : public GameEvent
 {
-public:
-    ErrorEvent();
-    virtual ~ErrorEvent();
+private:
+	char* message;
 
-	virtual void execute(World* world) {}
-	virtual bool fillArgument(char* values[]) {}
+public:
+	ErrorEvent() {}
+	virtual ~ErrorEvent() {}
+
+	virtual void execute(World* world);
+	virtual bool fillArgument(char* values[]);
 	virtual int getNumberOfArgument() {return 1;}
 };
 
 class DisconnectEvent : public GameEvent
 {
-public:
-    DisconnectEvent();
-    virtual ~DisconnectEvent();
+private:
+	int teamId;
 
-	virtual void execute(World* world) {}
-	virtual bool fillArgument(char* values[]) {}
+public:
+	DisconnectEvent() {}
+	virtual ~DisconnectEvent() {}
+
+	virtual void execute(World* world);
+	virtual bool fillArgument(char* values[]);
 	virtual int getNumberOfArgument() {return 1;}
 };
 
-class AddPlayerEvent : public GameEvent
+class AddTeamEvent : public GameEvent
 {
+private:
+	int teamId;
+	char* teamName;
+	char* characterNames[MAX_CHARACTER_PER_TEAM];
+
 public:
-    AddPlayerEvent();
-    virtual ~AddPlayerEvent();
+	AddTeamEvent() {}
+	virtual ~AddTeamEvent() {}
 
 	virtual void execute(World* world);
 	virtual bool fillArgument(char* values[]);
@@ -65,9 +79,11 @@ public:
 
 class MoveCharacterEvent : public GameEvent
 {
+private:
+	int positionX, positionZ, characterId, teamId;
 public:
-    MoveCharacterEvent();
-    virtual ~MoveCharacterEvent();
+	MoveCharacterEvent() {}
+	virtual ~MoveCharacterEvent() {}
 
 	virtual void execute(World* world);
 	virtual bool fillArgument(char* values[]);

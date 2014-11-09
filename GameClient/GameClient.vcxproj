@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EventController.h" />
-    <ClInclude Include="GameEvent.h" />
     <ClInclude Include="include\BaseApplication.h" />
+    <ClInclude Include="include\EventController.h" />
+    <ClInclude Include="include\EventFactory.h" />
     <ClInclude Include="include\GameClientApplication.h" />
     <ClInclude Include="include\Character.h" />
-    <ClInclude Include="include\EventFactory.h" />
+    <ClInclude Include="include\GameEvent.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\Team.h" />
     <ClInclude Include="include\NetUtility.h" />
@@ -32,12 +32,14 @@
     <ClInclude Include="include\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EventController.cpp" />
     <ClCompile Include="src\BaseApplication.cpp" />
+    <ClCompile Include="src\EventFactory.cpp" />
     <ClCompile Include="src\GameClientApplication.cpp" />
-    <ClCompile Include="src\NetCharacter.cpp" />
-    <ClCompile Include="src\NetCommandController.cpp" />
-    <ClCompile Include="src\NetPlayerController.cpp" />
-    <ClCompile Include="src\NetTeam.cpp" />
+    <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\GameEvent.cpp" />
+    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Team.cpp" />
     <ClCompile Include="src\NetworkController.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>

@@ -4,37 +4,43 @@
 ** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
 ** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
-**        \/        \/             \/         \/         \/        \/        \/ 
+**         \/        \/             \/         \/         \/        \/        \/ 
 **
-** Team.h
-** Team that control some characters
+** EventController.h
+** The controler for all the event on the game
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __Team_h_
-#define __Team_h_
-
 #include "stdafx.h"
 
-#include "Character.h"
+#include "EventController.h"
 
-class Team
+EventController::EventController()
 {
-private:
-	int id;
-	char* name;
-	Character* characters[MAX_CHARACTER_PER_TEAM];
-	int characterCount;
+}
 
-public:
-	Team(char* name, int id);
-	virtual ~Team();
+EventController::~EventController()
+{
+}
 
-	void addCharacter(Character* character);
-	Character* getCharacter(int characterId);
-	void addTime(Ogre::Real deltaTime);
-	int getId();
-};
+void EventController::executeAllGameEvent(World* world)
+{
+	while(!gameEventQueue.empty())
+	{
+		GameEvent* event = gameEventQueue.front();
+		event->execute(world);
+		delete event;
+		gameEventQueue.pop();
+	}
+}
 
-#endif // #ifndef __Team_h_
+void EventController::addGameEvent(GameEvent* gameEvent)
+{
+	gameEventQueue.push(gameEvent);
+}
+
+std::queue<GameEvent*>* EventController::getQueue()
+{
+	return &gameEventQueue;
+}

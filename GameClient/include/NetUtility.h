@@ -21,9 +21,9 @@
 
 namespace NetUtility
 {
-	static std::string generateMoveCharacterPacket(int playerId, int characterId, double x, double z)
+	static std::string generateMoveCharacterMessage(int playerId, int characterId, double x, double z)
 	{
-		char numstr[21]; // enough to hold all numbers up to 64-bits
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", playerId);
 		std::string message = "UpdateCharacter:";
 		message += numstr;
@@ -42,9 +42,9 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string updatePlayer(int playerId)
+	static std::string generateUpdatePlayerMessage(int playerId)
 	{
-		char numstr[21]; // enough to hold all numbers up to 64-bits
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", playerId);
 		std::string message = "UpdatePlayer:";
 		message += numstr;

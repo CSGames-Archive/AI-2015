@@ -4,10 +4,10 @@
 ** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
 ** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
-**        \/        \/             \/         \/         \/        \/        \/ 
+**         \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCommandController.h
-** The controler for all the command receive over the network
+** EventFactory.h
+** The factory to create all the GameEvent that come from the net
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
@@ -16,18 +16,11 @@
 
 #include "EventFactory.h"
 
-
-EventController* eventController;
-GameEvent* currentEvent;
-
-char* arguments[MESSAGE_MAX_ARGUMENT];
-int argumentCount;
-void send();
-
-EventFactory::EventFactory(EventController* eventController)
+EventFactory::EventFactory(std::queue<GameEvent*>* gameEventQueue)
 {
-	this->eventController = eventController;
+	this->gameEventQueue = gameEventQueue;
 	argumentCount = 0;
+	currentEvent = NULL;
 }
 
 EventFactory::~EventFactory()
@@ -63,7 +56,7 @@ void EventFactory::createEvent(char* token)
 	}
 	else if(!strcmp(token, "AddPlayer"))
 	{
-		currentEvent = new AddPlayerEvent();
+		currentEvent = new AddTeamEvent();
 	}
 	else if(!strcmp(token, "Move"))
 	{
@@ -73,8 +66,10 @@ void EventFactory::createEvent(char* token)
 
 void EventFactory::sendEvent()
 {
-	currentEvent->fillArgument(arguments);
-	eventController->addGameEvent(currentEvent);
+	if(currentEvent->fillArgument(arguments))
+	{
+		gameEventQueue->push(currentEvent);
+	}
 	currentEvent = NULL;
 	argumentCount = 0;
 }

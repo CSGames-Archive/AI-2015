@@ -25,6 +25,10 @@ using boost::asio::ip::tcp;
 class NetworkController
 {
 private:
+	// Structure
+	std::queue<std::string> messageQueue;
+	EventFactory eventFactory;
+
 	// Attributes for connection
 	boost::asio::io_service io_service;
 	tcp::resolver resolver;
@@ -36,14 +40,12 @@ private:
 	boost::thread* readerThread;
 	boost::array<char, 128> buf;
 	boost::system::error_code error;
-	EventFactory eventFactory;
 
 	// Attributes for writer
-	std::queue<std::string> messageQueue;
 	boost::thread* writerThread;
 
 public:
-    NetworkController(EventController* eventController);
+    NetworkController(std::queue<GameEvent*>* gameEventQueue);
     virtual ~NetworkController();
 
 	// Threads functions
@@ -51,10 +53,8 @@ public:
 	void writeFunc();
 	void init();
 
-	// Character specifics commandes
-	void SendMoveCharacterMessage(int playerId, int characterId, double x, double z);
-	void SendUpdateTeam(int playerId);
 	void close();
+	std::queue<std::string>* getQueue();
 };
 
 #endif // #ifndef __NetworkController_h_

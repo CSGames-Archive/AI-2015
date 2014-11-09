@@ -4,7 +4,7 @@
 ** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
 ** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
-**        \/        \/             \/         \/         \/        \/        \/ 
+**         \/        \/             \/         \/         \/        \/        \/ 
 **
 ** GameClientAppliaction.h
 ** The game client appliaction
@@ -12,8 +12,8 @@
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __GameClientAppliaction_h_
-#define __GameClientAppliaction_h_
+#ifndef __GameClientApplication_h_
+#define __GameClientApplication_h_
 
 #include "stdafx.h"
 
@@ -26,7 +26,7 @@
 class GameClientApplication : public BaseApplication
 {
 private:
-	NetworkController* netController;
+	NetworkController* networkController;
 	EventController* eventController;
 	World* world;
 

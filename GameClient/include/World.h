@@ -18,24 +18,28 @@
 #include "stdafx.h"
 
 #include "Team.h"
-#include "NetworkController.h"
 
 class World
 {
 private:
-	NetworkController* networkController;
+	// TODO: find better place
+	char* TANK_MESH_NAME;
+	Ogre::Real TANK_MESH_HEIGHT;
+
+	std::queue<std::string>* netMessageQueue;
 	Ogre::SceneManager* sceneManager;
 
-	std::map<int, Team*> teams;
+	Team* teams[MAX_TEAM];
+	int teamCount;
 
 public:
-	World(Ogre::SceneManager* sceneManager, NetworkController* networkController);
+	World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessageQueue);
 	virtual ~World();
 
 	void createScene();
-	void addTeam(int id, char* teamName, char* characterNames[MAX_CHARACTER_PER_TEAM]);
-	void removeTeam(int id);
-	Team* getTeam(int id);
+	void addTeam(int teamId, char* teamName, char* characterNames[MAX_CHARACTER_PER_TEAM]);
+	void removeTeam(int teamId);
+	Team* getTeam(int teamId);
 	void addTime(Ogre::Real deltaTime);
 };
 

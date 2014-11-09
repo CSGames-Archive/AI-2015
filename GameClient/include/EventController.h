@@ -4,7 +4,7 @@
 ** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
 ** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
-**        \/        \/             \/         \/         \/        \/        \/ 
+**         \/        \/             \/         \/         \/        \/        \/ 
 **
 ** EventController.h
 ** Controller that manage all the event
@@ -30,6 +30,7 @@ public:
 
 	void executeAllGameEvent(World* world);
 	void addGameEvent(GameEvent* gameEvent);
+	std::queue<GameEvent*>* getQueue();
 };
 
 #endif // #ifndef __EventController_h_

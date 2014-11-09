@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 
-#include "NetworkController.h"
+#include "NetUtility.h"
 
 #define WALK_SPEED 50
 
@@ -26,7 +26,7 @@ class Character
 
 private:
 	// Network
-	NetworkController* networkController;
+	std::queue<std::string>* netMessageQueue;
 	int teamId;
 	int characterId;
 	Ogre::Vector3 lastSendPosition;
@@ -36,22 +36,18 @@ private:
 	Ogre::Vector3 targetPosition;
 
 	// 3D world components
-	std::string meshName;
-	Ogre::SceneManager* sceneManager;
 	Ogre::SceneNode* bodyNode;
-	Ogre::Entity* bodyEntity;
-	Ogre::Real characterHeight;
 
-	void setupBody();
 	void updateBody(Ogre::Real deltaTime);
 
 public:
-	Character(Ogre::SceneManager* sceneManager, NetworkController* networkController,
-		std::string name, std::string meshName, Ogre::Vector3 startingPosition, int teamId, int characterId);
+	Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId);
 	virtual ~Character();
 
 	void addTime(Ogre::Real deltaTime);
 	void setTargetPosition(Ogre::Vector3 targetPosition);
+	void setTargetPosition(int x, int z);
+	int getId();
 };
 
 #endif // #ifndef __Character_h_

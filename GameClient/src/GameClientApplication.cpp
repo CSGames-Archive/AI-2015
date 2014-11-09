@@ -21,41 +21,29 @@ GameClientApplication::GameClientApplication()
 
 GameClientApplication::~GameClientApplication()
 {
-	netController->close();
-	if(netController)
+	networkController->close();
+	if(networkController)
 	{
-		delete netController;
-		netController = 0;
+		delete networkController;
+		networkController = NULL;
+	}
+
+	if(eventController)
+	{
+		delete eventController;
+		eventController = NULL;
+	}
+
+	if(world)
+	{
+		delete world;
+		world = NULL;
 	}
 }
 
 void GameClientApplication::createScene()
 {
-	//TODO: Refactor with the new map
-	// Set the scene's ambient light
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
-
-	// Create a Light and set its position
-	Ogre::Light* light = mSceneMgr->createLight("MainLight");
-	light->setPosition(20.0f, 80.0f, 50.0f);
-
-	Ogre::Light* light2 = mSceneMgr->createLight("MainLight2");
-	light2->setPosition(-20.0f, 80.0f, -50.0f);
-
-	Ogre::Plane plane;
-	plane.d = 1000;
-	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
-	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-
-	// create a floor mesh resource
-	MeshManager::getSingleton().createPlane("floor", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-	Plane(Vector3::UNIT_Y, 0), 1000, 1000, 10, 10, true, 1, 10, 10, Vector3::UNIT_Z);
-
-	// create a floor entity, give it a material, and place it at the origin
-	Entity* floor = mSceneMgr->createEntity("Floor", "floor");
-	floor->setMaterialName("SceneMaterial/FloorSand");
-	floor->setCastShadows(false);
-	mSceneMgr->getRootSceneNode()->attachObject(floor);
+	world->createScene();
 }
 
 bool GameClientApplication::setup()
@@ -79,13 +67,15 @@ bool GameClientApplication::setup()
 	// Load resources
 	loadResources();
 
+	// Create world & controller
+	eventController = new EventController();
+	networkController = new NetworkController(eventController->getQueue());
+	networkController->init();
+	world = new World(mSceneMgr, networkController->getQueue());
+
 	// Create the scene
 	createScene();
 	createFrameListener();
-
-	netController = new NetworkController(mSceneMgr);
-
-	netController->init();
 
 	return true;
 };
@@ -108,7 +98,8 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     if (!mTrayMgr->isDialogVisible())
     {
-		netController->addTime(evt.timeSinceLastFrame);
+		eventController->executeAllGameEvent(world);
+		world->addTime(evt.timeSinceLastFrame);
         mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
         if (mDetailsPanel->isVisible())          // If details panel is visible, then update its contents
         {
@@ -137,7 +128,7 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 	if (arg.key == OIS::KC_ESCAPE)
 	{
 		//TODO: test if call in the destructor
-		netController->close();
+		networkController->close();
 		mShutDown = true;
 	}
 

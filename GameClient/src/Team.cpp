@@ -6,35 +6,59 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Team.h
-** Team that control some characters
+** Team.cpp
+** Implementation of the NetTeam
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __Team_h_
-#define __Team_h_
-
 #include "stdafx.h"
 
-#include "Character.h"
+#include "Team.h"
 
-class Team
+Team::Team(char* name, int teamId)
 {
-private:
-	int id;
-	char* name;
-	Character* characters[MAX_CHARACTER_PER_TEAM];
-	int characterCount;
+	this->name = name;
+	this->id = teamId;
+	characterCount = 0;
+}
 
-public:
-	Team(char* name, int id);
-	virtual ~Team();
+Team::~Team()
+{
+	for(int i = 0; i < characterCount; ++i)
+	{
+		if(characters[i])
+		{
+			delete characters[i];
+		}
+	}
+}
 
-	void addCharacter(Character* character);
-	Character* getCharacter(int characterId);
-	void addTime(Ogre::Real deltaTime);
-	int getId();
-};
+void Team::addCharacter(Character* character)
+{
+	characters[characterCount++] = character;
+}
 
-#endif // #ifndef __Team_h_
+Character* Team::getCharacter(int characterId)
+{
+	if(characterId < characterCount)
+		return characters[characterId];
+	else
+		return NULL;
+}
+
+void Team::addTime(Ogre::Real deltaTime)
+{
+	for(int i = 0; i < characterCount; ++i)
+	{
+		if(characters[i])
+		{
+			characters[i]->addTime(deltaTime);
+		}
+	}
+}
+
+int Team::getId()
+{
+	return id;
+}

@@ -17,12 +17,12 @@
 
 #include "stdafx.h"
 
-#include "EventController.h"
+#include "GameEvent.h"
 
 class EventFactory
 {
 private:
-	EventController* eventController;
+	std::queue<GameEvent*>* gameEventQueue;
 	GameEvent* currentEvent;
 
 	char* arguments[MESSAGE_MAX_ARGUMENT];
@@ -31,7 +31,7 @@ private:
 	void createEvent(char* token);
 
 public:
-	EventFactory(EventController* eventController);
+	EventFactory(std::queue<GameEvent*>* gameEventQueue);
     virtual ~EventFactory();
 
 	void fead(char* token);

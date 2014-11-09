@@ -16,7 +16,7 @@
 
 #include "NetworkController.h"
 
-NetworkController::NetworkController(SceneManager* sceneManager) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), netPlayerController(sceneManager, &messageQueue), netCommandController(&netPlayerController)
+NetworkController::NetworkController(std::queue<GameEvent*>* gameEventQueue) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), eventFactory(gameEventQueue)
 {
 	endpoint_iterator = resolver.resolve(query);
 	readerThread = NULL;
@@ -96,11 +96,6 @@ void NetworkController::init()
 	}
 }
 
-void  NetworkController::addMessageToQueue(std::string message)
-{
-	messageQueue.push(message);
-}
-
 void NetworkController::readerFunc()
 {
 	bool exit = false;
@@ -133,7 +128,7 @@ void NetworkController::readerFunc()
 
 			while(token != NULL)
 			{
-				netCommandController.UpdateStateMachine(token);
+				eventFactory.fead(token);
 				token = strtok( NULL, seps);
 			}
 		}
@@ -147,7 +142,7 @@ void NetworkController::readerFunc()
 void NetworkController::close()
 {
 	std::string message = "Exit";
-	addMessageToQueue(message);
+	messageQueue.push(message);
 
 	if(readerThread)
 		readerThread->join();
@@ -156,7 +151,7 @@ void NetworkController::close()
 		writerThread->join();
 }
 
-void NetworkController::addTime(Real deltaTime)
+std::queue<std::string>* NetworkController::getQueue()
 {
-	netPlayerController.addTime(deltaTime);
+	return &messageQueue;
 }
