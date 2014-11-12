@@ -10,6 +10,10 @@ var currentClientId = 1;
 var currentClientConnected = 0;
 var gameClientId = 0;
 
+// Game Settings
+var maxTeamNumber = 0;
+var maxCharacterPerTeam = 0;
+
 net.createServer(function (socket) {
 
 	// Identify this client
@@ -51,12 +55,13 @@ net.createServer(function (socket) {
 			if(gameClientId == 0)
 			{
 				gameClientId = socket.id;
+				socket.write('YourAreTheGameClient' );
 				if (Debug)
 					process.stdout.write(' - Game Client Ready - ' + '\n');
 			}
 			else
 			{
-				socket.write('Error: Game client already connected');
+				socket.write('ErrorClientAlreadyConnected');
 			}
 		}
 		else if (msg == 'AIClientReady')
@@ -67,7 +72,7 @@ net.createServer(function (socket) {
 			}
 			else
 			{
-				socket.write('Error: Game client not connected');
+				socket.write('ErrorGameClientNotConnected');
 			}
 		}
 		else
@@ -79,7 +84,7 @@ net.createServer(function (socket) {
 			}
 			else
 			{
-				socket.write('Error: Game client not connected');
+				socket.write('ErrorGameClientNotConnected');
 			}
 		}
 	});

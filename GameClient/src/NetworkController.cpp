@@ -21,6 +21,7 @@ NetworkController::NetworkController(std::queue<GameEvent*>* gameEventQueue) : r
 	endpoint_iterator = resolver.resolve(query);
 	readerThread = NULL;
 	writerThread = NULL;
+	status = ControllerStatus::TryToConnect;
 }
 
 NetworkController::~NetworkController()
@@ -74,10 +75,21 @@ void NetworkController::writeFunc()
 
 void NetworkController::init()
 {
+	while(status == ControllerStatus::TryToConnect)
+	{
+		if(!tryToConnect())
+		{
+			printf("Can't reach server... Will try again in 2s\n");
+			boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
+		}
+		else
+		{
+			status = ControllerStatus::TryJoinGame;
+		}
+	}
+
 	try
 	{
-		boost::asio::connect(socket, endpoint_iterator);
-		
 		if(readerThread == NULL)
 		{
 			readerThread = new boost::thread( boost::bind (&NetworkController::readerFunc, this));
@@ -87,13 +99,33 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
-
-		messageQueue.push("GameClientReady");
 	}
 	catch (std::exception& e)
 	{
 		printf("Exception in init : %s\n", e.what());
 	}
+
+	tryJoinGame();
+}
+
+bool NetworkController::tryToConnect()
+{
+	try
+	{
+		boost::asio::connect(socket, endpoint_iterator);
+	}
+	catch (std::exception& e)
+	{
+		printf("Exception in init : %s\n", e.what());
+		return false;
+	}
+	return true;
+}
+
+void NetworkController::tryJoinGame()
+{
+	messageQueue.push("GameClientReady");
+	status = ControllerStatus::WaitingYouAreTheGameClient;
 }
 
 void NetworkController::readerFunc()
@@ -128,7 +160,14 @@ void NetworkController::readerFunc()
 
 			while(token != NULL)
 			{
-				eventFactory.fead(token);
+				if(status == ControllerStatus::Connected)
+				{
+					eventFactory.fead(token);
+				}
+				else
+				{
+					parseMessage(token);
+				}
 				token = strtok( NULL, seps);
 			}
 		}
@@ -154,4 +193,16 @@ void NetworkController::close()
 std::queue<std::string>* NetworkController::getQueue()
 {
 	return &messageQueue;
+}
+
+void NetworkController::parseMessage(char* token)
+{
+	if(!strcmp(token, "YourAreTheGameClient"))
+	{
+		status = ControllerStatus::Connected;
+	}
+	else if(!strcmp(token, "ErrorClientAlreadyConnected"))
+	{
+		close();
+	}
 }

@@ -24,9 +24,7 @@ int main(int argc, char* argv[])
 		char* playerName = "Rudolf";
 		char* characterName1 = "dodo";
 		char* characterName2 = "potato";
-		char* characterNames[2];
-		characterNames[0] = characterName1;
-		characterNames[1] = characterName1;
+		char* characterNames[2] = {characterName1, characterName2};
 
 		GameMap gameMap(playerName, characterNames);
 		NetworkController netController(&gameMap);

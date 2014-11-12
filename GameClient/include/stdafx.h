@@ -30,6 +30,8 @@
 #include <iostream>
 #include <map>
 #include <queue>
+#include <chrono>
+#include <thread>
 
 // Check for duplicate include of window.h
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

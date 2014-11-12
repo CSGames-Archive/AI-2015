@@ -22,6 +22,11 @@
 
 using boost::asio::ip::tcp;
 
+namespace
+{
+	enum ControllerStatus { TryToConnect, TryJoinGame, WaitingYouAreTheGameClient, Connected};
+};
+
 class NetworkController
 {
 private:
@@ -35,6 +40,7 @@ private:
 	tcp::resolver::query query;
 	tcp::resolver::iterator endpoint_iterator;
 	tcp::socket socket;
+	ControllerStatus status;
 
 	// Attributes for reader
 	boost::thread* readerThread;
@@ -52,6 +58,9 @@ public:
 	void readerFunc();
 	void writeFunc();
 	void init();
+	bool tryToConnect();
+	void tryJoinGame();
+	void parseMessage(char* token);
 
 	void close();
 	std::queue<std::string>* getQueue();
