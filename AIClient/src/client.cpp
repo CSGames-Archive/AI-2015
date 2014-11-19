@@ -26,10 +26,10 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		char* playerName = "Rudolf";
-		char* characterName1 = "dodo";
-		char* characterName2 = "potato";
-		char* characterNames[2] = {characterName1, characterName2};
+		std::string playerName = "Rudolf";
+		std::string characterName1 = "dodo";
+		std::string characterName2 = "potato";
+		std::string characterNames[2] = {characterName1, characterName2};
 
 		GameMap gameMap(playerName, characterNames);
 		AiStatus myStatus = AiStatus::AddPlayer;
@@ -50,15 +50,11 @@ int main(int argc, char* argv[])
 					boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
 					char numstr[21]; // enough to hold all numbers up to 64-bits
 					sprintf_s(numstr, "%d", gameMap.yourId);
-					std::string message = "AddPlayer:";
-					message += playerName;
-					message += numstr;
-					message += ":";
-					message += characterName1;
-					message += numstr;
-					message += ":";
-					message += characterName2;
-					message += numstr;
+					characterNames[0] += numstr;
+					characterNames[1] += numstr;
+					playerName += numstr;
+
+					std::string message = NetUtility::generateAddPlayerMessage(playerName, characterNames);
 					netController.addMessageToQueue(message);
 					myStatus = AiStatus::WaitGameStart;
 				}
@@ -68,17 +64,20 @@ int main(int argc, char* argv[])
 				}
 				else if(myStatus == AiStatus::MoveToCorner)
 				{
-					char numstr[21]; // enough to hold all numbers up to 64-bits
-					sprintf_s(numstr, "%d", 50);
-					std::string message = "Move:";
-					message += numstr;
-					message += ":";
-					message += numstr;
-					message += ":";
-					sprintf_s(numstr, "%d", 1);
-					message += numstr;
+					std::string message = NetUtility::generateMoveCharacterMessage(1,50,50);
 					netController.addMessageToQueue(message);
+
+					message = NetUtility::generateMoveCharacterMessage(0,-50,-50);
+					netController.addMessageToQueue(message);
+
 					myStatus = AiStatus::WaitReachCorner;
+				}
+				else if(myStatus == AiStatus::WaitReachCorner)
+				{
+					if(gameMap.players[gameMap.yourId]->characters[1]->x > 45)
+					{
+						printf("Yep its over!!\n");
+					}
 				}
 			}
 			boost::this_thread::sleep(boost::posix_time::milliseconds(30));

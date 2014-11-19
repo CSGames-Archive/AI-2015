@@ -25,12 +25,12 @@
 class Player
 {
 private:
-	char* tagName;
-	std::map<int, Character*> characters;
+	std::string tagName;
 
 public:
+	std::map<int, Character*> characters;
 	Player();
-	Player(char* tagName, char* characterNames[maxCharacter]);
+	Player(std::string tagName, std::string characterNames[maxCharacter]);
 	~Player();
 	void printSelf();
 	void moveCharacter(int id, double x, double z);

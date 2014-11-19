@@ -26,10 +26,10 @@ public:
 	std::map<int, Player*> players;
 	int yourId;
 	int opponentId;
-	char* playerName;
-	char* characterNames[maxCharacter];
+	std::string playerName;
+	std::string characterNames[maxCharacter];
 
-	GameMap(char* playerName, char* characterNames[maxCharacter]);
+	GameMap(std::string playerName, std::string characterNames[maxCharacter]);
 	~GameMap();
 	void printSelf();
 	void addPlayer(int id);

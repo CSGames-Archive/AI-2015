@@ -24,7 +24,7 @@ Player::Player()
 	}
 }
 
-Player::Player(char* tagName, char* characterNames[maxCharacter])
+Player::Player(std::string tagName, std::string characterNames[maxCharacter])
 {
 	this->tagName = "NoName";
 
@@ -52,7 +52,7 @@ void Player::moveCharacter(int id, double x, double y)
 
 void Player::printSelf()
 {
-	std::cout << "Player: " << tagName << std::endl;
+	std::cout << "Player: " << tagName.c_str() << std::endl;
 
 	for( int i=0; i<maxCharacter; ++i)
 	{

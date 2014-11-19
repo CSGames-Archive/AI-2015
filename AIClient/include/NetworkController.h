@@ -23,6 +23,7 @@
 #include <boost/thread.hpp>
 
 #include "NetCommandController.h"
+#include "NetUtility.h"
 #include "GameMap.h"
 
 using boost::asio::ip::tcp;

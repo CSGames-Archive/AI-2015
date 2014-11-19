@@ -14,7 +14,7 @@
 
 #include "GameMap.h"
 
-GameMap::GameMap(char* playerName, char* characterNames[maxCharacter])
+GameMap::GameMap(std::string playerName, std::string characterNames[maxCharacter])
 {
 	this->playerName = playerName;
 	for( int i=0; i<maxCharacter; ++i)

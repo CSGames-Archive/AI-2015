@@ -84,7 +84,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 
 		// TODO: refactor with case
 		Ogre::Vector3 networkDivergence = lastSendPosition - currentPosition;
-		if(networkDivergence.length() > 50)
+		if(networkDivergence.length() > 25)
 		{
 			std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, currentPosition.x, currentPosition.z);
 			netMessageQueue->push(message);
