@@ -22,14 +22,13 @@
 
 class GameMap
 {
-private:
+public:
 	std::map<int, Player*> players;
 	int yourId;
 	int opponentId;
 	char* playerName;
 	char* characterNames[maxCharacter];
 
-public:
 	GameMap(char* playerName, char* characterNames[maxCharacter]);
 	~GameMap();
 	void printSelf();

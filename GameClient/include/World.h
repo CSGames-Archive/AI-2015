@@ -37,7 +37,7 @@ public:
 	virtual ~World();
 
 	void createScene();
-	void addTeam(int teamId, char* teamName, char* characterNames[MAX_CHARACTER_PER_TEAM]);
+	void addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM]);
 	void removeTeam(int teamId);
 	Team* getTeam(int teamId);
 	void addTime(Ogre::Real deltaTime);

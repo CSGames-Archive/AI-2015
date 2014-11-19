@@ -22,28 +22,28 @@
 class GameEvent
 {
 protected:
-	int convertCharToNumeral(char* token);
+	int convertCharToNumeral(std::string token);
 
 public:
 	GameEvent() {}
 	virtual ~GameEvent() {}
 
 	virtual void execute(World* world) {}
-	virtual bool fillArgument(char* values[]) {return true;}
+	virtual bool fillArgument(std::string values[]) {return true;}
 	virtual int getNumberOfArgument() {return 0;}
 };
 
 class ErrorEvent : public GameEvent
 {
 private:
-	char* message;
+	std::string message;
 
 public:
 	ErrorEvent() {}
 	virtual ~ErrorEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(char* values[]);
+	virtual bool fillArgument(std::string values[]);
 	virtual int getNumberOfArgument() {return 1;}
 };
 
@@ -57,7 +57,7 @@ public:
 	virtual ~DisconnectEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(char* values[]);
+	virtual bool fillArgument(std::string values[]);
 	virtual int getNumberOfArgument() {return 1;}
 };
 
@@ -65,15 +65,15 @@ class AddTeamEvent : public GameEvent
 {
 private:
 	int teamId;
-	char* teamName;
-	char* characterNames[MAX_CHARACTER_PER_TEAM];
+	std::string teamName;
+	std::string characterNames[MAX_CHARACTER_PER_TEAM];
 
 public:
 	AddTeamEvent() {}
 	virtual ~AddTeamEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(char* values[]);
+	virtual bool fillArgument(std::string values[]);
 	virtual int getNumberOfArgument();
 };
 
@@ -86,7 +86,7 @@ public:
 	virtual ~MoveCharacterEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(char* values[]);
+	virtual bool fillArgument(std::string values[]);
 	virtual int getNumberOfArgument() {return 4;}
 };
 

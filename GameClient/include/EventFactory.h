@@ -25,7 +25,7 @@ private:
 	std::queue<GameEvent*>* gameEventQueue;
 	GameEvent* currentEvent;
 
-	char* arguments[MESSAGE_MAX_ARGUMENT];
+	std::string arguments[MESSAGE_MAX_ARGUMENT];
 	int argumentCount;
 	void sendEvent();
 	void createEvent(char* token);

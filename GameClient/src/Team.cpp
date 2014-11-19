@@ -16,7 +16,7 @@
 
 #include "Team.h"
 
-Team::Team(char* name, int teamId)
+Team::Team(std::string name, int teamId)
 {
 	this->name = name;
 	this->id = teamId;

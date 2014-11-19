@@ -16,12 +16,12 @@
 
 #include "GameEvent.h"
 
-int GameEvent::convertCharToNumeral(char* token)
+int GameEvent::convertCharToNumeral(std::string token)
 {
 	bool isDigit = true;
 
 	// Skip the first character because it could be "-"
-	for(int i = 1; i < (int) std::strlen(token); ++i)
+	for(int i = 1; i < token.size(); ++i)
 	{
 		if(!isdigit(token[i]))
 		{
@@ -32,7 +32,7 @@ int GameEvent::convertCharToNumeral(char* token)
 
 	if(isDigit)
 	{
-		return std::atoi(token);
+		return std::stoi(token);
 	}
 	std::cout << "Converting char to numeral failed for :" << token << std::endl;
 	return 0;
@@ -43,7 +43,7 @@ void ErrorEvent::execute(World* world)
 	std::cout << "Error :" << message << std::endl;
 }
 
-bool ErrorEvent::fillArgument(char* values[])
+bool ErrorEvent::fillArgument(std::string values[])
 {
 	message = values[0];
 	return true;
@@ -56,7 +56,7 @@ void DisconnectEvent::execute(World* world)
 	world->removeTeam(teamId);
 }
 
-bool DisconnectEvent::fillArgument(char* values[])
+bool DisconnectEvent::fillArgument(std::string values[])
 {
 	teamId = convertCharToNumeral(values[0]);
 
@@ -76,7 +76,7 @@ void AddTeamEvent::execute(World* world)
 	world->addTeam(teamId, teamName, characterNames);
 }
 
-bool AddTeamEvent::fillArgument(char* values[])
+bool AddTeamEvent::fillArgument(std::string values[])
 {
 	teamName = values[0];
 
@@ -105,7 +105,7 @@ void MoveCharacterEvent::execute(World* world)
 	world->getTeam(teamId)->getCharacter(characterId)->setTargetPosition(positionX, positionZ);
 }
 
-bool MoveCharacterEvent::fillArgument(char* values[])
+bool MoveCharacterEvent::fillArgument(std::string values[])
 {
 	positionX = convertCharToNumeral(values[0]);
 	positionZ = convertCharToNumeral(values[1]);

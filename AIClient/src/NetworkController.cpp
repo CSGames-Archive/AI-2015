@@ -21,6 +21,8 @@ NetworkController::NetworkController(GameMap* gameMap) : resolver(io_service), q
 		endpoint_iterator = resolver.resolve(query);
 		readerThread = NULL;
 		writerThread = NULL;
+		status = ControllerStatus::TryToConnect;
+		gameStarted = false;
 	}
 
 NetworkController::~NetworkController()
@@ -54,6 +56,10 @@ void NetworkController::writeFunc()
 				{
 					exit = true;
 				}
+				else if(message == "AIClientReady")
+				{
+					boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
+				}
 
 				// To be sure that message don't overlap
 				message += '\n';
@@ -74,10 +80,21 @@ void NetworkController::writeFunc()
 
 void NetworkController::init()
 {
+	while(status == ControllerStatus::TryToConnect)
+	{
+		if(!tryToConnect())
+		{
+			printf("Can't reach server... Will try again in 2s\n");
+			boost::this_thread::sleep(boost::posix_time::milliseconds(2000));
+		}
+		else
+		{
+			status = ControllerStatus::TryJoinGame;
+		}
+	}
+
 	try
 	{
-		boost::asio::connect(socket, endpoint_iterator);
-		
 		if(readerThread == NULL)
 		{
 			readerThread = new boost::thread( boost::bind (&NetworkController::readerFunc, this));
@@ -87,13 +104,33 @@ void NetworkController::init()
 		{
 			writerThread = new boost::thread( boost::bind (&NetworkController::writeFunc, this));
 		}
-
-		messageQueue.push("AIClientReady");
 	}
 	catch (std::exception& e)
 	{
 		printf("Exception in init : %s\n", e.what());
 	}
+
+	tryJoinGame();
+}
+
+bool NetworkController::tryToConnect()
+{
+	try
+	{
+		boost::asio::connect(socket, endpoint_iterator);
+	}
+	catch (std::exception& e)
+	{
+		printf("Exception in init : %s\n", e.what());
+		return false;
+	}
+	return true;
+}
+
+void NetworkController::tryJoinGame()
+{
+	messageQueue.push("AIClientReady");
+	status = ControllerStatus::WaitingYouAreTheGameClient;
 }
 
 void  NetworkController::addMessageToQueue(std::string message)
@@ -133,7 +170,18 @@ void NetworkController::readerFunc()
 
 			while(token != NULL)
 			{
-				netCommandController.UpdateStateMachine(token);
+				if(status == ControllerStatus::Connected)
+				{
+					if(!strcmp(token, "GameStart"))
+					{
+						gameStarted = true;
+					}
+					netCommandController.UpdateStateMachine(token);
+				}
+				else
+				{
+					parseMessage(token);
+				}
 				token = strtok(NULL, seps);
 			}
 		}
@@ -154,4 +202,28 @@ void NetworkController::close()
 
 	if(writerThread)
 		writerThread->join();
+}
+
+void NetworkController::parseMessage(char* token)
+{
+	if(!strcmp(token, "YourId"))
+	{
+		netCommandController.UpdateStateMachine(token);
+		status = ControllerStatus::Connected;
+	}
+	else if(!strcmp(token, "ErrorGameClientNotConnected"))
+	{
+		printf("The game client is not connected... Will try again in 2s\n");
+		tryJoinGame();
+	}
+}
+
+bool NetworkController::isConnected()
+{
+	return (status == ControllerStatus::Connected)?true:false;
+}
+
+bool NetworkController::isGameStarted()
+{
+	return gameStarted;
 }

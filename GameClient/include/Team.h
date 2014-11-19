@@ -23,12 +23,12 @@ class Team
 {
 private:
 	int id;
-	char* name;
+	std::string name;
 	Character* characters[MAX_CHARACTER_PER_TEAM];
 	int characterCount;
 
 public:
-	Team(char* name, int id);
+	Team(std::string name, int id);
 	virtual ~Team();
 
 	void addCharacter(Character* character);

@@ -27,6 +27,11 @@
 
 using boost::asio::ip::tcp;
 
+namespace
+{
+	enum ControllerStatus { TryToConnect, TryJoinGame, WaitingYouAreTheGameClient, Connected};
+};
+
 class NetworkController
 {
 private:
@@ -42,6 +47,8 @@ private:
 	boost::array<char, 128> buf;
 	boost::system::error_code error;
 	NetCommandController netCommandController;
+	ControllerStatus status;
+	bool gameStarted;
 
 	// Attributes for writer
 	std::queue<std::string> messageQueue;
@@ -58,6 +65,11 @@ public:
 	void readerFunc();
 	void writeFunc();
 	void init();
+	bool tryToConnect();
+	void tryJoinGame();
+	void parseMessage(char* token);
+	bool isConnected();
+	bool isGameStarted();
 
 	// Character specifics commandes
 	void addMessageToQueue(std::string message);

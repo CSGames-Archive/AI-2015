@@ -70,7 +70,7 @@ void World::createScene()
 	crateNode->attachObject(crate);
 }
 
-void World::addTeam(int teamId, char* teamName, char* characterNames[MAX_CHARACTER_PER_TEAM])
+void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
 {
 	Team* team = new Team(teamName, teamId);
 	teams[teamCount++] = team;
@@ -89,11 +89,14 @@ void World::addTeam(int teamId, char* teamName, char* characterNames[MAX_CHARACT
 
 	if(teamCount == MAX_TEAM)
 	{
+		std::string message = "";
 		for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 		{
-			std::string message = NetUtility::generateUpdatePlayerMessage(teams[i]->getId());
+			message = NetUtility::generateUpdatePlayerMessage(teams[i]->getId());
 			netMessageQueue->push(message);
 		}
+		message = "GameStart";
+		netMessageQueue->push(message);
 	}
 }
 
