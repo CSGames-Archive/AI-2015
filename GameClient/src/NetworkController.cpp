@@ -63,6 +63,7 @@ void NetworkController::writeFunc()
 				boost::asio::write(socket, boost::asio::buffer(message),
 							   boost::asio::transfer_all(), ignored_error);
 			}
+			boost::this_thread::sleep(boost::posix_time::milliseconds(30));
 		}
 		readerThread->join();
 		socket.close();

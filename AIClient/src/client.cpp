@@ -81,6 +81,7 @@ int main(int argc, char* argv[])
 					myStatus = AiStatus::WaitReachCorner;
 				}
 			}
+			boost::this_thread::sleep(boost::posix_time::milliseconds(30));
 		}
 
 		netController.close();
