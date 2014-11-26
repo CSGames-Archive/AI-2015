@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 class main {
-	public static void main(String argv[]) throws Exception {
+	public main(String argv[]) throws Exception {
 
 		Socket webSocket = new Socket("127.0.0.1", 1337);
 		PrintWriter outToServer = new PrintWriter(webSocket.getOutputStream(),

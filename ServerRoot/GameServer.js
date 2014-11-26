@@ -55,13 +55,13 @@ net.createServer(function (socket) {
 			if(gameClientId == 0)
 			{
 				gameClientId = socket.id;
-				socket.write('YourAreTheGameClient' );
+				socket.write('YourAreTheGameClient' + '\n');
 				if (Debug)
 					process.stdout.write(' - Game Client Ready - ' + '\n');
 			}
 			else
 			{
-				socket.write('ErrorClientAlreadyConnected');
+				socket.write('ErrorClientAlreadyConnected' + '\n');
 			}
 		}
 		else if (msg == 'AIClientReady')
@@ -72,7 +72,7 @@ net.createServer(function (socket) {
 			}
 			else
 			{
-				socket.write('ErrorGameClientNotConnected');
+				socket.write('ErrorGameClientNotConnected' + '\n');
 			}
 		}
 		else
@@ -84,7 +84,7 @@ net.createServer(function (socket) {
 			}
 			else
 			{
-				socket.write('ErrorGameClientNotConnected');
+				socket.write('ErrorGameClientNotConnected' + '\n');
 			}
 		}
 	});
@@ -112,7 +112,7 @@ net.createServer(function (socket) {
 		{
 			// Don't want to send it to sender
 			if (client === sender) return;
-			client.write(message);
+			client.write(message + '\n');
 		});
 
 		if (Debug)
