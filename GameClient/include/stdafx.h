@@ -30,8 +30,12 @@
 #include <iostream>
 #include <map>
 #include <queue>
-#include <chrono>
-#include <thread>
+
+// Fix the blank string
+#ifndef __BLANKSTRING_h_
+#define __BLANKSTRING_h_
+const std::string blankstring = "";
+#endif
 
 // Check for duplicate include of window.h
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

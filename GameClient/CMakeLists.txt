@@ -13,27 +13,31 @@ find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 
 set(HEADER_FILES
-  include/stdafx.h
-  include/NetUtility.h
   include/BaseApplication.h
+  include/Character.h
+  include/EventController.h
+  include/EventFactory.h
   include/GameClientApplication.h
-  include/NetCommandController.h
-  include/NetCharacter.h
-  include/NetTeam.h
-  include/NetPlayerController.h
+  include/GameEvent.h
+  include/NetUtility.h
   include/NetworkController.h
-  include/SinbadCharacterController.h
+  include/stdafx.h
+  include/Team.h
+  include/World.h
 )
 
 set(SOURCE_FILES
   src/BaseApplication.cpp
+  src/BaseApplication.cpp
+  src/Character.cpp
+  src/EventController.cpp
+  src/EventFactory.cpp
   src/GameClientApplication.cpp
-  src/NetCommandController.cpp
-  src/NetCharacter.cpp
-  src/NetTeam.cpp
-  src/NetPlayerController.cpp
+  src/GameEvent.cpp
   src/NetworkController.cpp
   src/stdafx.cpp
+  src/Team.cpp
+  src/World.cpp
 )
 
 
