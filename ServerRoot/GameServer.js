@@ -1,7 +1,7 @@
 // Load the TCP Library
 net = require('net');
 
-var Debug = true;
+var debug = true;
 var HOST = '127.0.0.1';
 var PORT = 1337;
 
@@ -10,9 +10,12 @@ var currentClientId = 1;
 var currentClientConnected = 0;
 var gameClientId = 0;
 
-// Game Settings
-var maxTeamNumber = 0;
-var maxCharacterPerTeam = 0;
+var endline = '\n';
+function print(message) {
+	if(debug) {
+		process.stdout.write(message + endline);
+	}
+}
 
 net.createServer(function (socket) {
 
@@ -27,19 +30,15 @@ net.createServer(function (socket) {
 	currentClientConnected++;
 	currentClientId++;
 
-	if (Debug)
-		process.stdout.write(' - join - ' + '\n');
-			
-	// Handle incoming messages from clients.
+	print(' - join - ');
+
 	socket.on('data', function (data) {
-		//socket.msg += data.toString('utf8');
-		
-		var arr = data.split('\n');
+		var arr = data.split(endline);
 		arr.forEach(function (chunk)
 		{
 			if(chunk.length > 1)
 			{
-				process.stdout.write(' - Chunk - ' + chunk + '\n');
+				print(' - Chunk - ' + chunk);
 				socket.emit('message', chunk);
 			}
 		});
@@ -48,75 +47,88 @@ net.createServer(function (socket) {
 	socket.on('message', function(msg) {
 		if (msg == 'Exit')
 		{
-			socket.write('OkForExit');
+			send('Net:OkForExit', socket);
 		}
 		else if (msg == 'GameClientReady')
 		{
-			if(gameClientId == 0)
-			{
-				gameClientId = socket.id;
-				socket.write('YourAreTheGameClient' + '\n');
-				if (Debug)
-					process.stdout.write(' - Game Client Ready - ' + '\n');
-			}
-			else
-			{
-				socket.write('ErrorClientAlreadyConnected' + '\n');
-			}
+			socket.emit('GameClientReady');
 		}
 		else if (msg == 'AIClientReady')
 		{
-			if(gameClientId != 0)
-			{
-				socket.write('YourId:' + socket.id);
-			}
-			else
-			{
-				socket.write('ErrorGameClientNotConnected' + '\n');
-			}
+			socket.emit('AIClientReady')
 		}
 		else
 		{
-			if(gameClientId != 0)
-			{
-				msg += ':' + socket.id + ':';
-				broadcast(msg, socket);
-			}
-			else
-			{
-				socket.write('ErrorGameClientNotConnected' + '\n');
-			}
+			socket.emit('GameMessage', msg)
+		}
+	});
+
+	socket.on('GameClientReady', function ()
+	{
+		if(gameClientId == 0)
+		{
+			gameClientId = socket.id;
+			send('Net:YourAreTheGameClient', socket);
+			print(' - Game Client Ready - ');
+		}
+		else
+		{
+			send('Net:ErrorClientAlreadyConnected', socket);
 		}
 	});
 	
-	// Remove the client from the list when it leaves
-	socket.on('end', function () 
+	socket.on('AIClientReady', function ()
 	{
-		if (Debug)
-			process.stdout.write(' - End - ' + '\n');
+		if(gameClientId != 0)
+		{
+			send('Net:JoinGame:' + socket.id, socket);
+		}
+		else
+		{
+			send('Net:ErrorGameClientNotConnected', socket);
+		}
+	});
+
+	socket.on('GameMessage', function (message)
+	{
+		if(gameClientId != 0)
+		{
+			message += ':' + socket.id;
+			broadcast(message, socket);
+		}
+		else
+		{
+			send('Net:ErrorGameClientDisconnect', socket);
+		}
+	});
+
+	socket.on('end', function ()
+	{
+		print(' - end - ')
 		removeSocket(socket);
 	});
 
-	// Remove the client from the list when it leaves
 	socket.on('error', function ()
 	{
-		if (Debug)
-			process.stdout.write(' - Error - ' + '\n');
+		print(' - error - ')
 		removeSocket(socket);
 	});
   
-	// Send a message to all clients
 	function broadcast(message, sender) 
 	{
 		clients.forEach(function (client)
 		{
 			// Don't want to send it to sender
 			if (client === sender) return;
-			client.write(message + '\n');
+			client.write(message + endline);
 		});
+		print('Broadcast - ' + message);
+	}
 
-		if (Debug)
-			process.stdout.write('Broadcast - ' + message + '\n');
+	function send(message, socket) 
+	{
+		socket.write(message + endline)
+		print('Send - ' + message)
 	}
 
 	function removeSocket(socket)
@@ -129,9 +141,7 @@ net.createServer(function (socket) {
 		clients.splice(clients.indexOf(socket), 1);
 		broadcast('ClientDisconnect:' + socket.id);
 	}
-
 }).listen(PORT, HOST);
 
-// Starting message on the terminal of the server
 console.log('Game Server: ' + HOST + ':' + PORT);
 
