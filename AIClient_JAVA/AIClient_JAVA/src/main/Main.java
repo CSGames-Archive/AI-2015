@@ -14,8 +14,13 @@
 
 package main;
 
+import network.NetworkController;
+
 class Main {
 	public static void main(String args[]) {
-		
+		String message = "AIClientReady";
+		NetworkController.getInstance().sendMessage(message);
+		NetworkController.getInstance().readMessage();
+		System.out.println(" - end - ");
 	}
 }

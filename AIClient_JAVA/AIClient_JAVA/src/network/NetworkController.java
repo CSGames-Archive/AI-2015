@@ -43,21 +43,21 @@ public class NetworkController {
 		}
 		return instance;
 	}
-
+	
 	public void sendMessage(String message) {
 		System.out.println(message);
 		outToServer.println(message);
 	}
 
-	public void readMessage() {
-		String textServer;
+	public String readMessage() {
+		String textServer = "";
 		try {
-			while ((textServer = inFromServer.readLine()) != null) {
-				System.out.println("Server: " + textServer);
-			}
+			textServer = inFromServer.readLine();
+			System.out.println("Server: " + textServer);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return textServer;
 	}
 
 	public void close() {

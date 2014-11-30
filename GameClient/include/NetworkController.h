@@ -22,10 +22,16 @@
 
 using boost::asio::ip::tcp;
 
-namespace
+namespace ControllerStatus
 {
-	enum ControllerStatus { TryToConnect, TryJoinGame, WaitingYouAreTheGameClient, Connected};
-};
+	enum ControllerStatus
+	{
+		TryToConnect,
+		TryJoinGame,
+		WaitingYouAreTheGameClient,
+		Connected
+	};
+}
 
 class NetworkController
 {
@@ -40,7 +46,7 @@ private:
 	tcp::resolver::query query;
 	tcp::resolver::iterator endpoint_iterator;
 	tcp::socket socket;
-	ControllerStatus status;
+	ControllerStatus::ControllerStatus status;
 
 	// Attributes for reader
 	boost::thread* readerThread;

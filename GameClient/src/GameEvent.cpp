@@ -32,7 +32,7 @@ int GameEvent::convertCharToNumeral(std::string token)
 
 	if(isDigit)
 	{
-		return std::stoi(token);
+		return std::atoi(token.c_str());
 	}
 	std::cout << "Converting char to numeral failed for :" << token << std::endl;
 	return 0;
