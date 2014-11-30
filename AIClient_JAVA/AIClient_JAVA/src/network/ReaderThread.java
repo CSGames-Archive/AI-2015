@@ -6,20 +6,16 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** Main.java
- ** Main program loop
+ ** ReaderThread.java
+ ** Thread that read on the tcp socket
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package main;
+package network;
 
-import network.NetworkController;
-
-class Main {
-	public static void main(String args[]) {
-		NetworkController.getInstance().init();
-		//NetworkController.getInstance().close();
-		System.out.println(" - end - ");
-	}
+public class ReaderThread extends Thread {
+    public void run() {
+        NetworkController.getInstance().readFunctionThread();
+    }
 }

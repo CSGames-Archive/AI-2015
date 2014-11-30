@@ -81,11 +81,11 @@ net.createServer(function (socket) {
 	{
 		if(gameClientId != 0)
 		{
-			send('Net:JoinGame:' + socket.id, socket);
+			send('Game:JoinGame:' + socket.id, socket);
 		}
 		else
 		{
-			send('Net:ErrorGameClientNotConnected', socket);
+			send('Net:JoinGameFailed', socket);
 		}
 	});
 
@@ -139,7 +139,7 @@ net.createServer(function (socket) {
 		}
 		
 		clients.splice(clients.indexOf(socket), 1);
-		broadcast('ClientDisconnect:' + socket.id);
+		broadcast('Game:ClientDisconnect:' + socket.id);
 	}
 }).listen(PORT, HOST);
 
