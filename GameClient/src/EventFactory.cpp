@@ -19,57 +19,44 @@
 EventFactory::EventFactory(std::queue<GameEvent*>* gameEventQueue)
 {
 	this->gameEventQueue = gameEventQueue;
-	argumentCount = 0;
-	currentEvent = NULL;
 }
 
 EventFactory::~EventFactory()
 {
 }
 
-void EventFactory::fead(char* token)
+void EventFactory::generate(std::string message)
 {
-	if(!currentEvent)
+	std::string type = NetUtility::getNextToken(message, ":");
+
+	GameEvent* currentEvent = createEvent(type);
+	if(currentEvent)
 	{
-		createEvent(token);
-	}
-	else
-	{
-		arguments[argumentCount++] = token;
-		
-		if(argumentCount == currentEvent->getNumberOfArgument())
+		if(currentEvent->fill(message))
 		{
-			sendEvent();
+			gameEventQueue->push(currentEvent);
 		}
+
 	}
 }
 
-void EventFactory::createEvent(char* token)
+GameEvent* EventFactory::createEvent(std::string type)
 {
-	if(!strcmp(token, "Error"))
+	if(type == "Error")
 	{
-		currentEvent = new ErrorEvent();
+		return new ErrorEvent();
 	}
-	else if(!strcmp(token, "Disconnect"))
+	else if(type == "Disconnect")
 	{
-		currentEvent = new DisconnectEvent();
+		return new DisconnectEvent();
 	}
-	else if(!strcmp(token, "AddPlayer"))
+	else if(type == "AddPlayer")
 	{
-		currentEvent = new AddTeamEvent();
+		return new AddTeamEvent();
 	}
-	else if(!strcmp(token, "Move"))
+	else if(type == "Move")
 	{
-		currentEvent = new MoveCharacterEvent();
+		return new MoveCharacterEvent();
 	}
-}
-
-void EventFactory::sendEvent()
-{
-	if(currentEvent->fillArgument(arguments))
-	{
-		gameEventQueue->push(currentEvent);
-	}
-	currentEvent = NULL;
-	argumentCount = 0;
+	return NULL;
 }

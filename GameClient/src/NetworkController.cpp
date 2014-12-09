@@ -22,6 +22,7 @@ NetworkController::NetworkController(std::queue<GameEvent*>* gameEventQueue) : r
 	readerThread = NULL;
 	writerThread = NULL;
 	status = ControllerStatus::TryToConnect;
+	exitSocket = false;
 }
 
 NetworkController::~NetworkController()
@@ -131,10 +132,9 @@ void NetworkController::tryJoinGame()
 
 void NetworkController::readerFunc()
 {
-	bool exit = false;
 	try
 	{
-		while(!exit)
+		while(!exitSocket)
 		{
 			//we read the buffer to put the message in the buffer
 			size_t len = socket.read_some(boost::asio::buffer(buf), error);
@@ -145,37 +145,32 @@ void NetworkController::readerFunc()
 				throw boost::system::system_error(error); // Some other error.
 
 			buf.data()[len] = '\0';
+			std::string messagePack = buf.data();
 
-			if(!std::strcmp(buf.data(), "OkForExit"))
+			std::string message = NetUtility::getNextToken(messagePack, "\n");
+			while (!message.empty())
 			{
-				exit = true;
-				break;
-			}
-
-			char* seps = ":";
-			char* message = buf.data();
-			char* token = NULL;
-			char* next_token = NULL;
-
-			token = strtok( message, seps);
-
-			while(token != NULL)
-			{
-				if(status == ControllerStatus::Connected)
-				{
-					eventFactory.fead(token);
-				}
-				else
-				{
-					parseMessage(token);
-				}
-				token = strtok( NULL, seps);
+				parseMessage(message);
+				message = NetUtility::getNextToken(messagePack, "\n");
 			}
 		}
 	}
 	catch (std::exception& e)
 	{
 		printf("Exception in reader : %s\n", e.what());
+	}
+}
+
+void NetworkController::parseMessage(std::string message)
+{
+	std::string header = NetUtility::getNextToken(message, ":");
+	if(header == "Net")
+	{
+		parseMessageBody(message);
+	}
+	else if(header == "Game")
+	{
+		eventFactory.generate(message);
 	}
 }
 
@@ -196,13 +191,17 @@ std::queue<std::string>* NetworkController::getQueue()
 	return &messageQueue;
 }
 
-void NetworkController::parseMessage(char* token)
+void NetworkController::parseMessageBody(std::string body)
 {
-	if(!strcmp(token, "YourAreTheGameClient"))
+	if(body == "OkForExit")
+	{
+		exitSocket = true;
+	}
+	else if(body == "YourAreTheGameClient")
 	{
 		status = ControllerStatus::Connected;
 	}
-	else if(!strcmp(token, "ErrorClientAlreadyConnected"))
+	else if(body == "ErrorClientAlreadyConnected")
 	{
 		close();
 	}

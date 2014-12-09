@@ -73,7 +73,7 @@ net.createServer(function (socket) {
 		}
 		else
 		{
-			send('Net:ErrorClientAlreadyConnected', socket);
+			send('Net:CreateGameFailed', socket);
 		}
 	});
 	

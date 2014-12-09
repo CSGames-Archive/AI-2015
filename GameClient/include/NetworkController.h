@@ -52,6 +52,7 @@ private:
 	boost::thread* readerThread;
 	boost::array<char, 128> buf;
 	boost::system::error_code error;
+	bool exitSocket;
 
 	// Attributes for writer
 	boost::thread* writerThread;
@@ -66,7 +67,8 @@ public:
 	void init();
 	bool tryToConnect();
 	void tryJoinGame();
-	void parseMessage(char* token);
+	void parseMessage(std::string message);
+	void parseMessageBody(std::string body);
 
 	void close();
 	std::queue<std::string>* getQueue();

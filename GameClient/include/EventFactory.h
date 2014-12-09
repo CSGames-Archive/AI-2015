@@ -18,23 +18,19 @@
 #include "stdafx.h"
 
 #include "GameEvent.h"
+#include "NetUtility.h"
 
 class EventFactory
 {
 private:
 	std::queue<GameEvent*>* gameEventQueue;
-	GameEvent* currentEvent;
-
-	std::string arguments[MESSAGE_MAX_ARGUMENT];
-	int argumentCount;
-	void sendEvent();
-	void createEvent(char* token);
+	GameEvent* createEvent(std::string type);
 
 public:
 	EventFactory(std::queue<GameEvent*>* gameEventQueue);
     virtual ~EventFactory();
 
-	void fead(char* token);
+	void generate(std::string message);
 };
 
 #endif // #ifndef __EventFactory__

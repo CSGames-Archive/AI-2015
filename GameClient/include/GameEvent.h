@@ -18,6 +18,7 @@
 #include "stdafx.h"
 
 #include "World.h"
+#include "NetUtility.h"
 
 class GameEvent
 {
@@ -29,8 +30,7 @@ public:
 	virtual ~GameEvent() {}
 
 	virtual void execute(World* world) {}
-	virtual bool fillArgument(std::string values[]) {return true;}
-	virtual int getNumberOfArgument() {return 0;}
+	virtual bool fill(std::string arguments) {return true;}
 };
 
 class ErrorEvent : public GameEvent
@@ -43,8 +43,7 @@ public:
 	virtual ~ErrorEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(std::string values[]);
-	virtual int getNumberOfArgument() {return 1;}
+	virtual bool fill(std::string arguments);
 };
 
 class DisconnectEvent : public GameEvent
@@ -57,8 +56,7 @@ public:
 	virtual ~DisconnectEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(std::string values[]);
-	virtual int getNumberOfArgument() {return 1;}
+	virtual bool fill(std::string arguments);
 };
 
 class AddTeamEvent : public GameEvent
@@ -73,8 +71,7 @@ public:
 	virtual ~AddTeamEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(std::string values[]);
-	virtual int getNumberOfArgument();
+	virtual bool fill(std::string arguments);
 };
 
 class MoveCharacterEvent : public GameEvent
@@ -86,8 +83,7 @@ public:
 	virtual ~MoveCharacterEvent() {}
 
 	virtual void execute(World* world);
-	virtual bool fillArgument(std::string values[]);
-	virtual int getNumberOfArgument() {return 4;}
+	virtual bool fill(std::string arguments);
 };
 
 #endif // #ifndef __GameEvent_h_

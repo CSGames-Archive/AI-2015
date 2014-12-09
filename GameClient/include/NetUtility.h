@@ -21,6 +21,28 @@
 
 namespace NetUtility
 {
+	static std::string getNextToken(std::string& message, std::string separator)
+	{
+		std::string token = "";
+
+		if(message.empty())
+		{
+			return token;
+		}
+
+		size_t index = message.find(separator);
+		if(index == std::string::npos)
+		{
+			token = message;
+			message = "";
+			return message;
+		}
+
+		token = message.substr(0, index);
+		message.erase(0, index+1);
+		return token;
+	}
+
 	static std::string generateMoveCharacterMessage(int playerId, int characterId, double x, double z)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits

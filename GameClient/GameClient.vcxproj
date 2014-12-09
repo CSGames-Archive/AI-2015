@@ -32,8 +32,8 @@
     <ClInclude Include="include\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EventController.cpp" />
     <ClCompile Include="src\BaseApplication.cpp" />
+    <ClCompile Include="src\EventController.cpp" />
     <ClCompile Include="src\EventFactory.cpp" />
     <ClCompile Include="src\GameClientApplication.cpp" />
     <ClCompile Include="src\Character.cpp" />

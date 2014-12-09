@@ -43,9 +43,9 @@ void ErrorEvent::execute(World* world)
 	std::cout << "Error :" << message << std::endl;
 }
 
-bool ErrorEvent::fillArgument(std::string values[])
+bool ErrorEvent::fill(std::string arguments)
 {
-	message = values[0];
+	message = arguments;
 	return true;
 }
 
@@ -56,9 +56,9 @@ void DisconnectEvent::execute(World* world)
 	world->removeTeam(teamId);
 }
 
-bool DisconnectEvent::fillArgument(std::string values[])
+bool DisconnectEvent::fill(std::string arguments)
 {
-	teamId = convertCharToNumeral(values[0]);
+	teamId = convertCharToNumeral(arguments);
 
 	if(teamId != 0)
 		return true;
@@ -76,25 +76,21 @@ void AddTeamEvent::execute(World* world)
 	world->addTeam(teamId, teamName, characterNames);
 }
 
-bool AddTeamEvent::fillArgument(std::string values[])
+bool AddTeamEvent::fill(std::string arguments)
 {
-	teamName = values[0];
+
+	teamName = NetUtility::getNextToken(arguments, ":");
 
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
-		characterNames[i] = values[i+1];
+		characterNames[i] = NetUtility::getNextToken(arguments, ":");
 	}
 
-	teamId = convertCharToNumeral(values[1+MAX_CHARACTER_PER_TEAM]);
+	teamId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 
 	if(teamId != 0)
 		return true;
 	return false;
-}
-
-int AddTeamEvent::getNumberOfArgument()
-{
-	return 2 + MAX_CHARACTER_PER_TEAM;
 }
 
 void MoveCharacterEvent::execute(World* world)
@@ -105,12 +101,12 @@ void MoveCharacterEvent::execute(World* world)
 	world->getTeam(teamId)->getCharacter(characterId)->setTargetPosition(positionX, positionZ);
 }
 
-bool MoveCharacterEvent::fillArgument(std::string values[])
+bool MoveCharacterEvent::fill(std::string arguments)
 {
-	positionX = convertCharToNumeral(values[0]);
-	positionZ = convertCharToNumeral(values[1]);
-	characterId = convertCharToNumeral(values[2]);
-	teamId = convertCharToNumeral(values[3]);
+	positionX = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	positionZ = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	teamId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 
 	if(teamId != 0)
 		return true;
