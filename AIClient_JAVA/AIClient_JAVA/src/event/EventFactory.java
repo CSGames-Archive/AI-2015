@@ -16,8 +16,8 @@ package event;
 
 public class EventFactory {
 
-	public void generateEvent(String message) {
-		
+	public static void generateEvent(String message) {
+		System.out.println("Event catch");
 	}
 }
 

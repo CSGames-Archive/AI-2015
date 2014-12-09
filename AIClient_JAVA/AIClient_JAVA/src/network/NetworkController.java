@@ -24,7 +24,7 @@ import event.EventFactory;
 
 public class NetworkController {
 	private static NetworkController instance = null;
-	private EventFactory eventFactory;
+	//private EventFactory eventFactory;
 	private Socket webSocket;
 	private PrintWriter outToServer;
 	private BufferedReader inFromServer;
@@ -75,7 +75,7 @@ public class NetworkController {
 		if (messageParts[0].equals("Net")) {
 			parseNetMessage(messageParts[1]);
 		} else if (messageParts[0].equals("Game")) {
-			eventFactory.generateEvent(messageParts[1]);
+			EventFactory.generateEvent(messageParts[1]);
 		}
 	}
 
