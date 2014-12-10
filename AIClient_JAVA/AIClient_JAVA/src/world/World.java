@@ -14,6 +14,9 @@
 
 package world;
 
+import event.AddPlayerEvent;
+import event.EventController;
+
 public class World {
 	private static World instance = null;
 	private int yourId;
@@ -28,7 +31,7 @@ public class World {
 		}
 		return instance;
 	}
-
+	
 	public void error(String message) {
 		System.out.println(message);
 	}
@@ -36,5 +39,10 @@ public class World {
 	public void joinGame(int id) {
 		yourId = id;
 		System.out.println("Join game with id:" + yourId);
+		
+		String teamName = "team"+id;
+		String[] characterNames= {"character1" + id, "character2" + id};
+		AddPlayerEvent event = new AddPlayerEvent(teamName, characterNames);
+		EventController.getInstance().addOutgoingEvent(event);
 	}
 }

@@ -15,11 +15,21 @@
 package main;
 
 import network.NetworkController;
+import event.EventController;
 
 class Main {
 	public static void main(String args[]) {
 		NetworkController.getInstance().init();
-		//NetworkController.getInstance().close();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		EventController.getInstance().executeIngoingEvents();
+		EventController.getInstance().executeOutgoingEvents();
+		
+		NetworkController.getInstance().close();
 		System.out.println(" - end - ");
 	}
 }

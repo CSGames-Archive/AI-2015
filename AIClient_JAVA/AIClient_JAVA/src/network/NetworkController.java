@@ -24,7 +24,6 @@ import event.EventFactory;
 
 public class NetworkController {
 	private static NetworkController instance = null;
-	//private EventFactory eventFactory;
 	private Socket webSocket;
 	private PrintWriter outToServer;
 	private BufferedReader inFromServer;
