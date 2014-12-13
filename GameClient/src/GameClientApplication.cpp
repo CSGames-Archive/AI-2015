@@ -88,7 +88,7 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mShutDown)
         return false;
 
-	mWindow->setActive(true);
+	//mWindow->setActive(true);
 
     // Need to capture/update each device
     mKeyboard->capture();

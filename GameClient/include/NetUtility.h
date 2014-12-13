@@ -35,7 +35,7 @@ namespace NetUtility
 		{
 			token = message;
 			message = "";
-			return message;
+			return token;
 		}
 
 		token = message.substr(0, index);
