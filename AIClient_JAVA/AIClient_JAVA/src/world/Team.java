@@ -6,32 +6,31 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** JoinGameEvent.java
- ** Event that happen when you join a game
+ ** Team.java
+ ** A team
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package event;
+package world;
 
-import world.World;
+public class Team {
+	private int id;
+	private Character[] characters;
 
-public class JoinGameEvent extends IngoingEvent {
-
-	private int yourId;
-
-	@Override
-	public void execute() {
-		World.getInstance().joinGame(yourId);
-	}
-
-	@Override
-	public boolean fillArguments(String string) {
-		yourId = convertCharToNumeral(string);
-		if (yourId != 0) {
-			return true;
+	public Team(int id, int numberOfCharacter) {
+		this.id = id;
+		for (int index = 0; index < numberOfCharacter; ++index) {
+			// TODO: refactor with map
+			characters[index] = new Character(0, 0);
 		}
-		return false;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public Character getCharacter(int id) {
+		return characters[id];
+	}
 }

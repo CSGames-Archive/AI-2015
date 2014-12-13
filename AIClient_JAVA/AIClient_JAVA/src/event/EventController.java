@@ -43,6 +43,11 @@ public class EventController {
 		inEvents.add(event);
 	}
 
+	public void executeAllEvents() {
+		executeIngoingEvents();
+		executeOutgoingEvents();
+	}
+	
 	public void executeIngoingEvents() {
 		while (!inEvents.isEmpty()) {
 			IngoingEvent event = inEvents.remove();

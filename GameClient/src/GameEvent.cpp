@@ -103,9 +103,9 @@ void MoveCharacterEvent::execute(World* world)
 
 bool MoveCharacterEvent::fill(std::string arguments)
 {
+	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 	positionX = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 	positionZ = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
-	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 	teamId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
 
 	if(teamId != 0)

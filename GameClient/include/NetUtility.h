@@ -47,7 +47,7 @@ namespace NetUtility
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", playerId);
-		std::string message = "UpdateCharacter:";
+		std::string message = "Game:UpdateCharacter:";
 		message += numstr;
 		sprintf(numstr, "%d", characterId);
 		message += ":";
@@ -68,7 +68,7 @@ namespace NetUtility
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", playerId);
-		std::string message = "UpdatePlayer:";
+		std::string message = "Game:UpdatePlayer:";
 		message += numstr;
 
 		return message;

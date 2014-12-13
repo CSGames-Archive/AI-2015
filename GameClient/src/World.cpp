@@ -89,14 +89,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	if(teamCount == MAX_TEAM)
 	{
-		std::string message = "";
-		for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
-		{
-			message = NetUtility::generateUpdatePlayerMessage(teams[i]->getId());
-			netMessageQueue->push(message);
-		}
-		message = "GameStart";
-		netMessageQueue->push(message);
+		gameStart();
 	}
 }
 
@@ -130,4 +123,23 @@ void World::addTime(Ogre::Real deltaTime)
 			teams[i]->addTime(deltaTime);
 		}
 	}
+}
+
+void World::gameStart()
+{
+	char numstr[21]; // Enough to hold all numbers up to 64-bits
+	sprintf(numstr, "%d", MAX_TEAM);
+	std::string message = "Game:GameStart:";
+	message += numstr;
+	sprintf(numstr, "%d", MAX_CHARACTER_PER_TEAM);
+	message += ":";
+	message += numstr;
+
+	for(int i = 0; i < MAX_TEAM; ++i)
+	{
+		sprintf(numstr, "%d", teams[i]->getId());
+		message += ":";
+		message += numstr;
+	}
+	netMessageQueue->push(message);
 }

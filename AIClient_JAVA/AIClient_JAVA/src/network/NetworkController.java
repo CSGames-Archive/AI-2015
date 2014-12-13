@@ -98,7 +98,7 @@ public class NetworkController {
 	public void sendMessage(String message) {
 		if (outToServer != null) {
 			System.out.println(message);
-			outToServer.println(message);
+			outToServer.println(message + '\n');
 		} else {
 			System.out.println("Error: can't send the message: " + message);
 		}

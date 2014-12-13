@@ -6,32 +6,30 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** JoinGameEvent.java
- ** Event that happen when you join a game
+ ** MoveCharacter.java
+ ** Event call to move a character
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
 package event;
 
-import world.World;
+public class MoveCharacterEvent extends OutgoingEvent {
+	private int characterID;
+	private int positionX, positionY;
 
-public class JoinGameEvent extends IngoingEvent {
-
-	private int yourId;
-
-	@Override
-	public void execute() {
-		World.getInstance().joinGame(yourId);
+	public MoveCharacterEvent(int characterID, int positionX, int positionY) {
+		this.characterID = characterID;
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 
 	@Override
-	public boolean fillArguments(String string) {
-		yourId = convertCharToNumeral(string);
-		if (yourId != 0) {
-			return true;
-		}
-		return false;
+	public String toString() {
+		String message = "Game:Move" + SEPARATOR;
+		message += characterID + SEPARATOR;
+		message += positionX + SEPARATOR;
+		message += positionY;
+		return message;
 	}
-
 }

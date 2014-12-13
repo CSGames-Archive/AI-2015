@@ -15,6 +15,7 @@
 package event;
 
 public abstract class Event {
+	protected String SEPARATOR = ":";
 	protected int convertCharToNumeral(String string) {
 		try {
 			return Integer.parseInt(string);

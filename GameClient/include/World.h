@@ -41,6 +41,7 @@ public:
 	void removeTeam(int teamId);
 	Team* getTeam(int teamId);
 	void addTime(Ogre::Real deltaTime);
+	void gameStart();
 };
 
 #endif // #ifndef __World_h_

@@ -6,8 +6,8 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** JoinGameEvent.java
- ** Event that happen when you join a game
+ ** UpdateCharacterEvent.java
+ ** Event that happen when a character move
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
@@ -16,22 +16,31 @@ package event;
 
 import world.World;
 
-public class JoinGameEvent extends IngoingEvent {
-
-	private int yourId;
+public class UpdateCharacterEvent extends IngoingEvent {
+	private int teamID, characterID;
+	private int positionX, positionY;
 
 	@Override
 	public void execute() {
-		World.getInstance().joinGame(yourId);
+		System.out.println("Move character:" + characterID + " from " + teamID
+				+ " to " + positionX + "," + positionY);
+		World.getInstance().getTeam(teamID).getCharacter(characterID)
+				.move(positionX, positionY);
 	}
 
 	@Override
-	public boolean fillArguments(String string) {
-		yourId = convertCharToNumeral(string);
-		if (yourId != 0) {
-			return true;
+	public boolean fillArguments(String message) {
+		String[] messageParts = message.split(SEPARATOR, 5);
+
+		teamID = convertCharToNumeral(messageParts[0]);
+		if (teamID == 0) {
+			return false;
 		}
-		return false;
+
+		characterID = convertCharToNumeral(messageParts[1]);
+		positionX = convertCharToNumeral(messageParts[2]);
+		positionY = convertCharToNumeral(messageParts[3]);
+		return true;
 	}
 
 }

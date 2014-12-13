@@ -7,7 +7,7 @@
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
  ** World.java
- ** All the event that can happen in a game
+ ** The world
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
@@ -20,6 +20,8 @@ import event.EventController;
 public class World {
 	private static World instance = null;
 	private int yourId;
+	private boolean gameIsStarted = false;
+	private Team[] teams;
 
 	protected World() {
 		// Exists only to defeat instantiation
@@ -31,7 +33,7 @@ public class World {
 		}
 		return instance;
 	}
-	
+
 	public void error(String message) {
 		System.out.println(message);
 	}
@@ -39,10 +41,30 @@ public class World {
 	public void joinGame(int id) {
 		yourId = id;
 		System.out.println("Join game with id:" + yourId);
-		
-		String teamName = "team"+id;
-		String[] characterNames= {"character1" + id, "character2" + id};
+
+		String teamName = "team" + id;
+		String[] characterNames = { "character1" + id, "character2" + id };
 		AddPlayerEvent event = new AddPlayerEvent(teamName, characterNames);
 		EventController.getInstance().addOutgoingEvent(event);
+	}
+
+	public void startGame(int numberOfTeam, int numberOfCharacter, int[] teamIDs) {
+		gameIsStarted = true;
+		for (int index = 0; index < numberOfTeam; ++index) {
+			teams[index] = new Team(teamIDs[index], numberOfCharacter);
+		}
+	}
+
+	public Team getTeam(int id) {
+		for(int index = 0; index < teams.length; ++index) {
+			if(teams[index].getId() == id) {
+				return teams[index];
+			}
+		}
+		return null;
+	}
+
+	public boolean isGameIsStarted() {
+		return gameIsStarted;
 	}
 }

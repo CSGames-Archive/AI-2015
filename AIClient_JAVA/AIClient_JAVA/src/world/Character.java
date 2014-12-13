@@ -6,32 +6,32 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** JoinGameEvent.java
- ** Event that happen when you join a game
+ ** Character.java
+ ** A character
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package event;
+package world;
 
-import world.World;
+public class Character {
+	private int positionX, positionY;
 
-public class JoinGameEvent extends IngoingEvent {
-
-	private int yourId;
-
-	@Override
-	public void execute() {
-		World.getInstance().joinGame(yourId);
+	public Character(int positionX, int positionY) {
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 
-	@Override
-	public boolean fillArguments(String string) {
-		yourId = convertCharToNumeral(string);
-		if (yourId != 0) {
-			return true;
-		}
-		return false;
+	public void move(int x, int y) {
+		positionX = x;
+		positionY = y;
 	}
 
+	public int getPositionX() {
+		return positionX;
+	}
+
+	public int getPositionY() {
+		return positionY;
+	}
 }
