@@ -14,6 +14,10 @@
 
 package world;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import event.AddPlayerEvent;
 import event.EventController;
 
@@ -21,7 +25,7 @@ public class World {
 	private static World instance = null;
 	private int yourId;
 	private boolean gameIsStarted = false;
-	private Team[] teams;
+	private List<Team> teams = new ArrayList<Team>();
 
 	protected World() {
 		// Exists only to defeat instantiation
@@ -48,17 +52,18 @@ public class World {
 		EventController.getInstance().addOutgoingEvent(event);
 	}
 
-	public void startGame(int numberOfTeam, int numberOfCharacter, int[] teamIDs) {
+	public void startGame(int numberOfTeam, int numberOfCharacter, List<Integer> teamIDs) {
 		gameIsStarted = true;
 		for (int index = 0; index < numberOfTeam; ++index) {
-			teams[index] = new Team(teamIDs[index], numberOfCharacter);
+			teams.add(new Team(teamIDs.get(index), numberOfCharacter));
 		}
 	}
 
 	public Team getTeam(int id) {
-		for(int index = 0; index < teams.length; ++index) {
-			if(teams[index].getId() == id) {
-				return teams[index];
+		for (Iterator<Team> iterator = teams.iterator(); iterator.hasNext();) {
+			Team team = iterator.next();
+			if (team.getId() == id) {
+				return team;
 			}
 		}
 		return null;

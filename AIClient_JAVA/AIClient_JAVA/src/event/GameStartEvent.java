@@ -14,11 +14,14 @@
 
 package event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import world.World;
 
 public class GameStartEvent extends IngoingEvent {
 	private int numberOfTeam, numberOfCharacter;
-	private int[] teamIDs;
+	private List<Integer> teamIDs = new ArrayList<Integer>();
 
 	@Override
 	public void execute() {
@@ -39,12 +42,11 @@ public class GameStartEvent extends IngoingEvent {
 		//Plus one for the sender id that we don't use
 		String[] ids = headerParts[2].split(SEPARATOR, numberOfTeam+1);
 		for (int index = 0; index < ids.length-1; ++index) {
-			teamIDs[index] = convertCharToNumeral(ids[index]);
-			if (teamIDs[index] == 0) {
+			teamIDs.add(convertCharToNumeral(ids[index]));
+			if (teamIDs.get(index) == 0) {
 				return false;
 			}
 		}
-
 		return false;
 	}
 }

@@ -21,11 +21,16 @@ Team::Team(std::string name, int teamId)
 	this->name = name;
 	this->id = teamId;
 	characterCount = 0;
+
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
+	{
+		characters[i] = NULL;
+	}
 }
 
 Team::~Team()
 {
-	for(int i = 0; i < characterCount; ++i)
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
 		if(characters[i])
 		{
@@ -49,7 +54,7 @@ Character* Team::getCharacter(int characterId)
 
 void Team::addTime(Ogre::Real deltaTime)
 {
-	for(int i = 0; i < characterCount; ++i)
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
 		if(characters[i])
 		{

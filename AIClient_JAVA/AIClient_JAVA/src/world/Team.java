@@ -14,15 +14,18 @@
 
 package world;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Team {
 	private int id;
-	private Character[] characters;
+	private List<Character> characters = new ArrayList<Character>();
 
 	public Team(int id, int numberOfCharacter) {
 		this.id = id;
 		for (int index = 0; index < numberOfCharacter; ++index) {
 			// TODO: refactor with map
-			characters[index] = new Character(0, 0);
+			characters.add(new Character(0, 0));
 		}
 	}
 
@@ -31,6 +34,6 @@ public class Team {
 	}
 
 	public Character getCharacter(int id) {
-		return characters[id];
+		return characters.get(id);
 	}
 }

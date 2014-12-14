@@ -24,11 +24,16 @@ World::World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessa
 	this->netMessageQueue = netMessageQueue;
 	this->sceneManager = sceneManager;
 	teamCount = 0;
+
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
+	{
+		teams[i] = NULL;
+	}
 }
 
 World::~World()
 {
-	for(int i = 0; i < teamCount; ++i)
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
 		if(teams[i])
 		{
@@ -116,7 +121,7 @@ Team* World::getTeam(int teamId)
 
 void World::addTime(Ogre::Real deltaTime)
 {
-	for(int i = 0; i < teamCount; ++i)
+	for(int i = 0; i < MAX_TEAM; ++i)
 	{
 		if(teams[i])
 		{
