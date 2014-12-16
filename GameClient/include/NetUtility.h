@@ -1,0 +1,78 @@
+/* ------------------------------------------------------------------------------
+** _________   _________      ________    _____      _____  ___________ _________
+** \_   ___ \ /   _____/     /  _____/   /  _  \    /     \ \_   _____//   _____/
+** /    \  \/ \_____  \     /   \  ___  /  /_\  \  /  \ /  \ |    __)_ \_____  \ 
+** \     \____/        \    \    \_\  \/    |    \/    Y    \|        \/        \
+**  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
+**        \/        \/             \/         \/         \/        \/        \/ 
+**
+** NetUtility.h
+** Some tools for the network
+**
+** Author: Samuel-Ricardo Carriere
+** ------------------------------------------------------------------------------*/
+
+#ifndef __NetUtility_h_
+#define __NetUtility_h_
+
+#include "stdafx.h"
+
+#include <iostream>
+
+namespace NetUtility
+{
+	static std::string getNextToken(std::string& message, std::string separator)
+	{
+		std::string token = "";
+
+		if(message.empty())
+		{
+			return token;
+		}
+
+		size_t index = message.find(separator);
+		if(index == std::string::npos)
+		{
+			token = message;
+			message = "";
+			return token;
+		}
+
+		token = message.substr(0, index);
+		message.erase(0, index+1);
+		return token;
+	}
+
+	static std::string generateMoveCharacterMessage(int playerId, int characterId, double x, double z)
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		sprintf(numstr, "%d", playerId);
+		std::string message = "Game:UpdateCharacter:";
+		message += numstr;
+		sprintf(numstr, "%d", characterId);
+		message += ":";
+		message += numstr;
+
+		// TODO: refactor with map
+		message += ":";
+		sprintf(numstr, "%d", (int)x);
+		message += numstr;
+		message += ":";
+		sprintf(numstr, "%d", (int)z);
+		message += numstr;
+
+		return message;
+	}
+
+	static std::string generateUpdatePlayerMessage(int playerId)
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		sprintf(numstr, "%d", playerId);
+		std::string message = "Game:UpdatePlayer:";
+		message += numstr;
+
+		return message;
+	}
+};
+
+#endif // #ifndef __NetUtility_h_
