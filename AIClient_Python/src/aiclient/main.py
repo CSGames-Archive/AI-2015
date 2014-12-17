@@ -4,7 +4,10 @@ Created on Dec 15, 2014
 @author: samuel
 '''
 import socket
-from event.JoinGameEvent import JoinGameEvent
+from event.EventController import EventController, Singleton
+from event.EventFactory import EventFactory
+
+eventController = Singleton(EventController)
 
 # Socket definition
 HOST, PORT = "localhost", 1337
@@ -22,8 +25,9 @@ try:
 finally:
     sock.close()
 
-myEvent = JoinGameEvent()
-myEvent.fillArguments(received)
+messageParts = received.decode().split(":", 1)
+myEvent = EventFactory.generateEvent(messageParts[1])
+myEvent.execute()
 
 print("Sent:     {}".format(data))
 print("Received: {}".format(received))
