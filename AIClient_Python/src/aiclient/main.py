@@ -3,16 +3,19 @@ Created on Dec 15, 2014
 
 @author: samuel
 '''
-from event.EventController import EventController, Singleton
+import time
+from event.EventController import EventController
 from network.NetworkController import NetworkController
+from aiclient.Singleton import Singleton
 
 eventController = Singleton(EventController)
 
 netController = Singleton(NetworkController)
 netController.init()
 
-netController.readFunctionThread()
+time.sleep(2)
 
-eventController.executeAllEvents()
+eventController.executeIngoingEvents()
+netController.executeOutgoingEvents()
 
 netController.closeConnection()

@@ -5,19 +5,20 @@ Created on Dec 17, 2014
 '''
 import socket
 import sys
+import threading
 from event.EventFactory import EventFactory
-
-def Singleton(klass):
-    if not klass._instance:
-        klass._instance = klass()
-    return klass._instance
+from aiclient.Singleton import Singleton
+from event.QueueController import QueueController
+from event.OutgoingEvent import OutgoingEvent
 
 class NetworkController(object):
     _instance = None
     HOST, PORT = "localhost", 1337
     webSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    readerThread = None
     
     def __init__(self):
+        self.readerThread = threading.Thread(target=self.readFunctionThread)
         try:
             self.webSocket.connect((self.HOST, self.PORT))
         except:
@@ -35,30 +36,35 @@ class NetworkController(object):
             return message
         except:
             print("Error while reading from the socket", sys.exc_info()[0])
-            return ""
+            return "".encode()
         
     def init(self):
         self.sendMessage("AIClientReady\n")
-        # Start reading thread
+        self.readerThread.start()
+    
+    def executeOutgoingEvents(self):
+        queueController = Singleton(QueueController)
+        while not queueController.outEvents.empty():
+            event = OutgoingEvent(queueController.outEvents.get())
+            self.sendMessage(event.toString())
     
     def readFunctionThread(self):
         mustExit = False
         while not mustExit:
-            message = self.readMessage()
+            message = self.readMessage().decode()
             
-            if message == "Net:OkForExit" or message == "":
+            if message == "Net:OkForExit\n" or message == "":
                 mustExit = True
                 break
             
-            self.dispatchMessage(message.decode())
+            self.dispatchMessage(message)
     
     def dispatchMessage(self, message):
         messageParts = message.split(":", 1)
         if messageParts[0] == "Net":
-            pass
-            self.dispatchNetMessage(message)
+            self.dispatchNetMessage(messageParts[1])
         elif messageParts[0] == "Game":
-            EventFactory.generateEvent(message)
+            EventFactory.generateEvent(messageParts[1])
         
     def dispatchNetMessage(self, message):
         if message == "JoinGameFailed":
@@ -70,6 +76,6 @@ class NetworkController(object):
         
     def closeConnection(self):
         self.sendMessage("Exit")
-        #reader thread join
+        self.readerThread.join()
         self.webSocket.close()
         

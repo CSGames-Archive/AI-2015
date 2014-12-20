@@ -4,6 +4,8 @@ Created on Dec 16, 2014
 @author: samuel
 '''
 from event.JoinGameEvent import JoinGameEvent
+from aiclient.Singleton import Singleton
+from event.QueueController import QueueController
 
 class EventFactory(object):
     @staticmethod
@@ -12,7 +14,8 @@ class EventFactory(object):
         event = EventFactory.createEvent(messageParts[0])
         if event != None:
             event.fillArguments(messageParts[1])
-        return event
+            queueController = Singleton(QueueController)
+            queueController.addIngoingEvent(event)
     
     @staticmethod
     def createEvent(eventType):

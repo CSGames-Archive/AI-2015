@@ -7,7 +7,7 @@ from event.BaseEvent import BaseEvent
 
 class OutgoingEvent(BaseEvent):
 
-    def __init__(self, params):
+    def __init__(self):
         '''
         Constructor
         '''
