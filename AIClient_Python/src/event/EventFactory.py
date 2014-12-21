@@ -6,6 +6,7 @@ Created on Dec 16, 2014
 from event.JoinGameEvent import JoinGameEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
+from event.GameStartEvent import GameStartEvent
 
 class EventFactory(object):
     @staticmethod
@@ -21,4 +22,6 @@ class EventFactory(object):
     def createEvent(eventType):
         if eventType == "JoinGame":
             return JoinGameEvent()
+        elif eventType == "GameStart":
+            return GameStartEvent()
         return None

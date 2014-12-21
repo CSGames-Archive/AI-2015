@@ -8,6 +8,8 @@ from event.EventController import EventController
 from network.NetworkController import NetworkController
 from aiclient.Singleton import Singleton
 from world.World import World
+from event.MoveCharacterEvent import MoveCharacterEvent
+from event.QueueController import QueueController
 
 eventController = Singleton(EventController)
 netController = Singleton(NetworkController)
@@ -24,7 +26,10 @@ netController.executeOutgoingEvents()
 
 world = Singleton(World)
 if world.gameIsStarted:
-    print("Game is started")
+    moveEvent = MoveCharacterEvent(0, -50, 50)
+    queueController = Singleton(QueueController)
+    queueController.outEvents.put(moveEvent)
+    netController.executeOutgoingEvents()
     time.sleep(1)
 
 netController.closeConnection()
