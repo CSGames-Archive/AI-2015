@@ -7,6 +7,7 @@ from event.JoinGameEvent import JoinGameEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from event.GameStartEvent import GameStartEvent
+from event.UpdateCharacterEvent import UpdateCharacterEvent
 
 class EventFactory(object):
     @staticmethod
@@ -24,4 +25,6 @@ class EventFactory(object):
             return JoinGameEvent()
         elif eventType == "GameStart":
             return GameStartEvent()
+        elif eventType == "UpdateCharacter":
+            return UpdateCharacterEvent()
         return None
