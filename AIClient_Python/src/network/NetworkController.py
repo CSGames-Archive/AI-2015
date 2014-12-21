@@ -9,7 +9,6 @@ import threading
 from event.EventFactory import EventFactory
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
-from event.OutgoingEvent import OutgoingEvent
 
 class NetworkController(object):
     _instance = None
@@ -45,7 +44,7 @@ class NetworkController(object):
     def executeOutgoingEvents(self):
         queueController = Singleton(QueueController)
         while not queueController.outEvents.empty():
-            event = OutgoingEvent(queueController.outEvents.get())
+            event = queueController.outEvents.get()
             self.sendMessage(event.toString())
     
     def readFunctionThread(self):

@@ -12,14 +12,14 @@
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package main;
+package aiclient;
 
 import world.World;
 import network.NetworkController;
 import event.EventController;
 import event.MoveCharacterEvent;
 
-class Main {
+class Client {
 	public static void main(String args[]) {
 		// Initialization
 		NetworkController.getInstance().init();

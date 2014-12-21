@@ -4,14 +4,15 @@ Created on Dec 15, 2014
 @author: samuel
 '''
 from event.IngoingEvent import IngoingEvent
+from aiclient.Singleton import Singleton
+from world.World import World
 
 class JoinGameEvent(IngoingEvent):
-
-    def __init__(self):
-        self.yourId = 0
+    yourId = 0
         
     def execute(self):
-        print("JoinGameEvent: {}".format(self.yourId))
+        world = Singleton(World)
+        world.joinGame(self.yourId)
 
     def fillArguments(self, string):
         self.yourId = int(string)
