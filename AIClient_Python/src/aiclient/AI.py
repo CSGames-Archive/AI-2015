@@ -31,18 +31,18 @@ class AI(object):
             self.upperLeft()
     
     def init(self):
-        event1 = MoveCharacterEvent(0, 100, -100)
+        event1 = MoveCharacterEvent(0, 10, 0)
         self.queueController.outEvents.put(event1)
-        event2 = MoveCharacterEvent(1, -100, -100)
+        event2 = MoveCharacterEvent(1, 0, 0)
         self.queueController.outEvents.put(event2)
         self.aiStatus = AIStatus.LOWER_RIGHT
     
     def lowerRight(self):
         character = self.world.getTeam(self.world.yourId).characters[0]
-        if character.positionX == 100 and character.positionY == -100:
-            event1 = MoveCharacterEvent(0, -100, -100)
+        if character.positionX == 10 and character.positionY == 0:
+            event1 = MoveCharacterEvent(0, 0, 0)
             self.queueController.outEvents.put(event1)
-            event2 = MoveCharacterEvent(1, 100, -100)
+            event2 = MoveCharacterEvent(1, 10, 0)
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.LOWER_LEFT
     

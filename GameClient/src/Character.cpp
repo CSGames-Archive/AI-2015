@@ -25,11 +25,15 @@ Character::Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* 
 
 	// 3d Infos
 	this->bodyNode = bodyNode;
+	this->subStepPosition = bodyNode->getPosition();
+	//TODO: Refactor with the map starting position
+	this->position.x = 0;
+	this->position.y = 0;
+	this->targetPosition.x = 0;
+	this->targetPosition.y = 0;
 
 	// Character Infos
 	this->name = name;
-	this->targetPosition = bodyNode->getPosition();
-	this->lastSendPosition = bodyNode->getPosition();
 }
 
 Character::~Character()
@@ -41,16 +45,11 @@ void Character::addTime(Ogre::Real deltaTime)
 	updateBody(deltaTime);
 }
 
-void Character::setTargetPosition(Ogre::Vector3 targetPosition)
-{
-	targetPosition.y = bodyNode->getPosition().y;
-	this->targetPosition = targetPosition;
-}
-
 void Character::setTargetPosition(int x, int z)
 {
-	Ogre::Vector3 targetPosition(x, bodyNode->getPosition().y, z);
-	this->targetPosition = targetPosition;
+	//TODO: check if the position is in the map
+	this->targetPosition.x = x;
+	this->targetPosition.y = z;
 }
 
 void Character::updateBody(Ogre::Real deltaTime)
@@ -58,20 +57,30 @@ void Character::updateBody(Ogre::Real deltaTime)
 	if(bodyNode != NULL)
 	{
 		Ogre::Vector3 currentPosition = bodyNode->getPosition();
-		Ogre::Vector3 goalDirection = targetPosition - currentPosition;
-
-		if(goalDirection.length() > Ogre::Real(1.0))
+		Ogre::Vector3 goalDirection = subStepPosition - currentPosition;
+		
+		if(goalDirection.length() < Ogre::Real(1.0))
 		{
-			goalDirection.normalise();
-		}
-		else
-		{
-			goalDirection = Ogre::Vector3::ZERO;
+			if(position == targetPosition)
+			{
+				goalDirection = Ogre::Vector3::ZERO;
+			}
+			else
+			{
+				Map::calculateSubStep(targetPosition, position);
+				//TODO: change the map values
+				std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
+				netMessageQueue->push(message);
+
+				subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_SQUARE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_SQUARE_SIZE));
+				goalDirection = subStepPosition - currentPosition;
+			}
 		}
 
-		if (goalDirection != Ogre::Vector3::ZERO)
+		if(goalDirection != Ogre::Vector3::ZERO)
 		{
 			// Calculate direction
+			goalDirection.normalise();
 			Ogre::Quaternion currentDirection = bodyNode->getOrientation().zAxis().getRotationTo(goalDirection);
 
 			// Find the rotation in yaw
@@ -80,15 +89,6 @@ void Character::updateBody(Ogre::Real deltaTime)
 			bodyNode->yaw(Ogre::Degree(yawToGoal));
 
 			bodyNode->translate(0, 0, deltaTime * WALK_SPEED, Ogre::Node::TS_LOCAL);
-		}
-
-		// TODO: refactor with case
-		Ogre::Vector3 networkDivergence = lastSendPosition - currentPosition;
-		if(networkDivergence.length() > 35)
-		{
-			std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, currentPosition.x, currentPosition.z);
-			netMessageQueue->push(message);
-			lastSendPosition = currentPosition;
 		}
 	}
 }

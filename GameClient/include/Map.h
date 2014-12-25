@@ -6,41 +6,49 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** stdafx.h
-** All the precompile headers
+** Map.h
+** Map that containt the position of all entity
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-// Remove warning for Boost library
-#define NOMINMAX
+#ifndef __Map_h_
+#define __Map_h_
 
-#define MAX_CHARACTER_PER_TEAM 2
-#define MAX_TEAM 2
-#define MAP_HEIGHT 10
-#define MAP_WIDTH 10
-#define MESSAGE_MAX_ARGUMENT 16
+#include "stdafx.h"
 
-// Boost
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/thread.hpp>
+#define MAP_SQUARE_SIZE 50
 
-#include "Ogre.h"
-#include "OIS.h"
+namespace MapEntity
+{
+	enum MapEntity{EMPTY, BOX, CHARACTER};
+}
 
-#include <iostream>
-#include <map>
-#include <queue>
+struct Vector2
+{
+	int x;
+	int y;
 
-// Fix the blank string
-#ifndef __BLANKSTRING_h_
-#define __BLANKSTRING_h_
-const std::string blankstring = "";
-#endif
+	bool operator==(Vector2 const& vector) const
+	{
+		if(x == vector.x && y == vector.y)
+			return true;
+		else
+			return false;
+	}
+};
 
-// Check for duplicate include of window.h
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
+class Map
+{
+private:
+	MapEntity::MapEntity map[MAP_HEIGHT][MAP_WIDTH];
+
+public:
+	Map();
+	virtual ~Map() {}
+
+	MapEntity::MapEntity getSquare(Vector2 postion);
+	static Vector2 calculateSubStep(const Vector2& currentPosition, Vector2& targetPosition);
+};
+
+#endif // #ifndef __Map_h_

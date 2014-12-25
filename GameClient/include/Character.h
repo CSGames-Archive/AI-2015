@@ -18,6 +18,7 @@
 #include "stdafx.h"
 
 #include "NetUtility.h"
+#include "Map.h"
 
 #define WALK_SPEED 50
 
@@ -29,11 +30,12 @@ private:
 	std::queue<std::string>* netMessageQueue;
 	int teamId;
 	int characterId;
-	Ogre::Vector3 lastSendPosition;
 
 	// Character Infos
 	std::string name;
-	Ogre::Vector3 targetPosition;
+	Vector2 position;
+	Vector2 targetPosition;
+	Ogre::Vector3 subStepPosition;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
@@ -45,7 +47,6 @@ public:
 	virtual ~Character();
 
 	void addTime(Ogre::Real deltaTime);
-	void setTargetPosition(Ogre::Vector3 targetPosition);
 	void setTargetPosition(int x, int z);
 	int getId();
 };
