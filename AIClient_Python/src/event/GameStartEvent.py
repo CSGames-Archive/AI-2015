@@ -8,9 +8,11 @@ from aiclient.Singleton import Singleton
 from world.World import World
 
 class GameStartEvent(IngoingEvent):
-    numberOfTeam = 0
-    numberOfCharacter = 0
-    teamsIds = []
+
+    def __init__(self):
+        self.numberOfTeam = 0
+        self.numberOfCharacter = 0
+        self.teamsIds = []
 
     def fillArguments(self, string):
         numberParts = string.split(":", 2)

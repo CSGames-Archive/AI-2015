@@ -8,7 +8,9 @@ from aiclient.Singleton import Singleton
 from world.World import World
 
 class JoinGameEvent(IngoingEvent):
-    yourId = 0
+    
+    def __init__(self):
+        self.yourId = 0
         
     def execute(self):
         world = Singleton(World)

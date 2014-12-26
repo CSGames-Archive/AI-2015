@@ -5,8 +5,6 @@ Created on Dec 20, 2014
 '''
 
 class Character(object):
-    positionX = 0
-    positionY = 0
     
     def __init__(self, positionX, positionY):
         self.positionX = positionX

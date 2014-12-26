@@ -33,24 +33,46 @@ class AI(object):
     def init(self):
         event1 = MoveCharacterEvent(0, 10, 0)
         self.queueController.outEvents.put(event1)
-        event2 = MoveCharacterEvent(1, 0, 0)
+        event2 = MoveCharacterEvent(1, 0, 10)
         self.queueController.outEvents.put(event2)
         self.aiStatus = AIStatus.LOWER_RIGHT
     
     def lowerRight(self):
-        character = self.world.getTeam(self.world.yourId).characters[0]
-        if character.positionX == 10 and character.positionY == 0:
+        character1 = self.world.getTeam(self.world.yourId).characters[0]
+        character2 = self.world.getTeam(self.world.yourId).characters[1]
+        if character1.positionX == 10 and character1.positionY == 0 and character2.positionX == 0 and character2.positionY == 10:
             event1 = MoveCharacterEvent(0, 0, 0)
             self.queueController.outEvents.put(event1)
-            event2 = MoveCharacterEvent(1, 10, 0)
+            event2 = MoveCharacterEvent(1, 10, 10)
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.LOWER_LEFT
     
     def lowerLeft(self):
-        pass
+        character1 = self.world.getTeam(self.world.yourId).characters[0]
+        character2 = self.world.getTeam(self.world.yourId).characters[1]
+        if character1.positionX == 0 and character1.positionY == 0 and character2.positionX == 10 and character2.positionY == 10:
+            event1 = MoveCharacterEvent(0, 10, 10)
+            self.queueController.outEvents.put(event1)
+            event2 = MoveCharacterEvent(1, 0, 0)
+            self.queueController.outEvents.put(event2)
+            self.aiStatus = AIStatus.UPPER_RIGHT
     
     def upperRight(self):
-        pass
+        character1 = self.world.getTeam(self.world.yourId).characters[0]
+        character2 = self.world.getTeam(self.world.yourId).characters[1]
+        if character1.positionX == 10 and character1.positionY == 10 and character2.positionX == 0 and character2.positionY == 0:
+            event1 = MoveCharacterEvent(0, 0, 10)
+            self.queueController.outEvents.put(event1)
+            event2 = MoveCharacterEvent(1, 10, 0)
+            self.queueController.outEvents.put(event2)
+            self.aiStatus = AIStatus.UPPER_LEFT
     
     def upperLeft(self):
-        pass
+        character1 = self.world.getTeam(self.world.yourId).characters[0]
+        character2 = self.world.getTeam(self.world.yourId).characters[1]
+        if character1.positionX == 0 and character1.positionY == 10 and character2.positionX == 10 and character2.positionY == 0:
+            event1 = MoveCharacterEvent(0, 10, 0)
+            self.queueController.outEvents.put(event1)
+            event2 = MoveCharacterEvent(1, 0, 10)
+            self.queueController.outEvents.put(event2)
+            self.aiStatus = AIStatus.LOWER_RIGHT

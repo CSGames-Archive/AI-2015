@@ -8,13 +8,15 @@ from world.World import World
 from aiclient.Singleton import Singleton
 
 class UpdateCharacterEvent(IngoingEvent):
-    teamId = 0
-    characterId = 0
-    positionX = 0
-    positionY = 0
+
+    def __init__(self):
+        self.teamId = 0
+        self.characterId = 0
+        self.positionX = 0
+        self.positionY = 0
     
     def fillArguments(self, string):
-        arguments = string.split(":", 5)
+        arguments = string.split(":", 4)
         
         self.teamId = int(arguments[0])
         self.characterId = int(arguments[1])

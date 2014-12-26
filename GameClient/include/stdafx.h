@@ -17,8 +17,8 @@
 
 #define MAX_CHARACTER_PER_TEAM 2
 #define MAX_TEAM 2
-#define MAP_HEIGHT 10
-#define MAP_WIDTH 10
+#define MAP_HEIGHT 12
+#define MAP_WIDTH 12
 #define MESSAGE_MAX_ARGUMENT 16
 
 // Boost

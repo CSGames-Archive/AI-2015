@@ -67,13 +67,24 @@ void Character::updateBody(Ogre::Real deltaTime)
 			}
 			else
 			{
-				Map::calculateSubStep(targetPosition, position);
-				//TODO: change the map values
-				std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
-				netMessageQueue->push(message);
+				Vector2 newPosition = Map::getInstance().calculateSubStep(targetPosition, position);
 
-				subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_SQUARE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_SQUARE_SIZE));
-				goalDirection = subStepPosition - currentPosition;
+				if(newPosition == position)
+				{
+					goalDirection = Ogre::Vector3::ZERO;
+				}
+				else
+				{
+					Map::getInstance().setTile(position, MapEntity::EMPTY);
+					Map::getInstance().setTile(newPosition, MapEntity::CHARACTER);
+					position = newPosition;
+
+					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
+					netMessageQueue->push(message);
+
+					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_SQUARE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_SQUARE_SIZE));
+					goalDirection = subStepPosition - currentPosition;
+				}
 			}
 		}
 

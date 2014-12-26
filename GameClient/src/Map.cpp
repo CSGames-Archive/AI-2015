@@ -27,29 +27,61 @@ Map::Map()
 	}
 }
 
-MapEntity::MapEntity Map::getSquare(Vector2 position)
+MapEntity::MapEntity Map::getTile(const Vector2& position)
 {
 	return map[position.x][position.y];
 }
 
-Vector2 Map::calculateSubStep(const Vector2& targetPosition, Vector2& currentPosition)
+void Map::setTile(const Vector2& position, MapEntity::MapEntity value)
 {
-	//TODO use collision in map
-	if(currentPosition.x < targetPosition.x)
+	map[position.x][position.y] = value;
+}
+
+Vector2 Map::calculateSubStep(const Vector2& targetPosition, Vector2 currentPosition)
+{
+	int horizontalDiff = std::abs(targetPosition.x - currentPosition.x);
+	int verticalDiff = std::abs(targetPosition.y - currentPosition.y);
+	
+	if(horizontalDiff > verticalDiff)
 	{
-		++currentPosition.x;
+		if(currentPosition.x < targetPosition.x)
+		{
+			++currentPosition.x;
+			if( getTile(currentPosition) == MapEntity::EMPTY)
+			{
+				return currentPosition;
+			}
+			--currentPosition.x;
+		}
+		else if(currentPosition.x > targetPosition.x)
+		{
+			--currentPosition.x;
+			if( getTile(currentPosition) == MapEntity::EMPTY)
+			{
+				return currentPosition;
+			}
+			++currentPosition.x;
+		}
 	}
-	else if(currentPosition.x > targetPosition.x)
-	{
-		--currentPosition.x;
-	}
-	else if(currentPosition.y < targetPosition.y)
+
+	if(currentPosition.y < targetPosition.y)
 	{
 		++currentPosition.y;
+		if( getTile(currentPosition) == MapEntity::EMPTY)
+		{
+			return currentPosition;
+		}
+		--currentPosition.y;
 	}
 	else if(currentPosition.y > targetPosition.y)
 	{
 		--currentPosition.y;
+		if( getTile(currentPosition) == MapEntity::EMPTY)
+		{
+			return currentPosition;
+		}
+		++currentPosition.y;
 	}
+
 	return currentPosition;
 }

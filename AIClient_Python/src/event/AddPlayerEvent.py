@@ -6,8 +6,6 @@ Created on Dec 17, 2014
 from event.OutgoingEvent import OutgoingEvent
 
 class AddPlayerEvent(OutgoingEvent):
-    teamName = ""
-    characterNames = []
 
     def __init__(self, teamName, characterNames):
         self.teamName = teamName

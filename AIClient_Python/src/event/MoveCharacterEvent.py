@@ -6,9 +6,6 @@ Created on Dec 20, 2014
 from event.OutgoingEvent import OutgoingEvent
 
 class MoveCharacterEvent(OutgoingEvent):
-    characterId = 0
-    positionX = 0
-    positionY = 0
 
     def __init__(self, characterId, positionX, positionY):
         self.characterId = characterId

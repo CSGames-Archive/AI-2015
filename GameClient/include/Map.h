@@ -17,6 +17,8 @@
 
 #include "stdafx.h"
 
+#include <cmath>
+
 #define MAP_SQUARE_SIZE 50
 
 namespace MapEntity
@@ -42,13 +44,21 @@ class Map
 {
 private:
 	MapEntity::MapEntity map[MAP_HEIGHT][MAP_WIDTH];
+	// Don't implement for singleton
+	Map(Map const&);
+    void operator=(Map const&);
 
 public:
 	Map();
-	virtual ~Map() {}
+    static Map& getInstance()
+    {
+        static Map instance;
+        return instance;
+    }
 
-	MapEntity::MapEntity getSquare(Vector2 postion);
-	static Vector2 calculateSubStep(const Vector2& currentPosition, Vector2& targetPosition);
+	MapEntity::MapEntity getTile(const Vector2& position);
+	void setTile(const Vector2& position, MapEntity::MapEntity value);
+	Vector2 calculateSubStep(const Vector2& currentPosition, Vector2 targetPosition);
 };
 
 #endif // #ifndef __Map_h_
