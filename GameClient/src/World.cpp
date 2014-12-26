@@ -18,7 +18,6 @@
 
 World::World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessageQueue)
 {
-	TANK_MESH_HEIGHT = 2.5;
 	TANK_MESH_NAME = "Tank.mesh";
 
 	this->netMessageQueue = netMessageQueue;
@@ -44,35 +43,63 @@ World::~World()
 
 void World::createScene()
 {
-	//TODO: Refactor with the new map
 	// Set the scene's ambient light
 	sceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
 	// Create a Light and set its position
 	Ogre::Light* light = sceneManager->createLight("MainLight");
-	light->setPosition(20.0f, 80.0f, 50.0f);
+	light->setPosition(0.0f, 80.0f, 0.0f);
 
-	Ogre::Light* light2 = sceneManager->createLight("MainLight2");
-	light2->setPosition(-20.0f, 80.0f, -50.0f);
+	light = sceneManager->createLight("MainLight2");
+	light->setPosition(0.0, 80.0, 25.0*11.0);
 
-	Ogre::Plane plane;
-	plane.d = 1000;
-	plane.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+	light = sceneManager->createLight("MainLight3");
+	light->setPosition(25.0*11.0, 80.0f, 0.0);
+
+	light = sceneManager->createLight("MainLight4");
+	light->setPosition(25.0*11.0, 80.0f, 25.0*11.0);
+
 	sceneManager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
 	// create a floor mesh resource
 	Ogre::MeshManager::getSingleton().createPlane("floor", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-	Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), 1000, 1000, 10, 10, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
+												  Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), 1000, 1000, 10, 10, true,
+												  1, 10, 10, Ogre::Vector3::UNIT_Z);
 
 	// create a floor entity, give it a material, and place it at the origin
+	Ogre::SceneNode* floorNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	Ogre::Entity* floor = sceneManager->createEntity("Floor", "floor");
 	floor->setMaterialName("SceneMaterial/FloorSand");
 	floor->setCastShadows(false);
-	sceneManager->getRootSceneNode()->attachObject(floor);
+	floorNode->attachObject(floor);
+	floorNode->setPosition(150.0, 0.0, 150.0);
 
+	//TODO: put this in function
+	//Delimiter crate creation
+	Ogre::Vector3 scaleVector(2.5, 2.5, 2.5);
 	Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-	Ogre::Entity* crate = sceneManager->createEntity("crate", "WoodCrate.mesh");
+	Ogre::Entity* crate = sceneManager->createEntity("crate1", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
+	crateNode->setScale(scaleVector);
+	crateNode->setPosition(-25.0, 12.5, -25.0);
+
+	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+	crate = sceneManager->createEntity("crate2", "WoodCrate.mesh");
+	crateNode->attachObject(crate);
+	crateNode->setScale(scaleVector);
+	crateNode->setPosition(25.0*12.0, 12.5, -25.0);
+
+	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+	crate = sceneManager->createEntity("crate3", "WoodCrate.mesh");
+	crateNode->attachObject(crate);
+	crateNode->setScale(scaleVector);
+	crateNode->setPosition(-25.0, 12.5, 25.0*12.0);
+
+	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+	crate = sceneManager->createEntity("crate4", "WoodCrate.mesh");
+	crateNode->attachObject(crate);
+	crateNode->setScale(scaleVector);
+	crateNode->setPosition(25.0*12.0, 12.5, 25.0*12.0);
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
@@ -82,9 +109,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
-		// TODO: refactor with map infos
-		Ogre::Vector3 startingPosition(0, TANK_MESH_HEIGHT ,0);
-		Ogre::SceneNode* bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode(startingPosition);
+		Ogre::SceneNode* bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 		Ogre::Entity* entity = sceneManager->createEntity(characterNames[i], TANK_MESH_NAME);
 		bodyNode->attachObject(entity);
 

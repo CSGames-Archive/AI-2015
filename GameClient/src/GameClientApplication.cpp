@@ -130,7 +130,6 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 
 	if (arg.key == OIS::KC_ESCAPE)
 	{
-		//TODO: test if call in the destructor
 		networkController->close();
 		mShutDown = true;
 	}
@@ -166,7 +165,6 @@ bool GameClientApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::Mous
 	return true;
 }
 
-//TODO: some refactor, this code came with the sdk
 #ifdef __cplusplus
 extern "C" {
 #endif

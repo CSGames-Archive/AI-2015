@@ -36,6 +36,7 @@ private:
 	Vector2 position;
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
+	Ogre::Real TANK_MESH_HEIGHT;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;

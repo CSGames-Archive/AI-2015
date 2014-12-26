@@ -24,7 +24,6 @@ class World
 private:
 	// TODO: find better place
 	char* TANK_MESH_NAME;
-	Ogre::Real TANK_MESH_HEIGHT;
 
 	std::queue<std::string>* netMessageQueue;
 	Ogre::SceneManager* sceneManager;

@@ -19,7 +19,7 @@
 
 #include <cmath>
 
-#define MAP_SQUARE_SIZE 50
+#define MAP_SQUARE_SIZE 25
 
 namespace MapEntity
 {
@@ -59,6 +59,11 @@ public:
 	MapEntity::MapEntity getTile(const Vector2& position);
 	void setTile(const Vector2& position, MapEntity::MapEntity value);
 	Vector2 calculateSubStep(const Vector2& currentPosition, Vector2 targetPosition);
+	bool moveUp(Vector2& currentPosition);
+	bool moveDown(Vector2& currentPosition);
+	bool moveLeft(Vector2& currentPosition);
+	bool moveRight(Vector2& currentPosition);
+	Vector2 getStartingPosition(int teamId, int characterId);
 };
 
 #endif // #ifndef __Map_h_

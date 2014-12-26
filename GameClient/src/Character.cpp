@@ -24,13 +24,13 @@ Character::Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* 
 	this->characterId = characterId;
 
 	// 3d Infos
+	TANK_MESH_HEIGHT = 2.5;
 	this->bodyNode = bodyNode;
-	this->subStepPosition = bodyNode->getPosition();
-	//TODO: Refactor with the map starting position
-	this->position.x = 0;
-	this->position.y = 0;
-	this->targetPosition.x = 0;
-	this->targetPosition.y = 0;
+	this->position = Map::getInstance().getStartingPosition(teamId, characterId);
+	this->targetPosition = this->position;
+	Ogre::Vector3 startingVector(this->position.x*MAP_SQUARE_SIZE, TANK_MESH_HEIGHT, this->position.y*MAP_SQUARE_SIZE);
+	this->bodyNode->setPosition(startingVector);
+	this->subStepPosition = startingVector;
 
 	// Character Infos
 	this->name = name;
@@ -47,9 +47,15 @@ void Character::addTime(Ogre::Real deltaTime)
 
 void Character::setTargetPosition(int x, int z)
 {
-	//TODO: check if the position is in the map
-	this->targetPosition.x = x;
-	this->targetPosition.y = z;
+	if(x > -1 && x < MAP_HEIGHT)
+	{
+		this->targetPosition.x = x;
+	}
+
+	if(z > -1 && z < MAP_WIDTH)
+	{
+		this->targetPosition.y = z;
+	}
 }
 
 void Character::updateBody(Ogre::Real deltaTime)

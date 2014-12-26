@@ -30,7 +30,7 @@ void EventController::executeAllGameEvent(World* world)
 	{
 		GameEvent* event = gameEventQueue.front();
 		event->execute(world);
-		//delete event;
+		//TODO: test if need delete event;
 		gameEventQueue.pop();
 		event;
 	}
