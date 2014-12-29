@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import event.AddPlayerEvent;
-import event.EventController;
+import event.QueueController;
 
 public class World {
 	private static World instance = null;
@@ -49,7 +49,7 @@ public class World {
 		String teamName = "team" + id;
 		String[] characterNames = { "character1" + id, "character2" + id };
 		AddPlayerEvent event = new AddPlayerEvent(teamName, characterNames);
-		EventController.getInstance().addOutgoingEvent(event);
+		QueueController.getInstance().addOutgoingEvent(event);
 	}
 
 	public void startGame(int numberOfTeam, int numberOfCharacter, List<Integer> teamIDs) {

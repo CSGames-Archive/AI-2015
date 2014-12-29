@@ -21,7 +21,7 @@ public class EventFactory {
 		IngoingEvent event = createEvent(messageParts[0]);
 		if(event != null) {
 			event.fillArguments(messageParts[1]);
-			EventController.getInstance().addIngoingEvent(event);
+			QueueController.getInstance().addIngoingEvent(event);
 		} else {
 			System.out.println("Factory Error: Message invalid");
 		}

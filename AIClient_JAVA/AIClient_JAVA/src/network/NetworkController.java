@@ -21,6 +21,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import event.EventFactory;
+import event.OutgoingEvent;
+import event.QueueController;
 
 public class NetworkController {
 	private static NetworkController instance = null;
@@ -28,6 +30,7 @@ public class NetworkController {
 	private PrintWriter outToServer;
 	private BufferedReader inFromServer;
 	private ReaderThread readerThead;
+	private boolean connected = false;
 
 	protected NetworkController() {
 		try {
@@ -36,6 +39,7 @@ public class NetworkController {
 			inFromServer = new BufferedReader(new InputStreamReader(
 					webSocket.getInputStream()));
 			readerThead = new ReaderThread();
+			connected = true;
 		} catch (Exception e) {
 			// TODO make some retry for server connection
 			e.printStackTrace();
@@ -51,7 +55,22 @@ public class NetworkController {
 
 	public void init() {
 		sendMessage("AIClientReady");
-		readerThead.start();
+		if (readerThead != null) {
+			readerThead.start();
+		}
+	}
+
+	public void executeOutgoingEvents() {
+		QueueController queueController = QueueController.getInstance();
+
+		while (!queueController.getOutEvents().isEmpty()) {
+			OutgoingEvent event = queueController.getOutEvents().remove();
+			NetworkController.getInstance().sendMessage(event.toString());
+		}
+	}
+
+	public boolean isConnected() {
+		return connected;
 	}
 
 	public void readFunctionThread() {
@@ -61,6 +80,7 @@ public class NetworkController {
 
 			if (fullMessage.equals("Net:OkForExit") || fullMessage == null) {
 				exit = true;
+				connected = false;
 				break;
 			}
 
@@ -80,14 +100,7 @@ public class NetworkController {
 
 	public void parseNetMessage(String message) {
 		if (message.equals("JoinGameFailed")) {
-			System.out.println("Error : the game client was not connected");
-			System.out.println("Info : connection retry in few seconds...");
-			try {
-				Thread.sleep(2000);
-				sendMessage("AIClientReady");
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			connectionRetry();
 		} else if (message.equals("ErrorGameClientDisconnect")) {
 			System.out.println("Error : the game client was disconnected");
 		} else {
@@ -120,10 +133,29 @@ public class NetworkController {
 	public void close() {
 		try {
 			sendMessage("Exit");
-			readerThead.join();
-			webSocket.close();
+			
+			if (readerThead != null) {
+				readerThead.join();
+			}
+			
+			if (webSocket != null) {
+				webSocket.close();
+			}
+			
+			connected = false;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void connectionRetry() {
+		System.out.println("Error : the game client was not connected");
+		System.out.println("Info : connection retry in few seconds...");
+		try {
+			Thread.sleep(2000);
+			sendMessage("AIClientReady");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

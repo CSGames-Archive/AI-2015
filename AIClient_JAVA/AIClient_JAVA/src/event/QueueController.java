@@ -6,35 +6,46 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** EventController.java
- ** Singleton that manage all the events
+ ** QueueController.java
+ ** Controller that manage all the queue
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
 package event;
 
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class EventController {
-	private static EventController instance = null;
+public class QueueController {
+	private static QueueController instance = null;
+	private Queue<OutgoingEvent> outEvents = new LinkedList<OutgoingEvent>();
+	private Queue<IngoingEvent> inEvents = new LinkedList<IngoingEvent>();
 
-	protected EventController() {
+	protected QueueController() {
 		// Exists only to defeat instantiation
 	}
 
-	public static EventController getInstance() {
+	public static QueueController getInstance() {
 		if (instance == null) {
-			instance = new EventController();
+			instance = new QueueController();
 		}
 		return instance;
 	}
 	
-	public void executeIngoingEvents() {
-		QueueController queueController = QueueController.getInstance();
-		
-		while (!queueController.getInEvents().isEmpty()) {
-			IngoingEvent event = queueController.getInEvents().remove();
-			event.execute();
-		}
+	public void addOutgoingEvent(OutgoingEvent event) {
+		outEvents.add(event);
+	}
+
+	public void addIngoingEvent(IngoingEvent event) {
+		inEvents.add(event);
+	}
+
+	public Queue<OutgoingEvent> getOutEvents() {
+		return outEvents;
+	}
+
+	public Queue<IngoingEvent> getInEvents() {
+		return inEvents;
 	}
 }

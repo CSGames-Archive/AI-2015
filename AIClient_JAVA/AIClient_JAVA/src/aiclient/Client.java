@@ -6,7 +6,7 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** Main.java
+ ** Client.java
  ** Main program loop
  **
  ** Author: Samuel-Ricardo Carriere
@@ -14,34 +14,36 @@
 
 package aiclient;
 
-import world.World;
 import network.NetworkController;
+import world.World;
 import event.EventController;
-import event.MoveCharacterEvent;
 
 class Client {
 	public static void main(String args[]) {
+
+		NetworkController networkController = NetworkController.getInstance();
+		EventController eventController = EventController.getInstance();
+		World world = World.getInstance();
+		AI ai = new AI();
+
 		// Initialization
-		NetworkController.getInstance().init();
-		//Waiting for join game
-		pause(1000);
-		EventController.getInstance().executeAllEvents();
-		//Waiting for the game start
-		pause(1000);
-		EventController.getInstance().executeAllEvents();
-		
-		if(World.getInstance().isGameIsStarted()) {
-			// AI Loop
-			MoveCharacterEvent moveEvent = new MoveCharacterEvent(0,50,50);
-			EventController.getInstance().addOutgoingEvent(moveEvent);
-			EventController.getInstance().executeAllEvents();
-			pause(1000);
+		networkController.init();
+
+		while (networkController.isConnected()) {
+			eventController.executeIngoingEvents();
+
+			if (world.isGameIsStarted()) {
+				ai.tick();
+			}
+
+			networkController.executeOutgoingEvents();
+			pause(30);
 		}
-		
+
 		NetworkController.getInstance().close();
 		System.out.println(" - end - ");
 	}
-	
+
 	public static void pause(long milli) {
 		try {
 			Thread.sleep(milli);

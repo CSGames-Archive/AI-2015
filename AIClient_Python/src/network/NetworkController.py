@@ -65,11 +65,11 @@ class NetworkController(object):
     def dispatchMessage(self, message):
         messageParts = message.split(":", 1)
         if messageParts[0] == "Net":
-            self.dispatchNetMessage(messageParts[1])
+            self.parseNetMessage(messageParts[1])
         elif messageParts[0] == "Game":
             EventFactory.generateEvent(messageParts[1])
         
-    def dispatchNetMessage(self, message):
+    def parseNetMessage(self, message):
         if message == "JoinGameFailed":
             self.connectionRetry()
         elif message == "ErrorGameClientDisconnect":
