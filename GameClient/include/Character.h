@@ -50,6 +50,7 @@ public:
 	void addTime(Ogre::Real deltaTime);
 	void setTargetPosition(int x, int z);
 	int getId();
+	void sendPosition();
 };
 
 #endif // #ifndef __Character_h_

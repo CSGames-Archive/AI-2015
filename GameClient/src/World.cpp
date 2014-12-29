@@ -120,6 +120,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 	if(teamCount == MAX_TEAM)
 	{
 		gameStart();
+		sendAllPosition();
 	}
 }
 
@@ -172,4 +173,15 @@ void World::gameStart()
 		message += numstr;
 	}
 	netMessageQueue->push(message);
+}
+
+void World::sendAllPosition()
+{
+	for(int teamIndex = 0; teamIndex < MAX_TEAM; ++teamIndex)
+	{
+		for(int characterIndex = 0; characterIndex < MAX_CHARACTER_PER_TEAM; ++characterIndex)
+		{
+			teams[teamIndex]->getCharacter(characterIndex)->sendPosition();
+		}
+	}
 }

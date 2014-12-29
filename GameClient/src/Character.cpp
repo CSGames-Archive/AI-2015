@@ -114,3 +114,9 @@ int Character::getId()
 {
 	return characterId;
 }
+
+void Character::sendPosition()
+{
+	std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
+	netMessageQueue->push(message);
+}
