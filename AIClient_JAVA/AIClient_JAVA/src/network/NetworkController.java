@@ -78,7 +78,7 @@ public class NetworkController {
 		while (!exit) {
 			String fullMessage = readMessage();
 
-			if (fullMessage.equals("Net:OkForExit") || fullMessage == null) {
+			if (fullMessage == null || fullMessage.equals("Net:OkForExit")) {
 				exit = true;
 				connected = false;
 				break;
@@ -122,10 +122,9 @@ public class NetworkController {
 		try {
 			textServer = inFromServer.readLine();
 			System.out.println("Server: " + textServer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
 			System.out.println("Error: can't read on socket");
+			return null;
 		}
 		return textServer;
 	}
@@ -133,15 +132,15 @@ public class NetworkController {
 	public void close() {
 		try {
 			sendMessage("Exit");
-			
+
 			if (readerThead != null) {
 				readerThead.join();
 			}
-			
+
 			if (webSocket != null) {
 				webSocket.close();
 			}
-			
+
 			connected = false;
 		} catch (IOException e) {
 			e.printStackTrace();

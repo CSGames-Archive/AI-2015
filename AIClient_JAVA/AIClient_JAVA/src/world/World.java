@@ -52,7 +52,8 @@ public class World {
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
 
-	public void startGame(int numberOfTeam, int numberOfCharacter, List<Integer> teamIDs) {
+	public void startGame(int numberOfTeam, int numberOfCharacter,
+			List<Integer> teamIDs) {
 		gameIsStarted = true;
 		for (int index = 0; index < numberOfTeam; ++index) {
 			teams.add(new Team(teamIDs.get(index), numberOfCharacter));
@@ -71,5 +72,9 @@ public class World {
 
 	public boolean isGameIsStarted() {
 		return gameIsStarted;
+	}
+
+	public int getYourId() {
+		return yourId;
 	}
 }
