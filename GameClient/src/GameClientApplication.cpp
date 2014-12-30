@@ -114,7 +114,10 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     }
 
 	Ogre::Real ttW = 1000.0 / 60.0 - 1000.0 * evt.timeSinceLastFrame;
-	if (ttW > 0) Sleep(ttW);
+	if (ttW > 0)
+	{
+	    boost::this_thread::sleep(boost::posix_time::milliseconds(ttW));
+	}
 
 	return true;
 }

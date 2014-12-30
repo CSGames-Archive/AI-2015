@@ -19,6 +19,7 @@ set(HEADER_FILES
   include/EventFactory.h
   include/GameClientApplication.h
   include/GameEvent.h
+  include/Map.h
   include/NetUtility.h
   include/NetworkController.h
   include/stdafx.h
@@ -34,6 +35,7 @@ set(SOURCE_FILES
   src/EventFactory.cpp
   src/GameClientApplication.cpp
   src/GameEvent.cpp
+  src/Map.cpp
   src/NetworkController.cpp
   src/stdafx.cpp
   src/Team.cpp
