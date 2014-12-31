@@ -76,7 +76,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 			}
 			else
 			{
-				Vector2 newPosition = Map::getInstance().calculateSubStep(targetPosition, position);
+				Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position);
 
 				if(newPosition == position)
 				{
@@ -84,16 +84,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 				}
 				else
 				{
-					if(Map::getInstance().getTile(position) == MapEntity::CHARACTER_MINE)
-					{
-						Map::getInstance().setTile(position, MapEntity::MINE, teamId, characterId);
-					}
-					else
-					{
-						Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
-					}
-
-					Map::getInstance().setTile(newPosition, MapEntity::CHARACTER, teamId, characterId);
+					Map::getInstance().moveCharacterTile(position, newPosition);
 					position = newPosition;
 
 					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);

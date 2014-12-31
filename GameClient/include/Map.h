@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 
+#include "NetUtility.h"
 #include <cmath>
 
 #define MAP_TILE_SIZE 25
@@ -30,6 +31,18 @@ struct Vector2
 {
 	int x;
 	int y;
+
+	Vector2()
+	{
+		this->x = 0;
+		this->y = 0;
+	}
+
+	Vector2(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+	}
 
 	bool operator==(Vector2 const& vector) const
 	{
@@ -72,13 +85,17 @@ public:
         return instance;
     }
 
-	MapEntity::MapEntity getTile(const Vector2& position);
+	MapEntity::MapEntity getTileType(const Vector2& position);
+	MapTile* getTile(const Vector2& position);
 	void setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId);
-	Vector2 calculateSubStep(const Vector2& currentPosition, Vector2 targetPosition);
-	bool moveUp(Vector2& currentPosition);
-	bool moveDown(Vector2& currentPosition);
-	bool moveLeft(Vector2& currentPosition);
-	bool moveRight(Vector2& currentPosition);
+	Vector2 calculateNextStep(const Vector2& currentPosition, const Vector2& targetPosition);
+	bool isTileEmpty(const Vector2& position);
+	bool isPositionValid(const Vector2& position);
+	Vector2 leftTile(const Vector2& position);
+	Vector2 rightTile(const Vector2& position);
+	Vector2 upTile(const Vector2& position);
+	Vector2 downTile(const Vector2& position);
+	void moveCharacterTile(const Vector2& position, const Vector2& newPosition);
 	Vector2 getStartingPosition(int teamId, int characterId);
 };
 

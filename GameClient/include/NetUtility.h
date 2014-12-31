@@ -73,6 +73,25 @@ namespace NetUtility
 
 		return message;
 	}
+
+	static std::string generateMineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		sprintf(numstr, "%d", hitPlayerId);
+		std::string message = "Game:MineHit:";
+		message += numstr;
+		sprintf(numstr, "%d", hitCharacterId);
+		message += ":";
+		message += numstr;
+		sprintf(numstr, "%d", originPlayerId);
+		message += ":";
+		message += numstr;
+		sprintf(numstr, "%d", originCharacterId);
+		message += ":";
+		message += numstr;
+
+		return message;
+	}
 };
 
 #endif // #ifndef __NetUtility_h_

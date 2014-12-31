@@ -20,9 +20,14 @@ Map::Map()
 {
 }
 
-MapEntity::MapEntity Map::getTile(const Vector2& position)
+MapEntity::MapEntity Map::getTileType(const Vector2& position)
 {
 	return map[position.x][position.y].type;
+}
+
+MapTile* Map::getTile(const Vector2& position)
+{
+	return &map[position.x][position.y];
 }
 
 void Map::setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId)
@@ -32,109 +37,117 @@ void Map::setTile(const Vector2& position, MapEntity::MapEntity value, int teamI
 	map[position.x][position.y].characterId = characterId;
 }
 
-bool Map::moveUp(Vector2& currentPosition)
+bool Map::isTileEmpty(const Vector2& position)
 {
-	if(currentPosition.y == MAP_HEIGHT-1)
+	if(!isPositionValid(position))
 		return false;
 
-	++currentPosition.y;
-	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
+	MapEntity::MapEntity tileType = getTileType(position);
+	if( tileType == MapEntity::EMPTY || tileType == MapEntity::MINE)
 	{
 		return true;
 	}
-	--currentPosition.y;
 	return false;
 }
 
-bool Map::moveDown(Vector2& currentPosition)
+bool Map::isPositionValid(const Vector2& position)
 {
-	if(currentPosition.y == 0)
-		return false;
-
-	--currentPosition.y;
-	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
+	if(position.x > -1 && position.x < MAP_WIDTH &&
+		position.y > -1 && position.y < MAP_HEIGHT)
 	{
 		return true;
 	}
-	++currentPosition.y;
 	return false;
 }
 
-bool Map::moveRight(Vector2& currentPosition)
+Vector2 leftPosition(const Vector2& position)
 {
-	if(currentPosition.x == MAP_WIDTH-1)
-		return false;
-
-	++currentPosition.x;
-	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
-	{
-		return true;
-	}
-	--currentPosition.x;
-	return false;
+	return Vector2(position.x-1, position.y);
 }
 
-bool Map::moveLeft(Vector2& currentPosition)
+Vector2 rightPosition(const Vector2& position)
 {
-	if(currentPosition.x == 0)
-		return false;
-
-	--currentPosition.x;
-	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
-	{
-		return true;
-	}
-	++currentPosition.x;
-	return false;
+	return Vector2(position.x+1, position.y);
 }
 
-Vector2 Map::calculateSubStep(const Vector2& targetPosition, Vector2 currentPosition)
+Vector2 upPosition(const Vector2& position)
+{
+	return Vector2(position.x, position.y+1);
+}
+
+Vector2 downPosition(const Vector2& position)
+{
+	return Vector2(position.x, position.y-1);
+}
+
+Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& currentPosition)
 {
 	int horizontalDiff = std::abs(targetPosition.x - currentPosition.x);
 	int verticalDiff = std::abs(targetPosition.y - currentPosition.y);
-	
+
 	if(horizontalDiff > verticalDiff)
 	{
 		if(currentPosition.x < targetPosition.x)
 		{
-			if(moveRight(currentPosition))
-				return currentPosition;
-			if(moveUp(currentPosition))
-				return currentPosition;
-			if(moveDown(currentPosition))
-				return currentPosition;
+			if(isTileEmpty(rightPosition(currentPosition)))
+				return rightPosition(currentPosition);
+			if(isTileEmpty(upPosition(currentPosition)))
+				return upPosition(currentPosition);
+			if(isTileEmpty(downPosition(currentPosition)))
+				return downPosition(currentPosition);
 		}
 		else if(currentPosition.x > targetPosition.x)
 		{
-			if(moveLeft(currentPosition))
-				return currentPosition;
-			if(moveUp(currentPosition))
-				return currentPosition;
-			if(moveDown(currentPosition))
-				return currentPosition;
+			if(isTileEmpty(leftPosition(currentPosition)))
+				return leftPosition(currentPosition);
+			if(isTileEmpty(upPosition(currentPosition)))
+				return upPosition(currentPosition);
+			if(isTileEmpty(downPosition(currentPosition)))
+				return downPosition(currentPosition);
 		}
 	}
 
 	if(currentPosition.y < targetPosition.y)
 	{
-		if(moveUp(currentPosition))
-			return currentPosition;
-		if(moveLeft(currentPosition))
-			return currentPosition;
-		if(moveRight(currentPosition))
-			return currentPosition;
+		if(isTileEmpty(upPosition(currentPosition)))
+			return upPosition(currentPosition);
+		if(isTileEmpty(rightPosition(currentPosition)))
+			return rightPosition(currentPosition);
+		if(isTileEmpty(leftPosition(currentPosition)))
+			return leftPosition(currentPosition);
 	}
 	else if(currentPosition.y > targetPosition.y)
 	{
-		if(moveDown(currentPosition))
-			return currentPosition;
-		if(moveLeft(currentPosition))
-			return currentPosition;
-		if(moveRight(currentPosition))
-			return currentPosition;
+		if(isTileEmpty(downPosition(currentPosition)))
+			return downPosition(currentPosition);
+		if(isTileEmpty(rightPosition(currentPosition)))
+			return rightPosition(currentPosition);
+		if(isTileEmpty(leftPosition(currentPosition)))
+			return leftPosition(currentPosition);
 	}
 
 	return currentPosition;
+}
+
+void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
+{
+	MapTile* oldTile = getTile(position);
+	MapTile* newTile = getTile(newPosition);
+
+	if(newTile->type == MapEntity::MINE)
+	{
+		std::string message = NetUtility::generateMineHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+	}
+	setTile(newPosition, MapEntity::CHARACTER, oldTile->teamId, oldTile->characterId);
+
+	if(oldTile->type == MapEntity::CHARACTER_MINE)
+	{
+		oldTile->type = MapEntity::MINE;
+	}
+	else
+	{
+		setTile(position, MapEntity::EMPTY, 0, 0);
+	}
 }
 
 Vector2 Map::getStartingPosition(int teamId, int characterId)
