@@ -24,6 +24,7 @@ class World
 private:
 	// TODO: find better place
 	char* TANK_MESH_NAME;
+	char* MINE_MESH_NAME;
 
 	std::queue<std::string>* netMessageQueue;
 	Ogre::SceneManager* sceneManager;
@@ -42,6 +43,7 @@ public:
 	void addTime(Ogre::Real deltaTime);
 	void gameStart();
 	void sendAllPosition();
+	void dropMine(int teamId, int characterId);
 };
 
 #endif // #ifndef __World_h_

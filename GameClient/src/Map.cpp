@@ -18,23 +18,18 @@
 
 Map::Map()
 {
-	for(int x = 0; x < MAP_HEIGHT; ++x)
-	{
-		for(int y = 0; y < MAP_WIDTH; ++y)
-		{
-			map[x][x] = MapEntity::EMPTY;
-		}
-	}
 }
 
 MapEntity::MapEntity Map::getTile(const Vector2& position)
 {
-	return map[position.x][position.y];
+	return map[position.x][position.y].type;
 }
 
-void Map::setTile(const Vector2& position, MapEntity::MapEntity value)
+void Map::setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId)
 {
-	map[position.x][position.y] = value;
+	map[position.x][position.y].type = value;
+	map[position.x][position.y].teamId = teamId;
+	map[position.x][position.y].characterId = characterId;
 }
 
 bool Map::moveUp(Vector2& currentPosition)
@@ -43,7 +38,7 @@ bool Map::moveUp(Vector2& currentPosition)
 		return false;
 
 	++currentPosition.y;
-	if( getTile(currentPosition) == MapEntity::EMPTY)
+	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
 	{
 		return true;
 	}
@@ -57,7 +52,7 @@ bool Map::moveDown(Vector2& currentPosition)
 		return false;
 
 	--currentPosition.y;
-	if( getTile(currentPosition) == MapEntity::EMPTY)
+	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
 	{
 		return true;
 	}
@@ -71,7 +66,7 @@ bool Map::moveRight(Vector2& currentPosition)
 		return false;
 
 	++currentPosition.x;
-	if( getTile(currentPosition) == MapEntity::EMPTY)
+	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
 	{
 		return true;
 	}
@@ -85,7 +80,7 @@ bool Map::moveLeft(Vector2& currentPosition)
 		return false;
 
 	--currentPosition.x;
-	if( getTile(currentPosition) == MapEntity::EMPTY)
+	if( getTile(currentPosition) == MapEntity::EMPTY || getTile(currentPosition) == MapEntity::MINE)
 	{
 		return true;
 	}

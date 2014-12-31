@@ -19,6 +19,7 @@
 World::World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessageQueue)
 {
 	TANK_MESH_NAME = "Tank.mesh";
+	MINE_MESH_NAME = "Mine.mesh";
 
 	this->netMessageQueue = netMessageQueue;
 	this->sceneManager = sceneManager;
@@ -87,19 +88,19 @@ void World::createScene()
 	crate = sceneManager->createEntity("crate2", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(25.0*12.0, 12.5, -25.0);
+	crateNode->setPosition(25.0*8.0, 12.5, -25.0);
 
 	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	crate = sceneManager->createEntity("crate3", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(-25.0, 12.5, 25.0*12.0);
+	crateNode->setPosition(-25.0, 12.5, 25.0*8.0);
 
 	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	crate = sceneManager->createEntity("crate4", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(25.0*12.0, 12.5, 25.0*12.0);
+	crateNode->setPosition(25.0*8.0, 12.5, 25.0*8.0);
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
@@ -183,5 +184,21 @@ void World::sendAllPosition()
 		{
 			teams[teamIndex]->getCharacter(characterIndex)->sendPosition();
 		}
+	}
+}
+
+void World::dropMine(int teamId, int characterId)
+{
+	Character* character = getTeam(teamId)->getCharacter(characterId);
+	if(character->isMineReady())
+	{
+		std::string mineName = "mine_" + character->getName();
+
+		Ogre::SceneNode* bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::Entity* entity = sceneManager->createEntity(mineName, MINE_MESH_NAME);
+		bodyNode->attachObject(entity);
+	
+		Mine* mine = new Mine(bodyNode);
+		character->dropMine(mine);
 	}
 }

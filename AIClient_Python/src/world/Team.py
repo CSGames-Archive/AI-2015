@@ -11,5 +11,5 @@ class Team(object):
         self.teamId = teamId
         self.characters = []
         for index in range(0, numberOfCharacter):
-            self.characters.insert(index, Character(0, 0))
+            self.characters.insert(index, Character(index, 0, 0))
     

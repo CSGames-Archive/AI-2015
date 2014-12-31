@@ -6,8 +6,8 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCharacter.h
-** Implementation of the NetCharacter
+** Character.cpp
+** Implementation of the Character
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
@@ -28,16 +28,19 @@ Character::Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* 
 	this->bodyNode = bodyNode;
 	this->position = Map::getInstance().getStartingPosition(teamId, characterId);
 	this->targetPosition = this->position;
-	Ogre::Vector3 startingVector(this->position.x*MAP_SQUARE_SIZE, TANK_MESH_HEIGHT, this->position.y*MAP_SQUARE_SIZE);
+	Ogre::Vector3 startingVector(this->position.x*MAP_TILE_SIZE, TANK_MESH_HEIGHT, this->position.y*MAP_TILE_SIZE);
 	this->bodyNode->setPosition(startingVector);
 	this->subStepPosition = startingVector;
 
 	// Character Infos
 	this->name = name;
+	this->mine = NULL;
 }
 
 Character::~Character()
 {
+	if(mine)
+		delete mine;
 }
 
 void Character::addTime(Ogre::Real deltaTime)
@@ -81,14 +84,22 @@ void Character::updateBody(Ogre::Real deltaTime)
 				}
 				else
 				{
-					Map::getInstance().setTile(position, MapEntity::EMPTY);
-					Map::getInstance().setTile(newPosition, MapEntity::CHARACTER);
+					if(Map::getInstance().getTile(position) == MapEntity::CHARACTER_MINE)
+					{
+						Map::getInstance().setTile(position, MapEntity::MINE, teamId, characterId);
+					}
+					else
+					{
+						Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
+					}
+
+					Map::getInstance().setTile(newPosition, MapEntity::CHARACTER, teamId, characterId);
 					position = newPosition;
 
 					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
 					netMessageQueue->push(message);
 
-					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_SQUARE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_SQUARE_SIZE));
+					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
 					goalDirection = subStepPosition - currentPosition;
 				}
 			}
@@ -105,7 +116,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 
 			bodyNode->yaw(Ogre::Degree(yawToGoal));
 
-			bodyNode->translate(0, 0, deltaTime * WALK_SPEED, Ogre::Node::TS_LOCAL);
+			bodyNode->translate(0, 0, deltaTime * CHARACTER_WALK_SPEED, Ogre::Node::TS_LOCAL);
 		}
 	}
 }
@@ -115,8 +126,31 @@ int Character::getId()
 	return characterId;
 }
 
+std::string Character::getName()
+{
+	return name;
+}
+
 void Character::sendPosition()
 {
 	std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
 	netMessageQueue->push(message);
+}
+
+bool Character::isMineReady()
+{
+	return (!this->mine)?true:false;
+}
+
+void Character::dropMine(Mine* mine)
+{
+	if(this->mine)
+	{
+		// Generate destroy event, not supposed to happen
+	}
+
+	mine->setPosition(position);
+	this->mine = mine;
+
+	Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
 }

@@ -112,3 +112,20 @@ bool MoveCharacterEvent::fill(std::string arguments)
 		return true;
 	return false;
 }
+
+void DropMineEvent::execute(World* world)
+{
+	std::cout << "Team " << teamId << " character " << characterId << " drop a mine" << std::endl;
+
+	world->dropMine(teamId, characterId);
+}
+
+bool DropMineEvent::fill(std::string arguments)
+{
+	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	teamId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+
+	if(teamId != 0)
+		return true;
+	return false;
+}

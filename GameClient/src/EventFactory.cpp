@@ -58,5 +58,9 @@ GameEvent* EventFactory::createEvent(std::string type)
 	{
 		return new MoveCharacterEvent();
 	}
+	else if(type == "DropMine")
+	{
+		return new DropMineEvent();
+	}
 	return NULL;
 }

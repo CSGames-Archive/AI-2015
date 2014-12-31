@@ -19,8 +19,7 @@
 
 #include "NetUtility.h"
 #include "Map.h"
-
-#define WALK_SPEED 50
+#include "Mine.h"
 
 class Character
 {
@@ -40,6 +39,7 @@ private:
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
+	Mine* mine;
 
 	void updateBody(Ogre::Real deltaTime);
 
@@ -50,7 +50,10 @@ public:
 	void addTime(Ogre::Real deltaTime);
 	void setTargetPosition(int x, int z);
 	int getId();
+	std::string getName();
 	void sendPosition();
+	bool isMineReady();
+	void dropMine(Mine* mine);
 };
 
 #endif // #ifndef __Character_h_

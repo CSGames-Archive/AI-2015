@@ -86,4 +86,16 @@ public:
 	virtual bool fill(std::string arguments);
 };
 
+class DropMineEvent : public GameEvent
+{
+private:
+	int characterId, teamId;
+public:
+	DropMineEvent() {}
+	virtual ~DropMineEvent() {}
+
+	virtual void execute(World* world);
+	virtual bool fill(std::string arguments);
+};
+
 #endif // #ifndef __GameEvent_h_

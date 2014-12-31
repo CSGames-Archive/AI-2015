@@ -19,11 +19,11 @@
 
 #include <cmath>
 
-#define MAP_SQUARE_SIZE 25
+#define MAP_TILE_SIZE 25
 
 namespace MapEntity
 {
-	enum MapEntity{EMPTY, BOX, CHARACTER};
+	enum MapEntity{EMPTY, BOX, CHARACTER, CHARACTER_MINE, MINE, MISSILE};
 }
 
 struct Vector2
@@ -40,10 +40,26 @@ struct Vector2
 	}
 };
 
+struct MapTile
+{
+	MapEntity::MapEntity type;
+	int teamId;
+	int characterId;
+
+	MapTile()
+	{
+		type = MapEntity::EMPTY;
+		teamId = 0;
+		characterId = 0;
+	}
+};
+
+
 class Map
 {
 private:
-	MapEntity::MapEntity map[MAP_HEIGHT][MAP_WIDTH];
+	MapTile map[MAP_HEIGHT][MAP_WIDTH];
+
 	// Don't implement for singleton
 	Map(Map const&);
     void operator=(Map const&);
@@ -57,7 +73,7 @@ public:
     }
 
 	MapEntity::MapEntity getTile(const Vector2& position);
-	void setTile(const Vector2& position, MapEntity::MapEntity value);
+	void setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId);
 	Vector2 calculateSubStep(const Vector2& currentPosition, Vector2 targetPosition);
 	bool moveUp(Vector2& currentPosition);
 	bool moveDown(Vector2& currentPosition);

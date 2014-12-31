@@ -6,43 +6,30 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** stdafx.h
-** All the precompile headers
+** Mine.h
+** A mine that could be drop by tank
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-// Remove warning for Boost library
-#define NOMINMAX
+#ifndef __Mine_h_
+#define __Mine_h_
 
-#define MAX_CHARACTER_PER_TEAM 2
-#define MAX_TEAM 2
-#define MAP_HEIGHT 8
-#define MAP_WIDTH 8
-#define MESSAGE_MAX_ARGUMENT 16
+#include "stdafx.h"
 
-#define CHARACTER_WALK_SPEED 50
+#include "Map.h"
 
-// Boost
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <boost/thread.hpp>
+class Mine
+{
 
-#include "Ogre.h"
-#include "OIS.h"
+private:
+	Ogre::Real MINE_MESH_HEIGHT;
+	Ogre::SceneNode* bodyNode;
 
-#include <iostream>
-#include <map>
-#include <queue>
+public:
+	Mine(Ogre::SceneNode* bodyNode);
+	virtual ~Mine();
+	void setPosition(Vector2 position);
+};
 
-// Fix the blank string
-#ifndef __BLANKSTRING_h_
-#define __BLANKSTRING_h_
-const std::string blankstring = "";
-#endif
-
-// Check for duplicate include of window.h
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#endif
+#endif // #ifndef __Mine_h_
