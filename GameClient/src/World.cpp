@@ -16,13 +16,12 @@
 
 #include "World.h"
 
-World::World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessageQueue)
+World::World()
 {
 	TANK_MESH_NAME = "Tank.mesh";
 	MINE_MESH_NAME = "Mine.mesh";
 
-	this->netMessageQueue = netMessageQueue;
-	this->sceneManager = sceneManager;
+	this->sceneManager = NULL;
 	teamCount = 0;
 
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
@@ -40,6 +39,11 @@ World::~World()
 			delete teams[i];
 		}
 	}
+}
+
+void World::init(Ogre::SceneManager* sceneManager)
+{
+	this->sceneManager = sceneManager;
 }
 
 void World::createScene()
@@ -114,7 +118,15 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		Ogre::Entity* entity = sceneManager->createEntity(characterNames[i], TANK_MESH_NAME);
 		bodyNode->attachObject(entity);
 
-		Character* character = new Character(netMessageQueue, bodyNode, characterNames[i], teamId, i);
+		std::string mineName = "mine_" + characterNames[i];
+		Ogre::SceneNode* mineNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::Entity* mineEntity = sceneManager->createEntity(mineName, MINE_MESH_NAME);
+		mineNode->attachObject(mineEntity);
+		mineNode->setScale(Ogre::Vector3(2.0, 2.0, 2.0));
+		mineNode->setVisible(false);
+
+		Mine* mine = new Mine(mineNode, mineName);
+		Character* character = new Character(bodyNode, mine, characterNames[i], teamId, i);
 		team->addCharacter(character);
 	}
 
@@ -173,7 +185,7 @@ void World::gameStart()
 		message += ":";
 		message += numstr;
 	}
-	netMessageQueue->push(message);
+	QueueController::getInstance().addMessage(message);
 }
 
 void World::sendAllPosition()
@@ -187,18 +199,7 @@ void World::sendAllPosition()
 	}
 }
 
-void World::dropMine(int teamId, int characterId)
+void World::mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
-	Character* character = getTeam(teamId)->getCharacter(characterId);
-	if(character->isMineReady())
-	{
-		std::string mineName = "mine_" + character->getName();
-
-		Ogre::SceneNode* bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-		Ogre::Entity* entity = sceneManager->createEntity(mineName, MINE_MESH_NAME);
-		bodyNode->attachObject(entity);
-	
-		Mine* mine = new Mine(bodyNode);
-		character->dropMine(mine);
-	}
+	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMine()->setVisible(false);
 }

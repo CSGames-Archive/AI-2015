@@ -33,17 +33,11 @@ GameClientApplication::~GameClientApplication()
 		delete eventController;
 		eventController = NULL;
 	}
-
-	if(world)
-	{
-		delete world;
-		world = NULL;
-	}
 }
 
 void GameClientApplication::createScene()
 {
-	world->createScene();
+	World::getInstance().createScene();
 }
 
 bool GameClientApplication::setup()
@@ -69,9 +63,9 @@ bool GameClientApplication::setup()
 
 	// Create world & controller
 	eventController = new EventController();
-	networkController = new NetworkController(eventController->getQueue());
+	networkController = new NetworkController();
 	networkController->init();
-	world = new World(mSceneMgr, networkController->getQueue());
+	World::getInstance().init(mSceneMgr);
 
 	// Create the scene
 	createScene();
@@ -98,8 +92,8 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     if (!mTrayMgr->isDialogVisible())
     {
-		eventController->executeAllGameEvent(world);
-		world->addTime(evt.timeSinceLastFrame);
+		eventController->executeAllGameEvent();
+		World::getInstance().addTime(evt.timeSinceLastFrame);
         mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
         if (mDetailsPanel->isVisible())          // If details panel is visible, then update its contents
         {

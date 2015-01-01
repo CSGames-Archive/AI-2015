@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 
+#include "QueueController.h"
 #include "NetUtility.h"
 #include <cmath>
 

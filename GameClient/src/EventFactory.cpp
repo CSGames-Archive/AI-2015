@@ -16,9 +16,8 @@
 
 #include "EventFactory.h"
 
-EventFactory::EventFactory(std::queue<GameEvent*>* gameEventQueue)
+EventFactory::EventFactory()
 {
-	this->gameEventQueue = gameEventQueue;
 }
 
 EventFactory::~EventFactory()
@@ -34,7 +33,7 @@ void EventFactory::generate(std::string message)
 	{
 		if(currentEvent->fill(message))
 		{
-			gameEventQueue->push(currentEvent);
+			QueueController::getInstance().addEvent(currentEvent);
 		}
 
 	}

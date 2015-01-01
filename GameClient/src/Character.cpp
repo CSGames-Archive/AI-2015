@@ -16,10 +16,9 @@
 
 #include "Character.h"
 
-Character::Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId)
+Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, int teamId, int characterId)
 {
 	// Network
-	this->netMessageQueue = netMessageQueue;
 	this->teamId = teamId;
 	this->characterId = characterId;
 
@@ -34,7 +33,7 @@ Character::Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* 
 
 	// Character Infos
 	this->name = name;
-	this->mine = NULL;
+	this->mine = mine;
 }
 
 Character::~Character()
@@ -88,7 +87,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 					position = newPosition;
 
 					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
-					netMessageQueue->push(message);
+					QueueController::getInstance().addMessage(message);
 
 					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
 					goalDirection = subStepPosition - currentPosition;
@@ -125,23 +124,25 @@ std::string Character::getName()
 void Character::sendPosition()
 {
 	std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
-	netMessageQueue->push(message);
+	QueueController::getInstance().addMessage(message);
 }
 
 bool Character::isMineReady()
 {
-	return (!this->mine)?true:false;
+	return !mine->isVisible();
 }
 
-void Character::dropMine(Mine* mine)
+void Character::dropMine()
 {
-	if(this->mine)
+	if(mine && isMineReady())
 	{
-		// Generate destroy event, not supposed to happen
+		Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
+		mine->setPosition(position);
+		mine->setVisible(true);
 	}
+}
 
-	mine->setPosition(position);
-	this->mine = mine;
-
-	Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
+Mine* Character::getMine()
+{
+	return mine;
 }

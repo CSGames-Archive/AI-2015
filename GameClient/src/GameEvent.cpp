@@ -38,22 +38,10 @@ int GameEvent::convertCharToNumeral(std::string token)
 	return 0;
 }
 
-void ErrorEvent::execute(World* world)
-{
-	std::cout << "Error :" << message << std::endl;
-}
-
 bool ErrorEvent::fill(std::string arguments)
 {
 	message = arguments;
 	return true;
-}
-
-void DisconnectEvent::execute(World* world)
-{
-	std::cout << "Player " << teamId << " disconnected from the game" << std::endl;
-
-	world->removeTeam(teamId);
 }
 
 bool DisconnectEvent::fill(std::string arguments)
@@ -63,17 +51,6 @@ bool DisconnectEvent::fill(std::string arguments)
 	if(teamId != 0)
 		return true;
 	return false;
-}
-
-void AddTeamEvent::execute(World* world)
-{
-	std::cout << "Team " << teamId << " join with name " << teamName << std::endl;
-	for( int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
-	{
-		std::cout << "    * Character " << characterNames[i] << " enter the battlefield" << std::endl;
-	}
-
-	world->addTeam(teamId, teamName, characterNames);
 }
 
 bool AddTeamEvent::fill(std::string arguments)
@@ -93,14 +70,6 @@ bool AddTeamEvent::fill(std::string arguments)
 	return false;
 }
 
-void MoveCharacterEvent::execute(World* world)
-{
-	std::cout << "Team " << teamId << " move character " << characterId << 
-				 " to (" << positionX << "," << positionZ << ")" << std::endl;
-
-	world->getTeam(teamId)->getCharacter(characterId)->setTargetPosition(positionX, positionZ);
-}
-
 bool MoveCharacterEvent::fill(std::string arguments)
 {
 	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
@@ -113,13 +82,6 @@ bool MoveCharacterEvent::fill(std::string arguments)
 	return false;
 }
 
-void DropMineEvent::execute(World* world)
-{
-	std::cout << "Team " << teamId << " character " << characterId << " drop a mine" << std::endl;
-
-	world->dropMine(teamId, characterId);
-}
-
 bool DropMineEvent::fill(std::string arguments)
 {
 	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
@@ -128,4 +90,12 @@ bool DropMineEvent::fill(std::string arguments)
 	if(teamId != 0)
 		return true;
 	return false;
+}
+
+MineHitEvent::MineHitEvent(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+{
+	this->hitPlayerId = hitPlayerId;
+	this->hitCharacterId = hitCharacterId;
+	this->originPlayerId = originPlayerId;
+	this->originCharacterId = originCharacterId;
 }

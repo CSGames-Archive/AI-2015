@@ -20,13 +20,13 @@
 #include "NetUtility.h"
 #include "Map.h"
 #include "Mine.h"
+#include "QueueController.h"
 
 class Character
 {
 
 private:
 	// Network
-	std::queue<std::string>* netMessageQueue;
 	int teamId;
 	int characterId;
 
@@ -44,7 +44,7 @@ private:
 	void updateBody(Ogre::Real deltaTime);
 
 public:
-	Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId);
+	Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, int teamId, int characterId);
 	virtual ~Character();
 
 	void addTime(Ogre::Real deltaTime);
@@ -53,7 +53,8 @@ public:
 	std::string getName();
 	void sendPosition();
 	bool isMineReady();
-	void dropMine(Mine* mine);
+	void dropMine();
+	Mine* getMine();
 };
 
 #endif // #ifndef __Character_h_

@@ -16,11 +16,12 @@
 
 #include "Mine.h"
 
-Mine::Mine(Ogre::SceneNode* bodyNode)
+Mine::Mine(Ogre::SceneNode* bodyNode, std::string mineName)
 {
 	// 3d Infos
-	MINE_MESH_HEIGHT = 1.5;
+	MINE_MESH_HEIGHT = 0.0;
 	this->bodyNode = bodyNode;
+	this->name = mineName;
 }
 
 Mine::~Mine()
@@ -31,4 +32,15 @@ void Mine::setPosition(Vector2 position)
 {
 	Ogre::Vector3 newposition(position.x * MAP_TILE_SIZE, MINE_MESH_HEIGHT, position.y * MAP_TILE_SIZE);
 	bodyNode->setPosition(newposition);
+	bodyNode->setVisible(true);
+}
+
+void Mine::setVisible(bool visible)
+{
+	bodyNode->setVisible(visible);
+}
+
+bool Mine::isVisible()
+{
+	return bodyNode->getAttachedObject(name)->isVisible();
 }

@@ -137,6 +137,10 @@ void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
 	if(newTile->type == MapEntity::MINE)
 	{
 		std::string message = NetUtility::generateMineHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addMessage(message);
+
+		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
 	}
 	setTile(newPosition, MapEntity::CHARACTER, oldTile->teamId, oldTile->characterId);
 

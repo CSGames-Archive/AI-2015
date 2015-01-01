@@ -6,31 +6,44 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** NetCommandController.h
-** The controler for all the command receive over the network
+** QueueController.h
+** Manager that contains all the queue
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __EventFactory__
-#define __EventFactory__
+#ifndef __QueueController_h_
+#define __QueueController_h_
 
 #include "stdafx.h"
 
 #include "GameEvent.h"
-#include "NetUtility.h"
-#include "QueueController.h"
 
-class EventFactory
+class QueueController
 {
 private:
-	GameEvent* createEvent(std::string type);
+	std::queue<std::string> messageQueue;
+	std::queue<GameEvent*> gameEventQueue;
+
+	// Don't implement for singleton
+	QueueController(QueueController const&);
+    void operator=(QueueController const&);
 
 public:
-	EventFactory();
-    virtual ~EventFactory();
+	QueueController();
+    static QueueController& getInstance()
+    {
+        static QueueController instance;
+        return instance;
+    }
 
-	void generate(std::string message);
+	void addMessage(std::string message);
+	std::string getMessage();
+	bool isMessageQueueEmpty();
+
+	void addEvent(GameEvent*);
+	GameEvent* getEvent();
+	bool isGameEventQueueEmpty();
 };
 
-#endif // #ifndef __EventFactory__
+#endif // #ifndef __Map_h_

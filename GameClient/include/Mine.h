@@ -25,11 +25,14 @@ class Mine
 private:
 	Ogre::Real MINE_MESH_HEIGHT;
 	Ogre::SceneNode* bodyNode;
+	std::string name;
 
 public:
-	Mine(Ogre::SceneNode* bodyNode);
+	Mine(Ogre::SceneNode* bodyNode, std::string mineName);
 	virtual ~Mine();
 	void setPosition(Vector2 position);
+	void setVisible(bool visible);
+	bool isVisible();
 };
 
 #endif // #ifndef __Mine_h_

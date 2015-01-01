@@ -17,85 +17,87 @@
 
 #include "stdafx.h"
 
-#include "World.h"
 #include "NetUtility.h"
 
-class GameEvent
+namespace EventType
 {
-protected:
+	enum EventType{NONE, ERROR_MESSAGE, DISCONNECT, ADD_TEAM, MOVE_CHARACTER, DROP_MINE, MINE_HIT};
+}
+
+struct GameEvent
+{
 	int convertCharToNumeral(std::string token);
 
-public:
-	GameEvent() {}
-	virtual ~GameEvent() {}
-
-	virtual void execute(World* world) {}
-	virtual bool fill(std::string arguments) {return true;}
+	virtual EventType::EventType getType() {return EventType::NONE;}
+	virtual bool fill(std::string arguments) {return false;}
 };
 
-class ErrorEvent : public GameEvent
+struct ErrorEvent : GameEvent
 {
-private:
 	std::string message;
 
-public:
 	ErrorEvent() {}
 	virtual ~ErrorEvent() {}
 
-	virtual void execute(World* world);
+	virtual EventType::EventType getType() {return EventType::ERROR_MESSAGE;}
 	virtual bool fill(std::string arguments);
 };
 
-class DisconnectEvent : public GameEvent
+struct DisconnectEvent : GameEvent
 {
-private:
 	int teamId;
 
-public:
 	DisconnectEvent() {}
 	virtual ~DisconnectEvent() {}
 
-	virtual void execute(World* world);
+	virtual EventType::EventType getType() {return EventType::DISCONNECT;}
 	virtual bool fill(std::string arguments);
 };
 
-class AddTeamEvent : public GameEvent
+struct AddTeamEvent : public GameEvent
 {
-private:
 	int teamId;
 	std::string teamName;
 	std::string characterNames[MAX_CHARACTER_PER_TEAM];
 
-public:
 	AddTeamEvent() {}
 	virtual ~AddTeamEvent() {}
 
-	virtual void execute(World* world);
+	virtual EventType::EventType getType() {return EventType::ADD_TEAM;}
 	virtual bool fill(std::string arguments);
 };
 
-class MoveCharacterEvent : public GameEvent
+struct MoveCharacterEvent : public GameEvent
 {
-private:
 	int positionX, positionZ, characterId, teamId;
-public:
+
 	MoveCharacterEvent() {}
 	virtual ~MoveCharacterEvent() {}
 
-	virtual void execute(World* world);
+	virtual EventType::EventType getType() {return EventType::MOVE_CHARACTER;}
 	virtual bool fill(std::string arguments);
 };
 
-class DropMineEvent : public GameEvent
+struct DropMineEvent : public GameEvent
 {
-private:
 	int characterId, teamId;
-public:
+
 	DropMineEvent() {}
 	virtual ~DropMineEvent() {}
 
-	virtual void execute(World* world);
+	virtual EventType::EventType getType() {return EventType::DROP_MINE;}
 	virtual bool fill(std::string arguments);
+};
+
+struct MineHitEvent : public GameEvent
+{
+	int hitPlayerId, hitCharacterId, originPlayerId, originCharacterId;
+
+	MineHitEvent(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	MineHitEvent() {}
+	virtual ~MineHitEvent() {}
+
+	virtual EventType::EventType getType() {return EventType::MINE_HIT;}
 };
 
 #endif // #ifndef __GameEvent_h_

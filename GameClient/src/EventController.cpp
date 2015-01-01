@@ -24,24 +24,89 @@ EventController::~EventController()
 {
 }
 
-void EventController::executeAllGameEvent(World* world)
+void EventController::executeAllGameEvent()
 {
-	while(!gameEventQueue.empty())
+	while(!QueueController::getInstance().isGameEventQueueEmpty())
 	{
-		GameEvent* event = gameEventQueue.front();
-		event->execute(world);
-		delete event;
-		gameEventQueue.pop();
-		event;
+		GameEvent* gameEvent = QueueController::getInstance().getEvent();
+		dispatchEvent(gameEvent);
+		delete gameEvent;
 	}
 }
 
-void EventController::addGameEvent(GameEvent* gameEvent)
+void EventController::dispatchEvent(GameEvent* gameEvent)
 {
-	gameEventQueue.push(gameEvent);
+	if(gameEvent->getType() == EventType::ERROR_MESSAGE)
+	{
+		error(gameEvent);
+	}
+	else if(gameEvent->getType() == EventType::DISCONNECT)
+	{
+		disconnect(gameEvent);
+	}
+	else if(gameEvent->getType() == EventType::ADD_TEAM)
+	{
+		addTeam(gameEvent);
+	}
+	else if(gameEvent->getType() == EventType::MOVE_CHARACTER)
+	{
+		moveCharacter(gameEvent);
+	}
+	else if(gameEvent->getType() == EventType::DROP_MINE)
+	{
+		dropMine(gameEvent);
+	}
+	else if(gameEvent->getType() == EventType::MINE_HIT)
+	{
+		mineHit(gameEvent);
+	}
 }
 
-std::queue<GameEvent*>* EventController::getQueue()
+void EventController::error(GameEvent* gameEvent)
 {
-	return &gameEventQueue;
+	ErrorEvent* errorEvent = static_cast<ErrorEvent*>(gameEvent);
+	std::cout << "Error :" << errorEvent->message << std::endl;
+}
+
+void EventController::disconnect(GameEvent* gameEvent)
+{
+	DisconnectEvent* disconnectEvent = static_cast<DisconnectEvent*>(gameEvent);
+	std::cout << "Player " << disconnectEvent->teamId << " disconnected from the game" << std::endl;
+
+	World::getInstance().removeTeam(disconnectEvent->teamId);
+}
+
+void EventController::addTeam(GameEvent* gameEvent)
+{
+	AddTeamEvent* addTeamEvent = static_cast<AddTeamEvent*>(gameEvent);
+	std::cout << "Team " << addTeamEvent->teamId << " join with name " << addTeamEvent->teamName << std::endl;
+	for( int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
+	{
+		std::cout << "    * Character " << addTeamEvent->characterNames[i] << " enter the battlefield" << std::endl;
+	}
+
+	World::getInstance().addTeam(addTeamEvent->teamId, addTeamEvent->teamName, addTeamEvent->characterNames);
+}
+
+void EventController::moveCharacter(GameEvent* gameEvent)
+{
+	MoveCharacterEvent* moveEvent = static_cast<MoveCharacterEvent*>(gameEvent);
+	std::cout << "Team " << moveEvent->teamId << " move character " << moveEvent->characterId << 
+				 " to (" << moveEvent->positionX << "," << moveEvent->positionZ << ")" << std::endl;
+
+	World::getInstance().getTeam(moveEvent->teamId)->getCharacter(moveEvent->characterId)->setTargetPosition(moveEvent->positionX, moveEvent->positionZ);
+}
+
+void EventController::dropMine(GameEvent* gameEvent)
+{
+	DropMineEvent* dropMineEvent = static_cast<DropMineEvent*>(gameEvent);
+	std::cout << "Team " << dropMineEvent->teamId << " character " << dropMineEvent->characterId << " drop a mine" << std::endl;
+
+	World::getInstance().getTeam(dropMineEvent->teamId)->getCharacter(dropMineEvent->characterId)->dropMine();
+}
+
+void EventController::mineHit(GameEvent* gameEvent)
+{
+	MineHitEvent* dropMineEvent = static_cast<MineHitEvent*>(gameEvent);
+	World::getInstance().mineHit(dropMineEvent->hitPlayerId, dropMineEvent->hitCharacterId, dropMineEvent->originPlayerId, dropMineEvent->originCharacterId);
 }
