@@ -36,6 +36,8 @@ private:
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
 	Ogre::Real TANK_MESH_HEIGHT;
+	bool askForMine;
+	bool askForMissile;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
@@ -55,6 +57,7 @@ public:
 	bool isMineReady();
 	void dropMine();
 	Mine* getMine();
+	void askMine();
 };
 
 #endif // #ifndef __Character_h_

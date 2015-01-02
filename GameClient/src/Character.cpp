@@ -34,6 +34,8 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, in
 	// Character Infos
 	this->name = name;
 	this->mine = mine;
+	this->askForMine = false;
+	this->askForMissile = false;
 }
 
 Character::~Character()
@@ -69,6 +71,11 @@ void Character::updateBody(Ogre::Real deltaTime)
 		
 		if(goalDirection.length() < Ogre::Real(1.0))
 		{
+			if(askForMine)
+			{
+				dropMine();
+			}
+
 			if(position == targetPosition)
 			{
 				goalDirection = Ogre::Vector3::ZERO;
@@ -132,8 +139,14 @@ bool Character::isMineReady()
 	return !mine->isVisible();
 }
 
+void Character::askMine()
+{
+	askForMine = true;
+}
+
 void Character::dropMine()
 {
+	askForMine = false;
 	if(mine && isMineReady())
 	{
 		Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);

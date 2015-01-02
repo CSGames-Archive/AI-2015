@@ -102,7 +102,7 @@ void EventController::dropMine(GameEvent* gameEvent)
 	DropMineEvent* dropMineEvent = static_cast<DropMineEvent*>(gameEvent);
 	std::cout << "Team " << dropMineEvent->teamId << " character " << dropMineEvent->characterId << " drop a mine" << std::endl;
 
-	World::getInstance().getTeam(dropMineEvent->teamId)->getCharacter(dropMineEvent->characterId)->dropMine();
+	World::getInstance().getTeam(dropMineEvent->teamId)->getCharacter(dropMineEvent->characterId)->askMine();
 }
 
 void EventController::mineHit(GameEvent* gameEvent)
