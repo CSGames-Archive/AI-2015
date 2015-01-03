@@ -37,6 +37,7 @@ public:
 	void moveCharacter(GameEvent* gameEvent);
 	void dropMine(GameEvent* gameEvent);
 	void mineHit(GameEvent* gameEvent);
+	void throwMissile(GameEvent* gameEvent);
 };
 
 #endif // #ifndef __EventController_h_

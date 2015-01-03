@@ -20,6 +20,7 @@ World::World()
 {
 	TANK_MESH_NAME = "Tank.mesh";
 	MINE_MESH_NAME = "Mine.mesh";
+	MISSILE_MESH_NAME = "Missile.mesh";
 
 	this->sceneManager = NULL;
 	teamCount = 0;
@@ -125,8 +126,16 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		mineNode->setScale(Ogre::Vector3(2.0, 2.0, 2.0));
 		mineNode->setVisible(false);
 
+		std::string missileName = "missile_" + characterNames[i];
+		Ogre::SceneNode* missileNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::Entity* missileEntity = sceneManager->createEntity(missileName, MISSILE_MESH_NAME);
+		missileNode->attachObject(missileEntity);
+		//missileNode->setScale(Ogre::Vector3(2.0, 2.0, 2.0));
+		missileNode->setVisible(false);
+
 		Mine* mine = new Mine(mineNode, mineName);
-		Character* character = new Character(bodyNode, mine, characterNames[i], teamId, i);
+		Missile* missile = new Missile(missileNode, missileName);
+		Character* character = new Character(bodyNode, mine, missile, characterNames[i], teamId, i);
 		team->addCharacter(character);
 	}
 

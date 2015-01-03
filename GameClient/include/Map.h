@@ -28,6 +28,11 @@ namespace MapEntity
 	enum MapEntity{EMPTY, BOX, CHARACTER, CHARACTER_MINE, MINE, MISSILE};
 }
 
+namespace MapDirection
+{
+	enum MapDirection{UP, DOWN, LEFT, RIGHT};
+}
+
 struct Vector2
 {
 	int x;

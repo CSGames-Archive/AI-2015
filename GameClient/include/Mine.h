@@ -29,7 +29,7 @@ private:
 
 public:
 	Mine(Ogre::SceneNode* bodyNode, std::string mineName);
-	virtual ~Mine();
+	virtual ~Mine() {}
 	void setPosition(Vector2 position);
 	void setVisible(bool visible);
 	bool isVisible();

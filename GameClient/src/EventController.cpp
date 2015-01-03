@@ -60,6 +60,10 @@ void EventController::dispatchEvent(GameEvent* gameEvent)
 	{
 		mineHit(gameEvent);
 	}
+	else if(gameEvent->getType() == EventType::THROW_MISSILE)
+	{
+		throwMissile(gameEvent);
+	}
 }
 
 void EventController::error(GameEvent* gameEvent)
@@ -109,4 +113,12 @@ void EventController::mineHit(GameEvent* gameEvent)
 {
 	MineHitEvent* dropMineEvent = static_cast<MineHitEvent*>(gameEvent);
 	World::getInstance().mineHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
+}
+
+void EventController::throwMissile(GameEvent* gameEvent)
+{
+	ThrowMissileEvent* throwMissileEvent = static_cast<ThrowMissileEvent*>(gameEvent);
+	std::cout << "Team " << throwMissileEvent->teamId << " character " << throwMissileEvent->characterId << " throw a missile" << std::endl;
+
+	World::getInstance().getTeam(throwMissileEvent->teamId)->getCharacter(throwMissileEvent->characterId)->askMissile(throwMissileEvent->direction);
 }

@@ -16,7 +16,7 @@
 
 #include "Character.h"
 
-Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, int teamId, int characterId)
+Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, std::string name, int teamId, int characterId)
 {
 	// Network
 	this->teamId = teamId;
@@ -36,6 +36,7 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, in
 	// Character Infos
 	this->name = name;
 	this->mine = mine;
+	this->missile = missile;
 	this->askForMine = false;
 	this->askForMissile = false;
 }
@@ -44,11 +45,15 @@ Character::~Character()
 {
 	if(mine)
 		delete mine;
+
+	if(missile)
+		delete missile;
 }
 
 void Character::addTime(Ogre::Real deltaTime)
 {
 	updateBody(deltaTime);
+	missile->addTime(deltaTime);
 }
 
 void Character::setTargetPosition(int x, int z)
@@ -76,6 +81,10 @@ void Character::updateBody(Ogre::Real deltaTime)
 			if(askForMine)
 			{
 				dropMine();
+			}
+			if(askForMissile)
+			{
+				throwMissile();
 			}
 
 			if(position == targetPosition)
@@ -144,6 +153,7 @@ bool Character::isMineReady()
 void Character::askMine()
 {
 	askForMine = true;
+	mine->setPosition(position);
 }
 
 void Character::dropMine()
@@ -152,12 +162,35 @@ void Character::dropMine()
 	if(mine && isMineReady())
 	{
 		Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
-		mine->setPosition(position);
 		mine->setVisible(true);
+	}
+}
+
+void Character::throwMissile()
+{
+	askForMissile = false;
+	if(missile && isMissileReady())
+	{
+		//Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
+		missile->launch();
 	}
 }
 
 Mine* Character::getMine()
 {
 	return mine;
+}
+
+bool Character::isMissileReady()
+{
+	return !missile->isVisible();
+}
+
+void Character::askMissile(int direction)
+{
+	askForMissile = true;
+	if(missile && isMissileReady())
+	{
+		missile->init(position,static_cast<MapDirection::MapDirection>(direction));
+	}
 }

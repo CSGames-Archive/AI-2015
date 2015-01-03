@@ -21,7 +21,7 @@
 
 namespace EventType
 {
-	enum EventType{NONE, ERROR_MESSAGE, DISCONNECT, ADD_TEAM, MOVE_CHARACTER, DROP_MINE, MINE_HIT};
+	enum EventType{NONE, ERROR_MESSAGE, DISCONNECT, ADD_TEAM, MOVE_CHARACTER, DROP_MINE, MINE_HIT, THROW_MISSILE};
 }
 
 struct GameEvent
@@ -98,6 +98,17 @@ struct MineHitEvent : public GameEvent
 	virtual ~MineHitEvent() {}
 
 	virtual EventType::EventType getType() {return EventType::MINE_HIT;}
+};
+
+struct ThrowMissileEvent : public GameEvent
+{
+	int characterId, direction, teamId;
+
+	ThrowMissileEvent() {}
+	virtual ~ThrowMissileEvent() {}
+
+	virtual EventType::EventType getType() {return EventType::THROW_MISSILE;}
+	virtual bool fill(std::string arguments);
 };
 
 #endif // #ifndef __GameEvent_h_

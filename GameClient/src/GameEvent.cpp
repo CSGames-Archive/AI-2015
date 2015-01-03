@@ -99,3 +99,14 @@ MineHitEvent::MineHitEvent(int hitTeamId, int hitCharacterId, int originTeamId, 
 	this->originTeamId = originTeamId;
 	this->originCharacterId = originCharacterId;
 }
+
+bool ThrowMissileEvent::fill(std::string arguments)
+{
+	characterId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	direction = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+	teamId = convertCharToNumeral(NetUtility::getNextToken(arguments, ":"));
+
+	if(teamId != 0)
+		return true;
+	return false;
+}

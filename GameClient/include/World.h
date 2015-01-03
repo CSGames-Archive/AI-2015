@@ -26,6 +26,7 @@ private:
 	// TODO: find better place
 	char* TANK_MESH_NAME;
 	char* MINE_MESH_NAME;
+	char* MISSILE_MESH_NAME;
 	Team* teams[MAX_TEAM];
 	int teamCount;
 

@@ -61,5 +61,9 @@ GameEvent* EventFactory::createEvent(std::string type)
 	{
 		return new DropMineEvent();
 	}
+	else if(type == "ThrowMissile")
+	{
+		return new ThrowMissileEvent();
+	}
 	return NULL;
 }

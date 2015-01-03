@@ -21,7 +21,8 @@
 #define MAP_WIDTH 8
 #define MESSAGE_MAX_ARGUMENT 16
 
-#define CHARACTER_WALK_SPEED 50
+#define CHARACTER_WALK_SPEED 35
+#define MISSILE_WALK_SPEED 70
 
 // Boost
 #include <boost/asio.hpp>

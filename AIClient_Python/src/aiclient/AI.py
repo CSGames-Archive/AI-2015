@@ -9,6 +9,7 @@ from event.MoveCharacterEvent import MoveCharacterEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from world.World import World
+from event.ThrowMissileEvent import Direction, ThrowMissileEvent
 
 class AIStatus(Enum):
     INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT = range(5)
@@ -59,6 +60,9 @@ class AI(object):
             event2 = MoveCharacterEvent(1, 0, 0)
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.UPPER_RIGHT
+            
+            event3 = ThrowMissileEvent(character1.characterId, Direction.UP)
+            self.queueController.outEvents.put(event3)
     
     def upperRight(self):
         character1 = self.world.getTeam(self.world.yourId).characters[0]

@@ -6,65 +6,47 @@
 **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
 **        \/        \/             \/         \/         \/        \/        \/ 
 **
-** Character.h
-** The Character that is controlled by the AI
+** Missile.h
+** Missile that player can shoot
 **
 ** Author: Samuel-Ricardo Carriere
 ** ------------------------------------------------------------------------------*/
 
-#ifndef __Character_h_
-#define __Character_h_
+#ifndef __Missile_h_
+#define __Missile_h_
 
 #include "stdafx.h"
 
-#include "NetUtility.h"
 #include "Map.h"
-#include "Mine.h"
-#include "Missile.h"
-#include "QueueController.h"
 
-class Character
+class Missile
 {
-
 private:
-	// Network
-	int teamId;
-	int characterId;
-
-	// Character Infos
+	// Missile Infos
+	Ogre::Real MISSILE_MESH_HEIGHT;
 	std::string name;
 	Vector2 position;
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
-	Ogre::Real TANK_MESH_HEIGHT;
-	bool askForMine;
-	bool askForMissile;
-
+	
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
-	Mine* mine;
-	Missile* missile;
-
 	void updateBody(Ogre::Real deltaTime);
 
 public:
-	Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, std::string name, int teamId, int characterId);
-	virtual ~Character();
+	Missile(Ogre::SceneNode* bodyNode, std::string name);
+	virtual ~Missile() {}
 
 	void addTime(Ogre::Real deltaTime);
-	void setTargetPosition(int x, int z);
-	int getId();
-	std::string getName();
 	void sendPosition();
+	void init(Vector2 position, MapDirection::MapDirection direction);
+	Vector2 calculateTargetPosition(MapDirection::MapDirection direction);
+	void launch();
 
-	bool isMineReady();
-	void dropMine();
-	Mine* getMine();
-	void askMine();
+	void setVisible(bool visible);
+	bool isVisible();
 
-	bool isMissileReady();
-	void askMissile(int direction);
-	void throwMissile();
+	Vector2 calculateNextStep();
 };
 
-#endif // #ifndef __Character_h_
+#endif // #ifndef __Missile_h_

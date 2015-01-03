@@ -27,6 +27,7 @@
     <ClInclude Include="include\GameEvent.h" />
     <ClInclude Include="include\Map.h" />
     <ClInclude Include="include\Mine.h" />
+    <ClInclude Include="include\Missile.h" />
     <ClInclude Include="include\QueueController.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\Team.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="src\GameEvent.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\Mine.cpp" />
+    <ClCompile Include="src\Missile.cpp" />
     <ClCompile Include="src\QueueController.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\Team.cpp" />
