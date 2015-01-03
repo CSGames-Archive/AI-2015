@@ -9,7 +9,6 @@ from event.MoveCharacterEvent import MoveCharacterEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from world.World import World
-from event.DropMineEvent import DropMineEvent
 
 class AIStatus(Enum):
     INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT = range(5)
@@ -47,14 +46,9 @@ class AI(object):
             event2 = MoveCharacterEvent(1, 7, 7)
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.LOWER_LEFT
-			
-            if character1.mineReady:
-                event3 = DropMineEvent(character1.characterId)
-                self.queueController.outEvents.put(event3)
 
-            if character2.mineReady:
-                event4 = DropMineEvent(character2.characterId)
-                self.queueController.outEvents.put(event4)
+            character1.dropMine()
+            character2.dropMine()
     
     def lowerLeft(self):
         character1 = self.world.getTeam(self.world.yourId).characters[0]
@@ -75,14 +69,9 @@ class AI(object):
             event2 = MoveCharacterEvent(1, 7, 0)
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.UPPER_LEFT
-			
-            if character1.mineReady:
-                event3 = DropMineEvent(character1.characterId)
-                self.queueController.outEvents.put(event3)
 
-            if character2.mineReady:
-                event4 = DropMineEvent(character2.characterId)
-                self.queueController.outEvents.put(event4)
+            character1.dropMine()
+            character2.dropMine()
     
     def upperLeft(self):
         character1 = self.world.getTeam(self.world.yourId).characters[0]

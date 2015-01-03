@@ -26,6 +26,8 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, std::string name, in
 	TANK_MESH_HEIGHT = 2.5;
 	this->bodyNode = bodyNode;
 	this->position = Map::getInstance().getStartingPosition(teamId, characterId);
+	Map::getInstance().setTile(this->position, MapEntity::CHARACTER, this->teamId, this->characterId);
+
 	this->targetPosition = this->position;
 	Ogre::Vector3 startingVector(this->position.x*MAP_TILE_SIZE, TANK_MESH_HEIGHT, this->position.y*MAP_TILE_SIZE);
 	this->bodyNode->setPosition(startingVector);

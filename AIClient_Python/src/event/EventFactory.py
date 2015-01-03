@@ -8,6 +8,7 @@ from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from event.GameStartEvent import GameStartEvent
 from event.UpdateCharacterEvent import UpdateCharacterEvent
+from event.MineHitEvent import MineHitEvent
 
 class EventFactory(object):
     @staticmethod
@@ -27,4 +28,6 @@ class EventFactory(object):
             return GameStartEvent()
         elif eventType == "UpdateCharacter":
             return UpdateCharacterEvent()
+        elif eventType == "MineHit":
+            return MineHitEvent()
         return None

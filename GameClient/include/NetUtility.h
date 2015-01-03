@@ -43,47 +43,35 @@ namespace NetUtility
 		return token;
 	}
 
-	static std::string generateMoveCharacterMessage(int playerId, int characterId, double x, double z)
+	static std::string generateMoveCharacterMessage(int teamId, int characterId, double x, double z)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
-		sprintf(numstr, "%d", playerId);
+		sprintf(numstr, "%d", teamId);
 		std::string message = "Game:UpdateCharacter:";
 		message += numstr;
 		sprintf(numstr, "%d", characterId);
 		message += ":";
 		message += numstr;
-
-		// TODO: refactor with map
-		message += ":";
 		sprintf(numstr, "%d", (int)x);
-		message += numstr;
 		message += ":";
+		message += numstr;
 		sprintf(numstr, "%d", (int)z);
+		message += ":";
 		message += numstr;
 
 		return message;
 	}
 
-	static std::string generateUpdatePlayerMessage(int playerId)
+	static std::string generateMineHit(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
-		sprintf(numstr, "%d", playerId);
-		std::string message = "Game:UpdatePlayer:";
-		message += numstr;
-
-		return message;
-	}
-
-	static std::string generateMineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
-	{
-		char numstr[21]; // Enough to hold all numbers up to 64-bits
-		sprintf(numstr, "%d", hitPlayerId);
+		sprintf(numstr, "%d", hitTeamId);
 		std::string message = "Game:MineHit:";
 		message += numstr;
 		sprintf(numstr, "%d", hitCharacterId);
 		message += ":";
 		message += numstr;
-		sprintf(numstr, "%d", originPlayerId);
+		sprintf(numstr, "%d", originTeamId);
 		message += ":";
 		message += numstr;
 		sprintf(numstr, "%d", originCharacterId);

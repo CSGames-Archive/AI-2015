@@ -91,7 +91,7 @@ struct DropMineEvent : public GameEvent
 
 struct MineHitEvent : public GameEvent
 {
-	int hitPlayerId, hitCharacterId, originPlayerId, originCharacterId;
+	int hitTeamId, hitCharacterId, originTeamId, originCharacterId;
 
 	MineHitEvent(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	MineHitEvent() {}

@@ -108,5 +108,5 @@ void EventController::dropMine(GameEvent* gameEvent)
 void EventController::mineHit(GameEvent* gameEvent)
 {
 	MineHitEvent* dropMineEvent = static_cast<MineHitEvent*>(gameEvent);
-	World::getInstance().mineHit(dropMineEvent->hitPlayerId, dropMineEvent->hitCharacterId, dropMineEvent->originPlayerId, dropMineEvent->originCharacterId);
+	World::getInstance().mineHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
 }

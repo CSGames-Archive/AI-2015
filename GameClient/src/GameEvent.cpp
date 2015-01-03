@@ -92,10 +92,10 @@ bool DropMineEvent::fill(std::string arguments)
 	return false;
 }
 
-MineHitEvent::MineHitEvent(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+MineHitEvent::MineHitEvent(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
 {
-	this->hitPlayerId = hitPlayerId;
+	this->hitTeamId = hitTeamId;
 	this->hitCharacterId = hitCharacterId;
-	this->originPlayerId = originPlayerId;
+	this->originTeamId = originTeamId;
 	this->originCharacterId = originCharacterId;
 }
