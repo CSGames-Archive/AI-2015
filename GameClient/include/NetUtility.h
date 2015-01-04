@@ -81,20 +81,29 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string generateMissileHit(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
+	static std::string generateMissileHit(int hitEntity, int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		std::string message = "Game:MissileHit";
+
+		message += ":";
+		sprintf(numstr, "%d", hitEntity);
+		message += numstr;
+
+		message += ":";
 		sprintf(numstr, "%d", hitTeamId);
-		std::string message = "Game:MissileHit:";
 		message += numstr;
+
+		message += ":";
 		sprintf(numstr, "%d", hitCharacterId);
-		message += ":";
 		message += numstr;
+
+		message += ":";
 		sprintf(numstr, "%d", originTeamId);
-		message += ":";
 		message += numstr;
-		sprintf(numstr, "%d", originCharacterId);
+
 		message += ":";
+		sprintf(numstr, "%d", originCharacterId);
 		message += numstr;
 
 		return message;

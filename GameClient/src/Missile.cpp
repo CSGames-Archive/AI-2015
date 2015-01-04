@@ -178,14 +178,13 @@ void Missile::hitWall()
 	MapTile* tile = Map::getInstance().getTile(position);
 	if(tile->type == MapEntity::CHARACTER || tile->type == MapEntity::CHARACTER_MINE)
 	{
-		std::string message = NetUtility::generateMissileHit(tile->teamId, tile->characterId, tile->teamId, tile->characterId);
-		QueueController::getInstance().addMessage(message);
-
-		MissileHitEvent* newEvent = new MissileHitEvent(tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::CHARACTER, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
 	else
 	{
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::NONE, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
 		setVisible(false);
 	}
 }

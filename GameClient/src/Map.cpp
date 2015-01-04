@@ -136,18 +136,12 @@ void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
 
 	if(newTile->type == MapEntity::MINE)
 	{
-		std::string message = NetUtility::generateMineHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
-		QueueController::getInstance().addMessage(message);
-
 		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
 	else if (newTile->type == MapEntity::MISSILE)
 	{
-		std::string message = NetUtility::generateMissileHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
-		QueueController::getInstance().addMessage(message);
-
-		MissileHitEvent* newEvent = new MissileHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::CHARACTER, oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
 
@@ -170,10 +164,7 @@ void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 
 	if (newTile->type == MapEntity::CHARACTER || newTile->type == MapEntity::CHARACTER_MINE)
 	{
-		std::string message = NetUtility::generateMissileHit(newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
-		QueueController::getInstance().addMessage(message);
-
-		MissileHitEvent* newEvent = new MissileHitEvent(newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::CHARACTER, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
 	else
@@ -183,9 +174,6 @@ void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 	/*
 	if(newTile->type == MapEntity::MINE)
 	{
-		std::string message = NetUtility::generateMineHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
-		QueueController::getInstance().addMessage(message);
-
 		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}

@@ -113,9 +113,12 @@ struct ThrowMissileEvent : public GameEvent
 
 struct MissileHitEvent : public GameEvent
 {
-	int hitTeamId, hitCharacterId, originTeamId, originCharacterId;
+	enum HitEntity{NONE, CHARACTER, MINE, MISSILE};
 
-	MissileHitEvent(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	int hitTeamId, hitCharacterId, originTeamId, originCharacterId;
+	HitEntity entity;
+
+	MissileHitEvent(HitEntity entity, int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	MissileHitEvent() {}
 	virtual ~MissileHitEvent() {}
 
