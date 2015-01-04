@@ -28,6 +28,7 @@ private:
 	Vector2 position;
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
+	MapDirection::MapDirection direction;
 	
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
@@ -47,6 +48,7 @@ public:
 	bool isVisible();
 
 	Vector2 calculateNextStep();
+	MapDirection::MapDirection getOrientation();
 };
 
 #endif // #ifndef __Missile_h_

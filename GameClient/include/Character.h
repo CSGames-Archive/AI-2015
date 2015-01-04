@@ -39,6 +39,7 @@ private:
 	Ogre::Real TANK_MESH_HEIGHT;
 	bool askForMine;
 	bool askForMissile;
+	Ogre::Real timeToWait;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;

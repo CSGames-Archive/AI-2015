@@ -31,6 +31,19 @@ namespace MapEntity
 namespace MapDirection
 {
 	enum MapDirection{UP, DOWN, LEFT, RIGHT};
+
+	static int DirectionToDegree(MapDirection direction)
+	{
+		if(direction == MapDirection::UP)
+			return 90;
+		else if(direction == MapDirection::DOWN)
+			return 270;
+		else if(direction == MapDirection::LEFT)
+			return 0;
+		else if(direction == MapDirection::RIGHT)
+			return 180;
+		return 0;
+	}
 }
 
 struct Vector2

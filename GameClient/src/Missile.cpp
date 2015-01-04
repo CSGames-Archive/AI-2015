@@ -41,6 +41,7 @@ void Missile::init(Vector2 position, MapDirection::MapDirection direction)
 	this->bodyNode->setPosition(startingVector);
 	this->subStepPosition = startingVector;
 	this->targetPosition = calculateTargetPosition(direction);
+	this->direction = direction;
 }
 
 Vector2 Missile::calculateTargetPosition(MapDirection::MapDirection direction)
@@ -165,4 +166,9 @@ Vector2 Missile::calculateNextStep()
 		return Vector2(position.x, position.y+1);
 	}
 	return position;
+}
+
+MapDirection::MapDirection Missile::getOrientation()
+{
+	return direction;
 }

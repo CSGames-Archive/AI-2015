@@ -39,6 +39,7 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, st
 	this->missile = missile;
 	this->askForMine = false;
 	this->askForMissile = false;
+	this->timeToWait = 0.0;
 }
 
 Character::~Character()
@@ -87,7 +88,12 @@ void Character::updateBody(Ogre::Real deltaTime)
 				throwMissile();
 			}
 
-			if(position == targetPosition)
+			if(timeToWait > 0)
+			{
+				timeToWait -= deltaTime;
+				goalDirection = Ogre::Vector3::ZERO;
+			}
+			else if(position == targetPosition)
 			{
 				goalDirection = Ogre::Vector3::ZERO;
 			}
@@ -103,9 +109,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 				{
 					Map::getInstance().moveCharacterTile(position, newPosition);
 					position = newPosition;
-
-					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
-					QueueController::getInstance().addMessage(message);
+					sendPosition();
 
 					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
 					goalDirection = subStepPosition - currentPosition;
@@ -169,10 +173,16 @@ void Character::dropMine()
 void Character::throwMissile()
 {
 	askForMissile = false;
+	timeToWait = 1.0;
 	if(missile && isMissileReady())
 	{
-		//Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
+		timeToWait = 1.0;
 		missile->launch();
+		Ogre::Real targetDegree = Ogre::Real(MapDirection::DirectionToDegree(missile->getOrientation()));
+		Ogre::Real currentDegree = bodyNode->getOrientation().getYaw().valueDegrees();
+		Ogre::Degree degreeToYaw = Ogre::Degree(targetDegree - currentDegree - 90.0);
+
+		bodyNode->yaw(degreeToYaw, Ogre::Node::TS_WORLD);
 	}
 }
 

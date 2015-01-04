@@ -61,8 +61,10 @@ class AI(object):
             self.queueController.outEvents.put(event2)
             self.aiStatus = AIStatus.UPPER_RIGHT
             
-            event3 = ThrowMissileEvent(character1.characterId, Direction.UP)
+            event3 = ThrowMissileEvent(character1.characterId, Direction.RIGHT)
             self.queueController.outEvents.put(event3)
+            event4 = ThrowMissileEvent(character2.characterId, Direction.LEFT)
+            self.queueController.outEvents.put(event4)
     
     def upperRight(self):
         character1 = self.world.getTeam(self.world.yourId).characters[0]
