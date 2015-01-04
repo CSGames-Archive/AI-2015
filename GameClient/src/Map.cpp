@@ -43,7 +43,7 @@ bool Map::isTileEmpty(const Vector2& position)
 		return false;
 
 	MapEntity::MapEntity tileType = getTileType(position);
-	if( tileType == MapEntity::EMPTY || tileType == MapEntity::MINE)
+	if( tileType == MapEntity::EMPTY || tileType == MapEntity::MINE || tileType == MapEntity::MISSILE)
 	{
 		return true;
 	}
@@ -142,6 +142,15 @@ void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
 		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
+	else if (newTile->type == MapEntity::MISSILE)
+	{
+		std::string message = NetUtility::generateMissileHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addMessage(message);
+
+		MissileHitEvent* newEvent = new MissileHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+	}
+
 	setTile(newPosition, MapEntity::CHARACTER, oldTile->teamId, oldTile->characterId);
 
 	if(oldTile->type == MapEntity::CHARACTER_MINE)
@@ -149,6 +158,40 @@ void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
 		oldTile->type = MapEntity::MINE;
 	}
 	else
+	{
+		setTile(position, MapEntity::EMPTY, 0, 0);
+	}
+}
+
+void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
+{
+	MapTile* oldTile = getTile(position);
+	MapTile* newTile = getTile(newPosition);
+
+	if (newTile->type == MapEntity::CHARACTER || newTile->type == MapEntity::CHARACTER_MINE)
+	{
+		std::string message = NetUtility::generateMissileHit(newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+		QueueController::getInstance().addMessage(message);
+
+		MissileHitEvent* newEvent = new MissileHitEvent(newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+	}
+	else
+	{
+		setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
+	}
+	/*
+	if(newTile->type == MapEntity::MINE)
+	{
+		std::string message = NetUtility::generateMineHit(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addMessage(message);
+
+		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+	}
+	*/
+
+	if(oldTile->type != MapEntity::CHARACTER)
 	{
 		setTile(position, MapEntity::EMPTY, 0, 0);
 	}

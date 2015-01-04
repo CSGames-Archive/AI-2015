@@ -178,10 +178,11 @@ void Character::throwMissile()
 	{
 		timeToWait = 1.0;
 		missile->launch();
-		Ogre::Real targetDegree = Ogre::Real(MapDirection::DirectionToDegree(missile->getOrientation()));
-		Ogre::Real currentDegree = bodyNode->getOrientation().getYaw().valueDegrees();
-		Ogre::Degree degreeToYaw = Ogre::Degree(targetDegree - currentDegree - 90.0);
 
+		Ogre::Real targetDegree = Ogre::Real(MapDirection::DirectionToDegree(missile->getDirection()));
+		Ogre::Real currentDegree = bodyNode->getOrientation().getYaw().valueDegrees();
+		// The front of the mesh is 90 degree off
+		Ogre::Degree degreeToYaw = Ogre::Degree(targetDegree - currentDegree - 90.0);
 		bodyNode->yaw(degreeToYaw, Ogre::Node::TS_WORLD);
 	}
 }
@@ -203,4 +204,9 @@ void Character::askMissile(int direction)
 	{
 		missile->init(position,static_cast<MapDirection::MapDirection>(direction));
 	}
+}
+
+Missile* Character::getMissile()
+{
+	return missile;
 }

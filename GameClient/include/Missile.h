@@ -48,7 +48,7 @@ public:
 	bool isVisible();
 
 	Vector2 calculateNextStep();
-	MapDirection::MapDirection getOrientation();
+	MapDirection::MapDirection getDirection();
 };
 
 #endif // #ifndef __Missile_h_

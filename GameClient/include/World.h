@@ -40,6 +40,7 @@ public:
 	World();
 	virtual ~World();
 	void init(Ogre::SceneManager* sceneManager);
+
 	static World& getInstance()
     {
         static World instance;
@@ -54,6 +55,7 @@ public:
 	void gameStart();
 	void sendAllPosition();
 	void mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	void missileHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 };
 
 #endif // #ifndef __World_h_

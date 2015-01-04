@@ -86,6 +86,7 @@ void Missile::updateBody(Ogre::Real deltaTime)
 			if(position == targetPosition)
 			{
 				goalDirection = Ogre::Vector3::ZERO;
+				// TODO: generate an missile reach map limit
 			}
 			else
 			{
@@ -97,14 +98,13 @@ void Missile::updateBody(Ogre::Real deltaTime)
 				}
 				else
 				{
-					/*
-					Map::getInstance().moveCharacterTile(position, newPosition);
+					Map::getInstance().moveMissileTile(position, newPosition);
 					position = newPosition;
 
+					/* TODO: send the missile position
 					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
 					QueueController::getInstance().addMessage(message);
 					*/
-					position = newPosition;
 
 					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
 					goalDirection = subStepPosition - currentPosition;
@@ -168,7 +168,7 @@ Vector2 Missile::calculateNextStep()
 	return position;
 }
 
-MapDirection::MapDirection Missile::getOrientation()
+MapDirection::MapDirection Missile::getDirection()
 {
 	return direction;
 }

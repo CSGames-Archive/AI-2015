@@ -115,6 +115,7 @@ public:
 	Vector2 upTile(const Vector2& position);
 	Vector2 downTile(const Vector2& position);
 	void moveCharacterTile(const Vector2& position, const Vector2& newPosition);
+	void moveMissileTile(const Vector2& position, const Vector2& newPosition);
 	Vector2 getStartingPosition(int teamId, int characterId);
 };
 

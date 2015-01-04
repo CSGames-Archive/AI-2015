@@ -210,5 +210,12 @@ void World::sendAllPosition()
 
 void World::mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
+	//TODO: refactor with the life system
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMine()->setVisible(false);
+}
+
+void World::missileHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+{
+	//TODO: refactor with the life system
+	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 }

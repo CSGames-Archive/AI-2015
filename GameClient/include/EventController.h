@@ -38,6 +38,7 @@ public:
 	void dropMine(GameEvent* gameEvent);
 	void mineHit(GameEvent* gameEvent);
 	void throwMissile(GameEvent* gameEvent);
+	void missileHit(GameEvent* gameEvent);
 };
 
 #endif // #ifndef __EventController_h_

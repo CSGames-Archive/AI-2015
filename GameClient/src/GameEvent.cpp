@@ -110,3 +110,11 @@ bool ThrowMissileEvent::fill(std::string arguments)
 		return true;
 	return false;
 }
+
+MissileHitEvent::MissileHitEvent(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
+{
+	this->hitTeamId = hitTeamId;
+	this->hitCharacterId = hitCharacterId;
+	this->originTeamId = originTeamId;
+	this->originCharacterId = originCharacterId;
+}

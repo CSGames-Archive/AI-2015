@@ -66,6 +66,7 @@ public:
 	bool isMissileReady();
 	void askMissile(int direction);
 	void throwMissile();
+	Missile* getMissile();
 };
 
 #endif // #ifndef __Character_h_
