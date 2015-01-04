@@ -22,6 +22,8 @@ QueueController::QueueController()
 
 void QueueController::addEvent(GameEvent* gameEvent)
 {
+	if(!gameEvent)
+		gameEvent->getType();
 	gameEventQueue.push(gameEvent);
 }
 

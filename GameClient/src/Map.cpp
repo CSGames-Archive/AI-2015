@@ -191,7 +191,7 @@ void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 	}
 	*/
 
-	if(oldTile->type != MapEntity::CHARACTER)
+	if(oldTile->type != MapEntity::CHARACTER && oldTile->type != MapEntity::CHARACTER_MINE)
 	{
 		setTile(position, MapEntity::EMPTY, 0, 0);
 	}
