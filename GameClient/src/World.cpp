@@ -226,3 +226,10 @@ void World::missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayer
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMine()->setVisible(false);
 }
+
+void World::missileHitMissile(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+{
+	//TODO: refactor with the life system
+	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
+	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMissile()->setVisible(false);
+}

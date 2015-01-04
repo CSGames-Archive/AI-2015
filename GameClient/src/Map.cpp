@@ -173,17 +173,20 @@ void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 		QueueController::getInstance().addEvent(newEvent);
 		setTile(newPosition, MapEntity::EMPTY, 0, 0);
 	}
+	else if (newTile->type == MapEntity::MISSILE)
+	{
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::MISSILE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+		setTile(newPosition, MapEntity::EMPTY, 0, 0);
+	}
 	else
 	{
-		setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
+		// Missile already hit
+		if(oldTile->teamId != 0)
+		{
+			setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
+		}
 	}
-	/*
-	if(newTile->type == MapEntity::MINE)
-	{
-		MineHitEvent* newEvent = new MineHitEvent(oldTile->teamId, oldTile->characterId, newTile->teamId, newTile->characterId);
-		QueueController::getInstance().addEvent(newEvent);
-	}
-	*/
 
 	if(oldTile->type != MapEntity::CHARACTER && oldTile->type != MapEntity::CHARACTER_MINE)
 	{

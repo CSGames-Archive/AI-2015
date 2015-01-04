@@ -34,17 +34,19 @@ class AI(object):
     def init(self):
         #event1 = MoveCharacterEvent(0, 7, 0)
         #self.queueController.outEvents.put(event1)
-        event2 = MoveCharacterEvent(1, 3, 3)
-        self.queueController.outEvents.put(event2)
-        self.aiStatus = AIStatus.LOWER_RIGHT
+        #event2 = MoveCharacterEvent(1, 3, 3)
+        #self.queueController.outEvents.put(event2)
+        #self.aiStatus = AIStatus.LOWER_RIGHT
         
         character1 = self.world.getTeam(self.world.yourId).characters[0]
         character2 = self.world.getTeam(self.world.yourId).characters[1]
         event3 = ThrowMissileEvent(character1.characterId, Direction.RIGHT)
         self.queueController.outEvents.put(event3)
+        event4 = ThrowMissileEvent(character2.characterId, Direction.LEFT)
+        self.queueController.outEvents.put(event4)
         
-        character1.dropMine()
-        character2.dropMine()
+        #character1.dropMine()
+        #character2.dropMine()
     
     def lowerRight(self):
         character1 = self.world.getTeam(self.world.yourId).characters[0]
