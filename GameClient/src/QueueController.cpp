@@ -22,6 +22,7 @@ QueueController::QueueController()
 
 void QueueController::addEvent(GameEvent* gameEvent)
 {
+	//TODO: try to reproduce the crash here
 	if(!gameEvent)
 		gameEvent->getType();
 	gameEventQueue.push(gameEvent);

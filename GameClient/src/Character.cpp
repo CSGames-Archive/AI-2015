@@ -173,8 +173,7 @@ void Character::dropMine()
 void Character::throwMissile()
 {
 	askForMissile = false;
-	timeToWait = 1.0;
-	if(missile && isMissileReady())
+	if(missile && isMissileReady() && timeToWait <= 0)
 	{
 		timeToWait = 1.0;
 		missile->launch();

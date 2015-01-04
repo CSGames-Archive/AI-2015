@@ -49,6 +49,7 @@ public:
 
 	Vector2 calculateNextStep();
 	MapDirection::MapDirection getDirection();
+	void hitWall();
 };
 
 #endif // #ifndef __Missile_h_

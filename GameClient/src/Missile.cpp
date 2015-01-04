@@ -86,7 +86,7 @@ void Missile::updateBody(Ogre::Real deltaTime)
 			if(position == targetPosition)
 			{
 				goalDirection = Ogre::Vector3::ZERO;
-				// TODO: generate an missile reach map limit
+				hitWall();
 			}
 			else
 			{
@@ -171,4 +171,21 @@ Vector2 Missile::calculateNextStep()
 MapDirection::MapDirection Missile::getDirection()
 {
 	return direction;
+}
+
+void Missile::hitWall()
+{
+	MapTile* tile = Map::getInstance().getTile(position);
+	if(tile->type == MapEntity::CHARACTER || tile->type == MapEntity::CHARACTER_MINE)
+	{
+		std::string message = NetUtility::generateMissileHit(tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		QueueController::getInstance().addMessage(message);
+
+		MissileHitEvent* newEvent = new MissileHitEvent(tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+	}
+	else
+	{
+		setVisible(false);
+	}
 }
