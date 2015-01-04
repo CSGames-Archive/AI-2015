@@ -56,6 +56,7 @@ public:
 	void sendAllPosition();
 	void mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	void missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	void missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 };
 
 #endif // #ifndef __World_h_

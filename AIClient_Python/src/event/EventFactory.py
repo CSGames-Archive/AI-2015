@@ -9,6 +9,7 @@ from event.QueueController import QueueController
 from event.GameStartEvent import GameStartEvent
 from event.UpdateCharacterEvent import UpdateCharacterEvent
 from event.MineHitEvent import MineHitEvent
+from event.MissileHitEvent import MissileHitEvent
 
 class EventFactory(object):
     @staticmethod
@@ -30,4 +31,6 @@ class EventFactory(object):
             return UpdateCharacterEvent()
         elif eventType == "MineHit":
             return MineHitEvent()
+        elif eventType == "MissileHit":
+            return MissileHitEvent()
         return None

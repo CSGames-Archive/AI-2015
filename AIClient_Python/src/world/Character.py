@@ -14,6 +14,7 @@ class Character(object):
         self.positionX = positionX
         self.positionY = positionY
         self.mineReady = True
+        self.missileReady = True
     
     def move(self, positionX, positionY):
         self.positionX = positionX
@@ -28,7 +29,16 @@ class Character(object):
 
     def hitByMine(self):
         # Refactor with life system
-        print("ouch!!")
+        print("ouch!! - Mine")
         
     def mineHit(self):
         self.mineReady = True;
+        print("Mine blow!")
+        
+    def hitByMissile(self):
+        # Refactor with life system
+        print("ouch!! - Missile")
+        
+    def missileHit(self):
+        self.missileReady = True;
+        print("Missile hit target")

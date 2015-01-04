@@ -9,7 +9,6 @@ from world.World import World
 
 class MineHitEvent(IngoingEvent):
 
-
     def __init__(self):
         self.hitTeamId = 0
         self.hitCharacterId = 0

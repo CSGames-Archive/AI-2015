@@ -167,6 +167,12 @@ void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::CHARACTER, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
+	else if (newTile->type == MapEntity::MINE)
+	{
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::MINE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+		QueueController::getInstance().addEvent(newEvent);
+		setTile(newPosition, MapEntity::EMPTY, 0, 0);
+	}
 	else
 	{
 		setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
