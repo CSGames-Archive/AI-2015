@@ -145,6 +145,10 @@ void EventController::missileHit(GameEvent* gameEvent)
 	{
 		World::getInstance().missileHitMissile(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
 	}
+	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::NONE)
+	{
+		World::getInstance().getTeam(missileHitEvent->originTeamId)->getCharacter(missileHitEvent->originCharacterId)->getMissile()->setVisible(false);
+	}
 
 	std::string message = NetUtility::generateMissileHit(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
 	QueueController::getInstance().addMessage(message);

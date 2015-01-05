@@ -130,7 +130,6 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		Ogre::SceneNode* missileNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 		Ogre::Entity* missileEntity = sceneManager->createEntity(missileName, MISSILE_MESH_NAME);
 		missileNode->attachObject(missileEntity);
-		//missileNode->setScale(Ogre::Vector3(2.0, 2.0, 2.0));
 		missileNode->setVisible(false);
 
 		Mine* mine = new Mine(mineNode, mineName);

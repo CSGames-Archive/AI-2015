@@ -183,8 +183,8 @@ void Missile::hitWall()
 	}
 	else
 	{
-		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::NONE, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
-		setVisible(false);
+		Map::getInstance().setTile(position, MapEntity::EMPTY,0, 0);
 	}
 }
