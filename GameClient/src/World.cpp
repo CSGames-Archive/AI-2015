@@ -54,23 +54,23 @@ void World::createScene()
 
 	// Create a Light and set its position
 	Ogre::Light* light = sceneManager->createLight("MainLight");
-	light->setPosition(0.0f, 80.0f, 0.0f);
+	light->setPosition(Ogre::Real(-MAP_TILE_SIZE), 80.0, Ogre::Real(-MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight2");
-	light->setPosition(0.0, 80.0, 25.0*11.0);
+	light->setPosition(Ogre::Real(-MAP_TILE_SIZE), 80.0, Ogre::Real(9*MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight3");
-	light->setPosition(25.0*11.0, 80.0f, 0.0);
+	light->setPosition(Ogre::Real(9*MAP_TILE_SIZE), 80.0f, Ogre::Real(-MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight4");
-	light->setPosition(25.0*11.0, 80.0f, 25.0*11.0);
+	light->setPosition(Ogre::Real(9*MAP_TILE_SIZE), 80.0f, Ogre::Real(9*MAP_TILE_SIZE));
 
 	sceneManager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
 	// create a floor mesh resource
 	Ogre::MeshManager::getSingleton().createPlane("floor", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-												  Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), 1000, 1000, 10, 10, true,
-												  1, 10, 10, Ogre::Vector3::UNIT_Z);
+												  Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), Ogre::Real(8*MAP_TILE_SIZE), Ogre::Real(8*MAP_TILE_SIZE),
+												  10, 10, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
 
 	// create a floor entity, give it a material, and place it at the origin
 	Ogre::SceneNode* floorNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -78,7 +78,7 @@ void World::createScene()
 	floor->setMaterialName("SceneMaterial/FloorSand");
 	floor->setCastShadows(false);
 	floorNode->attachObject(floor);
-	floorNode->setPosition(150.0, 0.0, 150.0);
+	floorNode->setPosition(87.5, 0.0, 87.5);
 
 	//TODO: put this in function
 	//Delimiter crate creation
@@ -87,25 +87,25 @@ void World::createScene()
 	Ogre::Entity* crate = sceneManager->createEntity("crate1", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(-25.0, 12.5, -25.0);
+	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, 0.0);
 
 	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	crate = sceneManager->createEntity("crate2", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(25.0*8.0, 12.5, -25.0);
+	crateNode->setPosition(Ogre::Real(7*MAP_TILE_SIZE), 12.5, Ogre::Real(4*MAP_TILE_SIZE));
 
 	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	crate = sceneManager->createEntity("crate3", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(-25.0, 12.5, 25.0*8.0);
+	crateNode->setPosition(0.0, 12.5, Ogre::Real(4*MAP_TILE_SIZE));
 
 	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	crate = sceneManager->createEntity("crate4", "WoodCrate.mesh");
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
-	crateNode->setPosition(25.0*8.0, 12.5, 25.0*8.0);
+	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, Ogre::Real(7*MAP_TILE_SIZE));
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
