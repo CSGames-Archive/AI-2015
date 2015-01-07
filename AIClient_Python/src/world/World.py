@@ -37,3 +37,6 @@ class World(object):
             if team.teamId == teamId:
                 return team
         return None
+    
+    def getMyTeam(self):
+        return self.getTeam(self.yourId)

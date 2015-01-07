@@ -16,11 +16,13 @@
 
 #include "Missile.h"
 
-Missile::Missile(Ogre::SceneNode* bodyNode, std::string name)
+Missile::Missile(Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId)
 {
 	// 3d Infos
 	MISSILE_MESH_HEIGHT = 8.5;
 	this->name = name;
+	this->teamId = teamId;
+	this->characterId = characterId;
 	this->bodyNode = bodyNode;
 	this->bodyNode->pitch(Ogre::Radian(Ogre::Degree(90)),Ogre::Node::TS_WORLD);
 
@@ -42,6 +44,8 @@ void Missile::init(Vector2 position, MapDirection::MapDirection direction)
 	this->subStepPosition = startingVector;
 	this->targetPosition = calculateTargetPosition(direction);
 	this->direction = direction;
+
+	sendPosition();
 }
 
 Vector2 Missile::calculateTargetPosition(MapDirection::MapDirection direction)
@@ -101,10 +105,7 @@ void Missile::updateBody(Ogre::Real deltaTime)
 					Map::getInstance().moveMissileTile(position, newPosition);
 					position = newPosition;
 
-					/* TODO: send the missile position
-					std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
-					QueueController::getInstance().addMessage(message);
-					*/
+					sendPosition();
 
 					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
 					goalDirection = subStepPosition - currentPosition;
@@ -130,11 +131,8 @@ void Missile::updateBody(Ogre::Real deltaTime)
 
 void Missile::sendPosition()
 {
-	//TODO make a missile update message
-	/*
-	std::string message = NetUtility::generateMoveCharacterMessage(teamId, characterId, position.x, position.y);
+	std::string message = NetUtility::generateMoveMissileMessage(teamId, characterId, position.x, position.y);
 	QueueController::getInstance().addMessage(message);
-	*/
 }
 
 void Missile::setVisible(bool visible)

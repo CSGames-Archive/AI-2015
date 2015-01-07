@@ -38,7 +38,7 @@ net.createServer(function (socket) {
 		{
 			if(chunk.length > 1)
 			{
-				print(' - Chunk - ' + chunk);
+				// print(' - Chunk - ' + chunk);
 				socket.emit('message', chunk);
 			}
 		});

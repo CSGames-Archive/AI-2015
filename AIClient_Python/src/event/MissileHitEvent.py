@@ -33,4 +33,4 @@ class MissileHitEvent(IngoingEvent):
         elif(self.hitEntity == 2):
             world.getTeam(self.hitTeamId).characters[self.hitCharacterId].mineHit()
         elif(self.hitEntity == 3):
-            world.getTeam(self.hitTeamId).characters[self.hitCharacterId].missileHit()        
+            world.getTeam(self.hitTeamId).characters[self.hitCharacterId].missileHit()

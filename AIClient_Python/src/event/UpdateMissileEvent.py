@@ -1,14 +1,14 @@
 '''
-Created on Dec 21, 2014
+Created on Jan 6, 2015
 
 @author: samuel
 '''
 from event.IngoingEvent import IngoingEvent
-from world.World import World
 from aiclient.Singleton import Singleton
+from world.World import World
 from mathUtils.Vector2 import Vector2
 
-class UpdateCharacterEvent(IngoingEvent):
+class UpdateMissileEvent(IngoingEvent):
 
     def __init__(self):
         self.teamId = 0
@@ -25,5 +25,5 @@ class UpdateCharacterEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.getTeam(self.teamId).characters[self.characterId].move(self.position)
+        world.getTeam(self.teamId).characters[self.characterId].missile.move(self.position)
         

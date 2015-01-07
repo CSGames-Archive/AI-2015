@@ -10,6 +10,7 @@ from event.GameStartEvent import GameStartEvent
 from event.UpdateCharacterEvent import UpdateCharacterEvent
 from event.MineHitEvent import MineHitEvent
 from event.MissileHitEvent import MissileHitEvent
+from event.UpdateMissileEvent import UpdateMissileEvent
 
 class EventFactory(object):
     @staticmethod
@@ -33,4 +34,6 @@ class EventFactory(object):
             return MineHitEvent()
         elif eventType == "MissileHit":
             return MissileHitEvent()
+        elif eventType == "UpdateMissile":
+            return UpdateMissileEvent()
         return None

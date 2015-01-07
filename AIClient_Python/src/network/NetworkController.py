@@ -17,6 +17,7 @@ class NetworkController(object):
     webSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     readerThread = None
     connected = False
+    queueController = Singleton(QueueController)
     
     def __init__(self):
         self.readerThread = threading.Thread(target=self.readFunctionThread)
@@ -45,9 +46,9 @@ class NetworkController(object):
         self.readerThread.start()
     
     def executeOutgoingEvents(self):
-        queueController = Singleton(QueueController)
-        while not queueController.outEvents.empty():
-            event = queueController.outEvents.get()
+        outQueue = self.queueController.getOutQueue()
+        while not outQueue.empty():
+            event = outQueue.get()
             self.sendMessage(event.toString() + "\n")
     
     def readFunctionThread(self):

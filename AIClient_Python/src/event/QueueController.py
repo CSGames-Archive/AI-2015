@@ -20,3 +20,6 @@ class QueueController(object):
     def addIngoingEvent(self, event):
         if isinstance(event, IngoingEvent):
             self.inEvents.put(event)
+            
+    def getOutQueue(self):
+        return self.outEvents

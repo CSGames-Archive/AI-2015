@@ -6,25 +6,32 @@ Created on Dec 20, 2014
 from event.DropMineEvent import DropMineEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
+from world.Missile import Missile
+from mathUtils.Vector2 import Vector2
+from event.MoveCharacterEvent import MoveCharacterEvent
+from event.ThrowMissileEvent import ThrowMissileEvent, Direction
 
 class Character(object):
+    queueController = Singleton(QueueController)
     
-    def __init__(self, characterId, positionX, positionY):
+    def __init__(self, characterId, position):
         self.characterId = characterId
-        self.positionX = positionX
-        self.positionY = positionY
+        self.position = Vector2(position.x, position.y)
         self.mineReady = True
-        self.missileReady = True
+        self.missile = Missile(Vector2(0,0))
     
-    def move(self, positionX, positionY):
-        self.positionX = positionX
-        self.positionY = positionY
+    def move(self, position):
+        self.position.x = position.x
+        self.position.y = position.y
+        
+    def goTo(self, position):
+        event1 = MoveCharacterEvent(self.characterId, position.x, position.y)
+        self.queueController.outEvents.put(event1)
         
     def dropMine(self):
         if(self.mineReady):
-            queueController = Singleton(QueueController)
             event = DropMineEvent(self.characterId)
-            queueController.outEvents.put(event)
+            self.queueController.addOutgoingEvent(event)
             self.mineReady = False
 
     def hitByMine(self):
@@ -35,10 +42,27 @@ class Character(object):
         self.mineReady = True;
         print("Mine blow!")
         
+    def shootMissile(self, direction):
+        if(self.missile.isReady):
+            event = ThrowMissileEvent(self.characterId, direction)
+            self.queueController.addOutgoingEvent(event)
+            
+    def shootUp(self):
+        self.shootMissile(Direction.UP)
+        
+    def shootDown(self):
+        self.shootMissile(Direction.DOWN)
+        
+    def shootLeft(self):
+        self.shootMissile(Direction.LEFT)
+        
+    def shootRight(self):
+        self.shootMissile(Direction.RIGHT)
+        
     def hitByMissile(self):
         # Refactor with life system
         print("ouch!! - Missile")
         
     def missileHit(self):
-        self.missileReady = True;
+        self.missile.isReady = True;
         print("Missile hit target")

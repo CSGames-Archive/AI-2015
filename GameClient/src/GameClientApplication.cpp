@@ -73,7 +73,7 @@ bool GameClientApplication::setup()
 	createScene();
 	createFrameListener();
 
-	mTrayMgr->hideAll();
+	//mTrayMgr->hideAll();
 
 	return true;
 };
@@ -92,7 +92,7 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mKeyboard->capture();
     mMouse->capture();
 
-	//mTrayMgr->frameRenderingQueued(evt);
+	mTrayMgr->frameRenderingQueued(evt);
 
 	eventController->executeAllGameEvent();
 	World::getInstance().addTime(evt.timeSinceLastFrame);

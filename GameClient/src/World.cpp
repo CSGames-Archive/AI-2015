@@ -133,7 +133,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		missileNode->setVisible(false);
 
 		Mine* mine = new Mine(mineNode, mineName);
-		Missile* missile = new Missile(missileNode, missileName);
+		Missile* missile = new Missile(missileNode, missileName, teamId, i);
 		Character* character = new Character(bodyNode, mine, missile, characterNames[i], teamId, i);
 		team->addCharacter(character);
 	}

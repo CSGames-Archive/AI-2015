@@ -29,13 +29,14 @@ private:
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
 	MapDirection::MapDirection direction;
+	int teamId, characterId;
 	
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
 	void updateBody(Ogre::Real deltaTime);
 
 public:
-	Missile(Ogre::SceneNode* bodyNode, std::string name);
+	Missile(Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId);
 	virtual ~Missile() {}
 
 	void addTime(Ogre::Real deltaTime);

@@ -118,7 +118,7 @@ void EventController::mineHit(GameEvent* gameEvent)
 	MineHitEvent* dropMineEvent = static_cast<MineHitEvent*>(gameEvent);
 	World::getInstance().mineHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
 
-	std::string message = NetUtility::generateMineHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
+	std::string message = NetUtility::generateMineHitMessage(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
 	QueueController::getInstance().addMessage(message);
 }
 
@@ -150,6 +150,6 @@ void EventController::missileHit(GameEvent* gameEvent)
 		World::getInstance().getTeam(missileHitEvent->originTeamId)->getCharacter(missileHitEvent->originCharacterId)->getMissile()->setVisible(false);
 	}
 
-	std::string message = NetUtility::generateMissileHit(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+	std::string message = NetUtility::generateMissileHitMessage(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
 	QueueController::getInstance().addMessage(message);
 }

@@ -62,7 +62,7 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string generateMineHit(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
+	static std::string generateMineHitMessage(int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", hitTeamId);
@@ -81,7 +81,7 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string generateMissileHit(int hitEntity, int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
+	static std::string generateMissileHitMessage(int hitEntity, int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		std::string message = "Game:MissileHit";
@@ -104,6 +104,25 @@ namespace NetUtility
 
 		message += ":";
 		sprintf(numstr, "%d", originCharacterId);
+		message += numstr;
+
+		return message;
+	}
+
+	static std::string generateMoveMissileMessage(int teamId, int characterId, double x, double z)
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		sprintf(numstr, "%d", teamId);
+		std::string message = "Game:UpdateMissile:";
+		message += numstr;
+		sprintf(numstr, "%d", characterId);
+		message += ":";
+		message += numstr;
+		sprintf(numstr, "%d", (int)x);
+		message += ":";
+		message += numstr;
+		sprintf(numstr, "%d", (int)z);
+		message += ":";
 		message += numstr;
 
 		return message;
