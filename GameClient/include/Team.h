@@ -33,7 +33,7 @@ public:
 
 	void addCharacter(Character* character);
 	Character* getCharacter(int characterId);
-	void addTime(Ogre::Real deltaTime);
+	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
 	int getId();
 };
 

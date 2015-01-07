@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 
+#include "TextOverlay.h"
 #include "Team.h"
 #include "QueueController.h"
 
@@ -29,6 +30,8 @@ private:
 	char* MISSILE_MESH_NAME;
 	Team* teams[MAX_TEAM];
 	int teamCount;
+
+	Ogre::Overlay* labelOverlay;
 
 	Ogre::SceneManager* sceneManager;
 

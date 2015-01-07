@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 
+#include "TextOverlay.h"
 #include "NetUtility.h"
 #include "Map.h"
 #include "Mine.h"
@@ -45,14 +46,16 @@ private:
 	Ogre::SceneNode* bodyNode;
 	Mine* mine;
 	Missile* missile;
+	TextOverlay* nameOverlay;
+	TextOverlay* lifeOverlay;
 
 	void updateBody(Ogre::Real deltaTime);
 
 public:
-	Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, std::string name, int teamId, int characterId);
+	Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, TextOverlay* nameOverlay, TextOverlay* lifeOverlay, std::string name, int teamId, int characterId);
 	virtual ~Character();
 
-	void addTime(Ogre::Real deltaTime);
+	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
 	void setTargetPosition(int x, int z);
 	int getId();
 	std::string getName();

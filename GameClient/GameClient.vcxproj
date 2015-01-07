@@ -29,6 +29,7 @@
     <ClInclude Include="include\Mine.h" />
     <ClInclude Include="include\Missile.h" />
     <ClInclude Include="include\QueueController.h" />
+    <ClInclude Include="include\TextOverlay.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\Team.h" />
     <ClInclude Include="include\NetUtility.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="src\Mine.cpp" />
     <ClCompile Include="src\Missile.cpp" />
     <ClCompile Include="src\QueueController.cpp" />
+    <ClCompile Include="src\TextOverlay.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\Team.cpp" />
     <ClCompile Include="src\NetworkController.cpp" />

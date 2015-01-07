@@ -52,13 +52,13 @@ Character* Team::getCharacter(int characterId)
 		return NULL;
 }
 
-void Team::addTime(Ogre::Real deltaTime)
+void Team::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 {
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
 		if(characters[i])
 		{
-			characters[i]->addTime(deltaTime);
+			characters[i]->addTime(deltaTime, camera);
 		}
 	}
 }

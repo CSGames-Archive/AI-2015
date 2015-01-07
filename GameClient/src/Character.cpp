@@ -16,7 +16,7 @@
 
 #include "Character.h"
 
-Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, std::string name, int teamId, int characterId)
+Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, TextOverlay* nameOverlay, TextOverlay* lifeOverlay, std::string name, int teamId, int characterId)
 {
 	// Network
 	this->teamId = teamId;
@@ -37,6 +37,9 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, st
 	this->name = name;
 	this->mine = mine;
 	this->missile = missile;
+	this->nameOverlay = nameOverlay;
+	this->lifeOverlay = lifeOverlay;
+
 	this->askForMine = false;
 	this->askForMissile = false;
 	this->timeToWait = 0.0;
@@ -49,12 +52,20 @@ Character::~Character()
 
 	if(missile)
 		delete missile;
+
+	if(nameOverlay)
+		delete nameOverlay;
+
+	if(lifeOverlay)
+		delete lifeOverlay;
 }
 
-void Character::addTime(Ogre::Real deltaTime)
+void Character::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 {
 	updateBody(deltaTime);
 	missile->addTime(deltaTime);
+	nameOverlay->update(camera);
+	lifeOverlay->update(camera);
 }
 
 void Character::setTargetPosition(int x, int z)

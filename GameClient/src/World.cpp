@@ -16,6 +16,8 @@
 
 #include "World.h"
 
+#include <OgreOverlayManager.h>
+
 World::World()
 {
 	TANK_MESH_NAME = "Tank.mesh";
@@ -106,6 +108,8 @@ void World::createScene()
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
 	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, Ogre::Real(7*MAP_TILE_SIZE));
+
+	labelOverlay = Ogre::OverlayManager::getSingleton().create("labelOverlay");
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
@@ -134,7 +138,11 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 		Mine* mine = new Mine(mineNode, mineName);
 		Missile* missile = new Missile(missileNode, missileName, teamId, i);
-		Character* character = new Character(bodyNode, mine, missile, characterNames[i], teamId, i);
+		TextOverlay* nameOverlay = new TextOverlay(labelOverlay, characterNames[i], characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport());
+		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life : 3", "Life_" + characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
+		lifeOverlay->setColors(Ogre::ColourValue(1.0, 0.5, 0.5), Ogre::ColourValue(1.0, 1.0, 1.0));
+
+		Character* character = new Character(bodyNode, mine, missile, nameOverlay, lifeOverlay, characterNames[i], teamId, i);
 		team->addCharacter(character);
 	}
 
@@ -172,7 +180,7 @@ void World::addTime(Ogre::Real deltaTime)
 	{
 		if(teams[i])
 		{
-			teams[i]->addTime(deltaTime);
+			teams[i]->addTime(deltaTime, sceneManager->getCamera("PlayerCam"));
 		}
 	}
 }
