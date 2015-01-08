@@ -73,6 +73,8 @@ public:
 	Missile* getMissile();
 
 	void hit();
+	bool isVisible();
+	void die();
 };
 
 #endif // #ifndef __Character_h_

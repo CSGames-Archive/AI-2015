@@ -41,6 +41,7 @@ public:
 	bool getNodeScreenSpaceCoords(Ogre::Camera* camera);
 	void setColors(Ogre::ColourValue topColor, Ogre::ColourValue bottomColor);
 	void setText(std::string text);
+	void hide();
 };
 
 #endif // #ifndef __TextOverlay_h_

@@ -93,3 +93,8 @@ void TextOverlay::setText(std::string text)
 {
 	this->textElement->setCaption(text);
 }
+
+void TextOverlay::hide()
+{
+	this->panel->hide();
+}

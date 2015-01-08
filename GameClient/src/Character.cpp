@@ -70,10 +70,14 @@ Character::~Character()
 
 void Character::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 {
-	updateBody(deltaTime);
 	missile->addTime(deltaTime);
-	nameOverlay->update(camera);
-	lifeOverlay->update(camera);
+
+	if(isVisible())
+	{
+		updateBody(deltaTime);
+		nameOverlay->update(camera);
+		lifeOverlay->update(camera);
+	}
 }
 
 void Character::setTargetPosition(int x, int z)
@@ -231,13 +235,32 @@ Missile* Character::getMissile()
 
 void Character::hit()
 {
+	--life;
+
 	if(life > 0)
-		--life;
+	{
+		char numstr[21];
+		sprintf(numstr, "%d", life);
+		std::string text = "Life: ";
+		text += numstr;
 
-	char numstr[21];
-	sprintf(numstr, "%d", life);
-	std::string text = "Life: ";
-	text += numstr;
+		this->lifeOverlay->setText(text);
+	}
+	else if(isVisible())
+	{
+		die();
+	}
+}
 
-	this->lifeOverlay->setText(text);
+bool Character::isVisible()
+{
+	return bodyNode->getAttachedObject(name)->isVisible();
+}
+
+void Character::die()
+{
+	bodyNode->setVisible(false);
+	lifeOverlay->hide();
+	nameOverlay->hide();
+	Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
 }

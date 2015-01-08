@@ -77,7 +77,6 @@ void Missile::launch()
 	setVisible(true);
 }
 
-
 void Missile::updateBody(Ogre::Real deltaTime)
 {
 	if(bodyNode != NULL && isVisible())
