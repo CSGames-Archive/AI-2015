@@ -43,6 +43,14 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, Te
 	this->askForMine = false;
 	this->askForMissile = false;
 	this->timeToWait = 0.0;
+	this->life = 3;
+
+	char numstr[21];
+	sprintf(numstr, "%d", this->life);
+	std::string text = "Life: ";
+	text += numstr;
+
+	this->lifeOverlay->setText(text);
 }
 
 Character::~Character()
@@ -219,4 +227,17 @@ void Character::askMissile(int direction)
 Missile* Character::getMissile()
 {
 	return missile;
+}
+
+void Character::hit()
+{
+	if(life > 0)
+		--life;
+
+	char numstr[21];
+	sprintf(numstr, "%d", life);
+	std::string text = "Life: ";
+	text += numstr;
+
+	this->lifeOverlay->setText(text);
 }

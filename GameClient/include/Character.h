@@ -41,6 +41,7 @@ private:
 	bool askForMine;
 	bool askForMissile;
 	Ogre::Real timeToWait;
+	int life;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
@@ -70,6 +71,8 @@ public:
 	void askMissile(int direction);
 	void throwMissile();
 	Missile* getMissile();
+
+	void hit();
 };
 
 #endif // #ifndef __Character_h_

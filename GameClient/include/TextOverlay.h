@@ -40,6 +40,7 @@ public:
 	void update(Ogre::Camera* camera);
 	bool getNodeScreenSpaceCoords(Ogre::Camera* camera);
 	void setColors(Ogre::ColourValue topColor, Ogre::ColourValue bottomColor);
+	void setText(std::string text);
 };
 
 #endif // #ifndef __TextOverlay_h_

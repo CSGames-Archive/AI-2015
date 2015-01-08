@@ -88,3 +88,8 @@ void TextOverlay::setColors(Ogre::ColourValue topColor, Ogre::ColourValue bottom
 	textElement->setColourTop(topColor);
 	textElement->setColourBottom(bottomColor);
 }
+
+void TextOverlay::setText(std::string text)
+{
+	this->textElement->setCaption(text);
+}

@@ -139,7 +139,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		Mine* mine = new Mine(mineNode, mineName);
 		Missile* missile = new Missile(missileNode, missileName, teamId, i);
 		TextOverlay* nameOverlay = new TextOverlay(labelOverlay, characterNames[i], characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport());
-		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life : 3", "Life_" + characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
+		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life: ", "Life_" + characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
 		lifeOverlay->setColors(Ogre::ColourValue(1.0, 0.5, 0.5), Ogre::ColourValue(1.0, 1.0, 1.0));
 
 		Character* character = new Character(bodyNode, mine, missile, nameOverlay, lifeOverlay, characterNames[i], teamId, i);
@@ -217,26 +217,24 @@ void World::sendAllPosition()
 
 void World::mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
-	//TODO: refactor with the life system
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMine()->setVisible(false);
+	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->hit();
 }
 
 void World::missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
-	//TODO: refactor with the life system
+	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->hit();
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 }
 
 void World::missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
-	//TODO: refactor with the life system
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMine()->setVisible(false);
 }
 
 void World::missileHitMissile(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
 {
-	//TODO: refactor with the life system
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMissile()->setVisible(false);
 }
