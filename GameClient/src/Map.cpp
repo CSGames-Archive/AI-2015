@@ -18,10 +18,12 @@
 
 Map::Map()
 {
+/*
 	map[4][0].type = MapEntity::BOX;
 	map[7][4].type = MapEntity::BOX;
 	map[0][4].type = MapEntity::BOX;
 	map[4][7].type = MapEntity::BOX;
+*/
 }
 
 MapEntity::MapEntity Map::getTileType(const Vector2& position)

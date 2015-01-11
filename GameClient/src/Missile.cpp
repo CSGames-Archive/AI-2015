@@ -130,7 +130,7 @@ void Missile::updateBody(Ogre::Real deltaTime)
 
 void Missile::sendPosition()
 {
-	std::string message = NetUtility::generateMoveMissileMessage(teamId, characterId, position.x, position.y);
+	std::string message = NetUtility::generateMoveMissileMessage(teamId, characterId, position.x, position.y, int(direction));
 	QueueController::getInstance().addMessage(message);
 }
 

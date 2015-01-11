@@ -3,17 +3,15 @@ Created on Jan 2, 2015
 
 @author: samuel
 '''
-from enum import Enum
-from event.OutgoingEvent import OutgoingEvent
 
-class Direction(Enum):
-    UP, DOWN, LEFT, RIGHT = range(4)
+from event.OutgoingEvent import OutgoingEvent
+from mathUtils.Direction import Direction
 
 class ThrowMissileEvent(OutgoingEvent):
 
     def __init__(self, characterId, direction):
         self.characterId = characterId
-        self.direction = direction
+        self.direction = Direction(direction)
         
     def toString(self):
         message = "Game:ThrowMissile:"

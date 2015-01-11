@@ -109,7 +109,7 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string generateMoveMissileMessage(int teamId, int characterId, double x, double z)
+	static std::string generateMoveMissileMessage(int teamId, int characterId, double x, double z, int direction)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		sprintf(numstr, "%d", teamId);
@@ -122,6 +122,9 @@ namespace NetUtility
 		message += ":";
 		message += numstr;
 		sprintf(numstr, "%d", (int)z);
+		message += ":";
+		message += numstr;
+		sprintf(numstr, "%d", direction);
 		message += ":";
 		message += numstr;
 

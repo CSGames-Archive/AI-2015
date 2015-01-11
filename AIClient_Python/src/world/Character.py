@@ -19,6 +19,7 @@ class Character(object):
         self.position = Vector2(position.x, position.y)
         self.mineReady = True
         self.missile = Missile(Vector2(0,0))
+        self.life = 3
     
     def move(self, position):
         self.position.x = position.x
@@ -35,7 +36,8 @@ class Character(object):
             self.mineReady = False
 
     def hitByMine(self):
-        # Refactor with life system
+        if self.isAlive():
+            self.life -= 1
         print("ouch!! - Mine")
         
     def mineHit(self):
@@ -60,9 +62,14 @@ class Character(object):
         self.shootMissile(Direction.RIGHT)
         
     def hitByMissile(self):
-        # Refactor with life system
+        if self.isAlive():
+            self.life -= 1
         print("ouch!! - Missile")
         
     def missileHit(self):
         self.missile.isReady = True;
         print("Missile hit target")
+        
+    def isAlive(self):
+        return self.life > 0
+    

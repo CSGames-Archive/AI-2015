@@ -84,6 +84,7 @@ void World::createScene()
 
 	//TODO: put this in function
 	//Delimiter crate creation
+	/*
 	Ogre::Vector3 scaleVector(2.5, 2.5, 2.5);
 	Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 	Ogre::Entity* crate = sceneManager->createEntity("crate1", "WoodCrate.mesh");
@@ -108,7 +109,7 @@ void World::createScene()
 	crateNode->attachObject(crate);
 	crateNode->setScale(scaleVector);
 	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, Ogre::Real(7*MAP_TILE_SIZE));
-
+	*/
 	labelOverlay = Ogre::OverlayManager::getSingleton().create("labelOverlay");
 }
 

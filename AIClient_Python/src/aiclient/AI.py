@@ -35,7 +35,7 @@ class AI(object):
         elif self.aiStatus == AIStatus.UPPER_LEFT:
             self.upperLeft()
     
-    def init(self):        
+    def init(self):
         character1 = self.world.getMyTeam().getFirstCharacter()
         character2 = self.world.getMyTeam().getSecondCharacter()
         
@@ -51,7 +51,7 @@ class AI(object):
         character1 = self.world.getMyTeam().getFirstCharacter()
         character2 = self.world.getMyTeam().getSecondCharacter()
         
-        if character1.position == self.position2 and character2.position == self.position3:
+        if character1.position == self.position2:
             character1.goTo(self.position1)
             character2.goTo(self.position4)
 
@@ -67,7 +67,7 @@ class AI(object):
         character1 = self.world.getMyTeam().getFirstCharacter()
         character2 = self.world.getMyTeam().getSecondCharacter()
         
-        if character1.position == self.position1 and character2.position == self.position4:
+        if character1.position == self.position1:
             character1.goTo(self.position4)
             character2.goTo(self.position1)
             
@@ -83,7 +83,7 @@ class AI(object):
         character1 = self.world.getMyTeam().getFirstCharacter()
         character2 = self.world.getMyTeam().getSecondCharacter()
         
-        if character1.position == self.position4 and character2.position == self.position1:
+        if character1.position == self.position4:
             character1.goTo(self.position3)
             character2.goTo(self.position2)
 
@@ -99,7 +99,7 @@ class AI(object):
         character1 = self.world.getMyTeam().getFirstCharacter()
         character2 = self.world.getMyTeam().getSecondCharacter()
         
-        if character1.position == self.position3 and character2.position == self.position2:
+        if character1.position == self.position3:
             character1.goTo(self.position2)
             character2.goTo(self.position3)
             
