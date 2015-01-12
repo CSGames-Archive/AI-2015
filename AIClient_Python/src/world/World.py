@@ -50,3 +50,9 @@ class World(object):
             return True
         return False
         
+    def isCharacterAtposition(self, position):
+        for team in self.teams:
+            for character in team.characters:
+                if character.position == position:
+                    return True
+        return False

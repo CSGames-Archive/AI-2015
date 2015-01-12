@@ -116,12 +116,14 @@ void Missile::updateBody(Ogre::Real deltaTime)
 		{
 			// Calculate direction
 			goalDirection.normalise();
-			Ogre::Quaternion currentDirection = bodyNode->getOrientation().yAxis().getRotationTo(goalDirection);
+			Ogre::Vector3 yAxis = bodyNode->getOrientation().yAxis();
+			Ogre::Quaternion currentDirection = yAxis.getRotationTo(goalDirection);
 
 			// Find the rotation in yaw
 			Ogre::Real yawToGoal = currentDirection.getYaw().valueDegrees();
+			Ogre::Real pitchToGoal = currentDirection.getPitch().valueDegrees();
 
-			bodyNode->yaw(Ogre::Degree(yawToGoal), Ogre::Node::TS_WORLD);
+			bodyNode->yaw(Ogre::Degree(yawToGoal + pitchToGoal), Ogre::Node::TS_WORLD);
 
 			bodyNode->translate(0, deltaTime * MISSILE_WALK_SPEED, 0, Ogre::Node::TS_LOCAL);
 		}

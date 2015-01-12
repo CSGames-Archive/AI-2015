@@ -49,8 +49,8 @@ class AI(object):
         
         print(self.world.map)
         
-        print(self.world.isBoxAtPosition(self.position1))
-        print(self.world.isBoxAtPosition(Vector2(0, 4)))
+        print(self.world.isCharacterAtposition(self.position1))
+        print(self.world.isCharacterAtposition(Vector2(0, 4)))
     
     def lowerRight(self):
         character1 = self.world.getMyTeam().getFirstCharacter()
