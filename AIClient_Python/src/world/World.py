@@ -13,6 +13,7 @@ class World(object):
     yourId = 0
     gameIsStarted = False
     teams = []
+    map = {}
 
     def error(self, message):
         print(message)
@@ -27,7 +28,7 @@ class World(object):
         queueController = Singleton(QueueController)
         queueController.outEvents.put(event)
         
-    def startGame(self, numberOfteam, numberOfCharacter, teamIDs):
+    def startGame(self, mapWidth, mapHeight, numberOfteam, numberOfCharacter, teamIDs):
         self.gameIsStarted = True
         for index in range(0, numberOfteam):
             self.teams.insert(index, Team(teamIDs[index], numberOfCharacter))
@@ -40,3 +41,12 @@ class World(object):
     
     def getMyTeam(self):
         return self.getTeam(self.yourId)
+    
+    def updateBox(self, x, y):
+        self.map[x, y] = 1;
+
+    def isBoxAtPosition(self, position):
+        if (position.x, position.y) in self.map:
+            return True
+        return False
+        

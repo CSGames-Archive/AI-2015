@@ -46,6 +46,11 @@ class AI(object):
         character2.shootLeft()
         
         self.aiStatus = AIStatus.LOWER_RIGHT
+        
+        print(self.world.map)
+        
+        print(self.world.isBoxAtPosition(self.position1))
+        print(self.world.isBoxAtPosition(Vector2(0, 4)))
     
     def lowerRight(self):
         character1 = self.world.getMyTeam().getFirstCharacter()

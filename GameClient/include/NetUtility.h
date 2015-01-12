@@ -130,6 +130,22 @@ namespace NetUtility
 
 		return message;
 	}
+
+	static std::string generateUpdateBoxMessage(int x, int y)
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		std::string message = "Game:UpdateBox";
+
+		message += ":";
+		sprintf(numstr, "%d", x);
+		message += numstr;
+
+		message += ":";
+		sprintf(numstr, "%d", y);
+		message += numstr;
+
+		return message;
+	}
 };
 
 #endif // #ifndef __NetUtility_h_

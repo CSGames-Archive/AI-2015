@@ -149,6 +149,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	if(teamCount == MAX_TEAM)
 	{
+		generateMap();
 		gameStart();
 		sendAllPosition();
 	}
@@ -189,17 +190,28 @@ void World::addTime(Ogre::Real deltaTime)
 void World::gameStart()
 {
 	char numstr[21]; // Enough to hold all numbers up to 64-bits
-	sprintf(numstr, "%d", MAX_TEAM);
-	std::string message = "Game:GameStart:";
-	message += numstr;
-	sprintf(numstr, "%d", MAX_CHARACTER_PER_TEAM);
+	std::string message = "Game:GameStart";
+
 	message += ":";
+	sprintf(numstr, "%d", MAP_WIDTH);
+	message += numstr;
+
+	message += ":";
+	sprintf(numstr, "%d", MAP_HEIGHT);
+	message += numstr;
+
+	message += ":";
+	sprintf(numstr, "%d", MAX_TEAM);
+	message += numstr;
+
+	message += ":";
+	sprintf(numstr, "%d", MAX_CHARACTER_PER_TEAM);
 	message += numstr;
 
 	for(int i = 0; i < MAX_TEAM; ++i)
 	{
-		sprintf(numstr, "%d", teams[i]->getId());
 		message += ":";
+		sprintf(numstr, "%d", teams[i]->getId());
 		message += numstr;
 	}
 	QueueController::getInstance().addMessage(message);
@@ -238,4 +250,34 @@ void World::missileHitMissile(int hitPlayerId, int hitCharacterId, int originPla
 {
 	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
 	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMissile()->setVisible(false);
+}
+
+void World::generateMap()
+{
+	Map& map = Map::getInstance();
+	Ogre::Vector3 scaleVector(2.0, 2.0, 2.0);
+	char numstr[21]; // Enough to hold all numbers up to 64-bits
+	sprintf(numstr, "%d", MAX_TEAM);
+
+	for(int x = 0; x < MAP_WIDTH; ++x)
+	{
+		for(int y = 0; y < MAP_HEIGHT; ++y)
+		{
+			if(map.getTileType(Vector2(x, y)) == MapEntity::BOX)
+			{
+				sprintf(numstr, "%d%d", x, y);
+				std::string name = "box_";
+				name += numstr;
+
+				Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+				Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
+				crateNode->attachObject(crate);
+				crateNode->setScale(scaleVector);
+				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+
+				std::string message = NetUtility::generateUpdateBoxMessage(x, y);
+				QueueController::getInstance().addMessage(message);
+			}
+		}
+	}
 }

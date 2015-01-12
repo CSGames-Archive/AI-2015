@@ -57,6 +57,7 @@ public:
 	void addTime(Ogre::Real deltaTime);
 	void gameStart();
 	void sendAllPosition();
+	void generateMap();
 	void mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	void missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	void missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
