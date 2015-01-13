@@ -23,6 +23,11 @@ Map::Map()
 	map[7][4].type = MapEntity::BOX;
 	map[0][4].type = MapEntity::BOX;
 	map[4][7].type = MapEntity::BOX;
+
+	map[4][4].type = MapEntity::BOX;
+	map[3][3].type = MapEntity::BOX;
+	map[3][4].type = MapEntity::BOX;
+	map[4][3].type = MapEntity::BOX;
 }
 
 MapEntity::MapEntity Map::getTileType(const Vector2& position)
@@ -85,50 +90,71 @@ Vector2 downPosition(const Vector2& position)
 	return Vector2(position.x, position.y-1);
 }
 
-Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& currentPosition)
+Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& currentPosition, const Vector2& lastPosition)
 {
+	bool checkLeft = false, checkRight = false, checkUp = false, checkDown = false;
+
+	//Remove old position from choice
+	if(lastPosition.x > currentPosition.x)
+	{
+		checkRight = true;
+	}
+	else if(lastPosition.x < currentPosition.x)
+	{
+		checkLeft = true;
+	}
+	else if(lastPosition.y > currentPosition.y)
+	{
+		checkUp = true;
+	}
+	else if(lastPosition.y < currentPosition.y)
+	{
+		checkDown = true;
+	}
+
+	//Check all suround tile if empty
+	if(!checkLeft && !isTileEmpty(leftPosition(currentPosition)))
+		checkLeft = true;
+	if(!checkRight && !isTileEmpty(rightPosition(currentPosition)))
+		checkRight = true;
+	if(!checkDown && !isTileEmpty(downPosition(currentPosition)))
+		checkDown = true;
+	if(!checkUp && !isTileEmpty(upPosition(currentPosition)))
+		checkUp = true;
+
+	//Calculate the difference between the target and the current position
 	int horizontalDiff = std::abs(targetPosition.x - currentPosition.x);
 	int verticalDiff = std::abs(targetPosition.y - currentPosition.y);
 
-	if(horizontalDiff > verticalDiff)
+	//If there's more horizontal distance to go or if we check all the other way
+	if(horizontalDiff > verticalDiff || (checkDown && checkUp) )
 	{
-		if(currentPosition.x < targetPosition.x)
+		//If we need to go to the right or if we check all other way
+		if(currentPosition.x < targetPosition.x || (checkDown && checkUp && checkLeft))
 		{
-			if(isTileEmpty(rightPosition(currentPosition)))
+			//If rigth is empty
+			if(!checkRight)
 				return rightPosition(currentPosition);
-			if(isTileEmpty(upPosition(currentPosition)))
-				return upPosition(currentPosition);
-			if(isTileEmpty(downPosition(currentPosition)))
-				return downPosition(currentPosition);
 		}
-		else if(currentPosition.x > targetPosition.x)
+		//If we need to go to the left or if we check all other way
+		if(currentPosition.x > targetPosition.x || (checkDown && checkUp && checkRight))
 		{
-			if(isTileEmpty(leftPosition(currentPosition)))
+			//If left empty
+			if(!checkLeft)
 				return leftPosition(currentPosition);
-			if(isTileEmpty(upPosition(currentPosition)))
-				return upPosition(currentPosition);
-			if(isTileEmpty(downPosition(currentPosition)))
-				return downPosition(currentPosition);
 		}
 	}
-
-	if(currentPosition.y < targetPosition.y)
+	//If we need to go up or if we check all other way
+	if(currentPosition.y < targetPosition.y || (checkDown && checkRight && checkLeft))
 	{
-		if(isTileEmpty(upPosition(currentPosition)))
+		if(!checkUp)
 			return upPosition(currentPosition);
-		if(isTileEmpty(rightPosition(currentPosition)))
-			return rightPosition(currentPosition);
-		if(isTileEmpty(leftPosition(currentPosition)))
-			return leftPosition(currentPosition);
 	}
-	else if(currentPosition.y > targetPosition.y)
+	//If we need to go down or if we check all other way
+	if(currentPosition.y > targetPosition.y || (checkUp && checkRight && checkLeft))
 	{
-		if(isTileEmpty(downPosition(currentPosition)))
+		if(!checkDown)
 			return downPosition(currentPosition);
-		if(isTileEmpty(rightPosition(currentPosition)))
-			return rightPosition(currentPosition);
-		if(isTileEmpty(leftPosition(currentPosition)))
-			return leftPosition(currentPosition);
 	}
 
 	return currentPosition;

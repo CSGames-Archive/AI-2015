@@ -26,6 +26,7 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, Te
 	TANK_MESH_HEIGHT = 2.5;
 	this->bodyNode = bodyNode;
 	this->position = Map::getInstance().getStartingPosition(teamId, characterId);
+	this->lastPosition = this->position;
 	Map::getInstance().setTile(this->position, MapEntity::CHARACTER, this->teamId, this->characterId);
 
 	this->targetPosition = this->position;
@@ -122,7 +123,8 @@ void Character::updateBody(Ogre::Real deltaTime)
 			}
 			else
 			{
-				Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position);
+				Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position, lastPosition);
+				this->lastPosition = this->position;
 
 				if(newPosition == position)
 				{

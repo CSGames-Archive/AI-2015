@@ -107,7 +107,7 @@ public:
 	MapEntity::MapEntity getTileType(const Vector2& position);
 	MapTile* getTile(const Vector2& position);
 	void setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId);
-	Vector2 calculateNextStep(const Vector2& currentPosition, const Vector2& targetPosition);
+	Vector2 calculateNextStep(const Vector2& currentPosition, const Vector2& targetPosition, const Vector2& lastPosition);
 	bool isTileEmpty(const Vector2& position);
 	bool isPositionValid(const Vector2& position);
 	Vector2 leftTile(const Vector2& position);

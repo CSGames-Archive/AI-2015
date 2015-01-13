@@ -35,6 +35,7 @@ private:
 	// Character Infos
 	std::string name;
 	Vector2 position;
+	Vector2 lastPosition;
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
 	Ogre::Real TANK_MESH_HEIGHT;
