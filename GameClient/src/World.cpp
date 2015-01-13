@@ -31,6 +31,8 @@ World::World()
 	{
 		teams[i] = NULL;
 	}
+
+	this->gameStarted = false;
 }
 
 World::~World()
@@ -56,22 +58,22 @@ void World::createScene()
 
 	// Create a Light and set its position
 	Ogre::Light* light = sceneManager->createLight("MainLight");
-	light->setPosition(Ogre::Real(-MAP_TILE_SIZE), 80.0, Ogre::Real(-MAP_TILE_SIZE));
+	light->setPosition(Ogre::Real(-2.0*MAP_TILE_SIZE), 80.0, Ogre::Real(-2.0*MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight2");
-	light->setPosition(Ogre::Real(-MAP_TILE_SIZE), 80.0, Ogre::Real(9*MAP_TILE_SIZE));
+	light->setPosition(Ogre::Real(-2.0*MAP_TILE_SIZE), 80.0, Ogre::Real(9.0*MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight3");
-	light->setPosition(Ogre::Real(9*MAP_TILE_SIZE), 80.0f, Ogre::Real(-MAP_TILE_SIZE));
+	light->setPosition(Ogre::Real(9.0*MAP_TILE_SIZE), 80.0f, Ogre::Real(-2.0*MAP_TILE_SIZE));
 
 	light = sceneManager->createLight("MainLight4");
-	light->setPosition(Ogre::Real(9*MAP_TILE_SIZE), 80.0f, Ogre::Real(9*MAP_TILE_SIZE));
+	light->setPosition(Ogre::Real(9.0*MAP_TILE_SIZE), 80.0f, Ogre::Real(9.0*MAP_TILE_SIZE));
 
 	sceneManager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
 	// create a floor mesh resource
 	Ogre::MeshManager::getSingleton().createPlane("floor", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-												  Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), Ogre::Real(8*MAP_TILE_SIZE), Ogre::Real(8*MAP_TILE_SIZE),
+												  Ogre::Plane(Ogre::Vector3::UNIT_Y, 0), 1000.0, 1000.0,
 												  10, 10, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
 
 	// create a floor entity, give it a material, and place it at the origin
@@ -82,35 +84,9 @@ void World::createScene()
 	floorNode->attachObject(floor);
 	floorNode->setPosition(87.5, 0.0, 87.5);
 
-	//TODO: put this in function
-	//Delimiter crate creation
-	/*
-	Ogre::Vector3 scaleVector(2.5, 2.5, 2.5);
-	Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-	Ogre::Entity* crate = sceneManager->createEntity("crate1", "WoodCrate.mesh");
-	crateNode->attachObject(crate);
-	crateNode->setScale(scaleVector);
-	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, 0.0);
-
-	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-	crate = sceneManager->createEntity("crate2", "WoodCrate.mesh");
-	crateNode->attachObject(crate);
-	crateNode->setScale(scaleVector);
-	crateNode->setPosition(Ogre::Real(7*MAP_TILE_SIZE), 12.5, Ogre::Real(4*MAP_TILE_SIZE));
-
-	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-	crate = sceneManager->createEntity("crate3", "WoodCrate.mesh");
-	crateNode->attachObject(crate);
-	crateNode->setScale(scaleVector);
-	crateNode->setPosition(0.0, 12.5, Ogre::Real(4*MAP_TILE_SIZE));
-
-	crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-	crate = sceneManager->createEntity("crate4", "WoodCrate.mesh");
-	crateNode->attachObject(crate);
-	crateNode->setScale(scaleVector);
-	crateNode->setPosition(Ogre::Real(4*MAP_TILE_SIZE), 12.5, Ogre::Real(7*MAP_TILE_SIZE));
-	*/
 	labelOverlay = Ogre::OverlayManager::getSingleton().create("labelOverlay");
+
+	generateMapDelimiter();
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
@@ -189,6 +165,8 @@ void World::addTime(Ogre::Real deltaTime)
 
 void World::gameStart()
 {
+	gameStarted = true;
+
 	char numstr[21]; // Enough to hold all numbers up to 64-bits
 	std::string message = "Game:GameStart";
 
@@ -255,7 +233,7 @@ void World::missileHitMissile(int hitPlayerId, int hitCharacterId, int originPla
 void World::generateMap()
 {
 	Map& map = Map::getInstance();
-	Ogre::Vector3 scaleVector(2.0, 2.0, 2.0);
+	Ogre::Vector3 scaleVector(1.5, 1.5, 1.5);
 	char numstr[21]; // Enough to hold all numbers up to 64-bits
 	sprintf(numstr, "%d", MAX_TEAM);
 
@@ -273,11 +251,95 @@ void World::generateMap()
 				Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 				crateNode->attachObject(crate);
 				crateNode->setScale(scaleVector);
-				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 7.5, Ogre::Real(y*MAP_TILE_SIZE));
 
 				std::string message = NetUtility::generateUpdateBoxMessage(x, y);
 				QueueController::getInstance().addMessage(message);
 			}
 		}
 	}
+}
+
+void World::generateMapDelimiter()
+{
+	char numstr[21]; // Enough to hold all numbers up to 64-bits
+	Ogre::Vector3 scaleVector(2.5, 2.5, 2.5);
+
+	for(int x = -1; x < MAP_WIDTH + 1; ++x)
+	{
+		sprintf(numstr, "%d", x);
+		std::string name = "delimiter_down_";
+		name += numstr;
+
+		Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
+		crateNode->attachObject(crate);
+		crateNode->setScale(scaleVector);
+		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, -MAP_TILE_SIZE);
+
+		sprintf(numstr, "%d", x);
+		name = "delimiter_up_";
+		name += numstr;
+
+		crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
+		crateNode->attachObject(crate);
+		crateNode->setScale(scaleVector);
+		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, Ogre::Real(MAP_TILE_SIZE*MAP_HEIGHT));
+	}
+
+	for(int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		sprintf(numstr, "%d", y);
+		std::string name = "delimiter_left_";
+		name += numstr;
+
+		Ogre::SceneNode* crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
+		crateNode->attachObject(crate);
+		crateNode->setScale(scaleVector);
+		crateNode->setPosition(-Ogre::Real(MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+
+		sprintf(numstr, "%d", y);
+		name = "delimiter_right_";
+		name += numstr;
+
+		crateNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
+		crateNode->attachObject(crate);
+		crateNode->setScale(scaleVector);
+		crateNode->setPosition(Ogre::Real(MAP_WIDTH*MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+	}
+}
+
+std::string World::getWinnerName()
+{
+	int winingId = 0;
+	int teamAlive = 0;
+	for(int i = 0; i < teamCount; ++i)
+	{
+		if(teams[i]->getCumulativeLife() > 0)
+		{
+			++teamAlive;
+			winingId = teams[i]->getId();
+		}
+	}
+
+	if(teamAlive < 2 && winingId != 0)
+	{
+		if(winingId != 0)
+		{
+			return getTeam(winingId)->getName();
+		}
+		else
+		{
+			return "Tie";
+		}
+	}
+	return "";
+}
+
+bool World::isGameStarted()
+{
+	return gameStarted;
 }

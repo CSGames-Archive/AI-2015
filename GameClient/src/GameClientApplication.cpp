@@ -17,6 +17,7 @@
 
 GameClientApplication::GameClientApplication()
 {
+	this->isGameOver = false;
 }
 
 GameClientApplication::~GameClientApplication()
@@ -94,8 +95,23 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	mTrayMgr->frameRenderingQueued(evt);
 
-	eventController->executeAllGameEvent();
-	World::getInstance().addTime(evt.timeSinceLastFrame);
+	if(!isGameOver)
+	{
+		eventController->executeAllGameEvent();
+
+		if(World::getInstance().isGameStarted())
+		{
+			World::getInstance().addTime(evt.timeSinceLastFrame);
+			std::string winingName = World::getInstance().getWinnerName();
+			if(winingName != "")
+			{
+				isGameOver = true;
+				showMessage("Wining: " + winingName);
+				//TODO: send a endgame event
+			}
+		}
+	}
+
     mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
 
 	Ogre::Real ttW = 1000.0 / 60.0 - 1000.0 * evt.timeSinceLastFrame;
@@ -151,6 +167,33 @@ bool GameClientApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::Mous
 	BaseApplication::mouseReleased(arg, id);
 
 	return true;
+}
+
+void GameClientApplication::showMessage(std::string message)
+{
+	textElement;
+
+	this->panel = static_cast<Ogre::OverlayContainer*>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "MainPanel"));
+	this->panel->setMetricsMode(Ogre::GMM_PIXELS);
+	this->panel->setPosition(300, 100);
+	this->panel->setDimensions(300, 120);
+
+	this->textElement = new Ogre::TextAreaOverlayElement("Label_MainPanel");
+	this->textElement->setCaption(message);
+	this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
+	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Alignment::Center);
+	this->textElement->setCharHeight(40);
+	this->textElement->setFontName("SdkTrays/Caption");
+	this->textElement->setColourBottom(Ogre::ColourValue(0.5, 1.0, 0.5));
+	this->textElement->setColourTop(Ogre::ColourValue(1.0, 1.0, 1.0));
+	this->textElement->setDimensions(300, 120);
+	this->textElement->setPosition(0, 0);
+
+	Ogre::Overlay* labelOverlay = Ogre::OverlayManager::getSingleton().create("main_label");
+
+	this->panel->addChild(this->textElement);
+	labelOverlay->add2D(this->panel);
+	labelOverlay->show();
 }
 
 #ifdef __cplusplus

@@ -67,3 +67,18 @@ int Team::getId()
 {
 	return id;
 }
+
+std::string Team::getName()
+{
+	return name;
+}
+
+int Team::getCumulativeLife()
+{
+	int cumulativeLife = 0;
+	for(int i = 0; i < characterCount; ++i)
+	{
+		cumulativeLife += characters[i]->getLife();
+	}
+	return cumulativeLife;
+}

@@ -264,3 +264,8 @@ void Character::die()
 	nameOverlay->hide();
 	Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
 }
+
+int Character::getLife()
+{
+	return life;
+}

@@ -7,6 +7,10 @@ from event.AddPlayerEvent import AddPlayerEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from world.Team import Team
+from enum import Enum
+
+class Entity(Enum):
+    EMPTY, BOX, CHARACTER = range(3)
 
 class World(object):
     _instance = None
@@ -22,8 +26,8 @@ class World(object):
         self.yourId = yourId
         print("JoinGameEvent: {}".format(self.yourId))
         
-        teamName = "team" + str(yourId)
-        characterNames = ["Character1" + str(yourId), "Character2" + str(yourId)]
+        teamName = "python team (" + str(yourId) + ")"
+        characterNames = ["python king (" + str(yourId) + ")", "python soldier (" + str(yourId) + ")"]
         event = AddPlayerEvent(teamName, characterNames)
         queueController = Singleton(QueueController)
         queueController.outEvents.put(event)
@@ -56,3 +60,10 @@ class World(object):
                 if character.position == position:
                     return True
         return False
+    
+    def whatIsAtPosition(self, position):
+        if self.isBoxAtPosition(position):
+            return Entity.BOX
+        if self.isCharacterAtposition(position):
+            return Entity.CHARACTER
+        return Entity.EMPTY

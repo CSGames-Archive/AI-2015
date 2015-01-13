@@ -30,6 +30,7 @@ private:
 	char* MISSILE_MESH_NAME;
 	Team* teams[MAX_TEAM];
 	int teamCount;
+	bool gameStarted;
 
 	Ogre::Overlay* labelOverlay;
 
@@ -62,6 +63,10 @@ public:
 	void missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	void missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	void missileHitMissile(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	void generateMapDelimiter();
+	std::string getWinnerName();
+
+	bool isGameStarted();
 };
 
 #endif // #ifndef __World_h_

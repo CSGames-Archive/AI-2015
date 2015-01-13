@@ -35,6 +35,8 @@ public:
 	Character* getCharacter(int characterId);
 	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
 	int getId();
+	std::string getName();
+	int getCumulativeLife();
 };
 
 #endif // #ifndef __Team_h_

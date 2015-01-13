@@ -75,6 +75,7 @@ public:
 	void hit();
 	bool isVisible();
 	void die();
+	int getLife();
 };
 
 #endif // #ifndef __Character_h_
