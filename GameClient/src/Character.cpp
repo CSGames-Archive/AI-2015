@@ -124,7 +124,6 @@ void Character::updateBody(Ogre::Real deltaTime)
 			else
 			{
 				Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position, lastPosition);
-				this->lastPosition = this->position;
 
 				if(newPosition == position)
 				{
@@ -132,6 +131,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 				}
 				else
 				{
+					this->lastPosition = this->position;
 					Map::getInstance().moveCharacterTile(position, newPosition);
 					position = newPosition;
 					sendPosition();

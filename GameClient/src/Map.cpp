@@ -23,11 +23,16 @@ Map::Map()
 	map[7][4].type = MapEntity::BOX;
 	map[0][4].type = MapEntity::BOX;
 	map[4][7].type = MapEntity::BOX;
+	
+	map[3][0].type = MapEntity::BOX;
+	map[7][3].type = MapEntity::BOX;
+	map[0][3].type = MapEntity::BOX;
+	map[3][7].type = MapEntity::BOX;
 
-	map[4][4].type = MapEntity::BOX;
 	map[3][3].type = MapEntity::BOX;
-	map[3][4].type = MapEntity::BOX;
-	map[4][3].type = MapEntity::BOX;
+	map[5][5].type = MapEntity::BOX;
+	map[3][5].type = MapEntity::BOX;
+	map[5][3].type = MapEntity::BOX;
 }
 
 MapEntity::MapEntity Map::getTileType(const Vector2& position)
@@ -92,72 +97,76 @@ Vector2 downPosition(const Vector2& position)
 
 Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& currentPosition, const Vector2& lastPosition)
 {
-	bool checkLeft = false, checkRight = false, checkUp = false, checkDown = false;
+	int scores[4];
+	Vector2 positions[4];
+
+	// Init scores
+	for(int index = 0; index < 4; ++index)
+	{
+		scores[index] = 0;
+	}
+
+	// Generate position
+	positions[0] = leftPosition(currentPosition);
+	positions[1] = rightPosition(currentPosition);
+	positions[2] = upPosition(currentPosition);
+	positions[3] = downPosition(currentPosition);
 
 	//Remove old position from choice
-	if(lastPosition.x > currentPosition.x)
+	if(lastPosition.x < currentPosition.x)
 	{
-		checkRight = true;
+		scores[0] = MAP_WIDTH + MAP_HEIGHT -1;
 	}
-	else if(lastPosition.x < currentPosition.x)
+	else if(lastPosition.x > currentPosition.x)
 	{
-		checkLeft = true;
+		scores[1] = MAP_WIDTH + MAP_HEIGHT -1;
 	}
 	else if(lastPosition.y > currentPosition.y)
 	{
-		checkUp = true;
+		scores[2] = MAP_WIDTH + MAP_HEIGHT -1;
 	}
 	else if(lastPosition.y < currentPosition.y)
 	{
-		checkDown = true;
+		scores[3] = MAP_WIDTH + MAP_HEIGHT -1;
 	}
 
 	//Check all suround tile if empty
-	if(!checkLeft && !isTileEmpty(leftPosition(currentPosition)))
-		checkLeft = true;
-	if(!checkRight && !isTileEmpty(rightPosition(currentPosition)))
-		checkRight = true;
-	if(!checkDown && !isTileEmpty(downPosition(currentPosition)))
-		checkDown = true;
-	if(!checkUp && !isTileEmpty(upPosition(currentPosition)))
-		checkUp = true;
+	if(scores[0] == 0)
+		scores[0] = calculateScore(positions[0], targetPosition);
 
-	//Calculate the difference between the target and the current position
-	int horizontalDiff = std::abs(targetPosition.x - currentPosition.x);
-	int verticalDiff = std::abs(targetPosition.y - currentPosition.y);
+	if(scores[1] == 0)
+		scores[1] = calculateScore(positions[1], targetPosition);
 
-	//If there's more horizontal distance to go or if we check all the other way
-	if(horizontalDiff > verticalDiff || (checkDown && checkUp) )
+	if(scores[2] == 0)
+		scores[2] = calculateScore(positions[2], targetPosition);
+
+	if(scores[3] == 0)
+		scores[3] = calculateScore(positions[3], targetPosition);
+
+	int lowestScore = MAP_HEIGHT + MAP_WIDTH;
+	int lowestScoreIndex = -1;
+
+	for(int index = 0; index < 4; ++index)
 	{
-		//If we need to go to the right or if we check all other way
-		if(currentPosition.x < targetPosition.x || (checkDown && checkUp && checkLeft))
+		if(scores[index] < lowestScore)
 		{
-			//If rigth is empty
-			if(!checkRight)
-				return rightPosition(currentPosition);
-		}
-		//If we need to go to the left or if we check all other way
-		if(currentPosition.x > targetPosition.x || (checkDown && checkUp && checkRight))
-		{
-			//If left empty
-			if(!checkLeft)
-				return leftPosition(currentPosition);
+			lowestScore = scores[index];
+			lowestScoreIndex = index;
 		}
 	}
-	//If we need to go up or if we check all other way
-	if(currentPosition.y < targetPosition.y || (checkDown && checkRight && checkLeft))
-	{
-		if(!checkUp)
-			return upPosition(currentPosition);
-	}
-	//If we need to go down or if we check all other way
-	if(currentPosition.y > targetPosition.y || (checkUp && checkRight && checkLeft))
-	{
-		if(!checkDown)
-			return downPosition(currentPosition);
-	}
 
-	return currentPosition;
+	if(lowestScoreIndex == -1)
+		return currentPosition;
+
+	return positions[lowestScoreIndex];
+}
+
+int Map::calculateScore(const Vector2& position, const Vector2& targetPosition)
+{
+	if(!isTileEmpty(position))
+		return MAP_HEIGHT + MAP_WIDTH;
+
+	return std::abs(position.x - targetPosition.x) + std::abs(position.y - targetPosition.y);
 }
 
 void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
