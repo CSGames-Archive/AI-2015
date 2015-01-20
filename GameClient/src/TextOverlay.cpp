@@ -36,8 +36,8 @@ TextOverlay::TextOverlay(Ogre::Overlay* overlay, std::string text, std::string n
 	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Alignment::Center);
 	this->textElement->setCharHeight(15);
 	this->textElement->setFontName("SdkTrays/Caption");
-	this->textElement->setColourBottom(Ogre::ColourValue(0.5, 1.0, 0.5));
-	this->textElement->setColourTop(Ogre::ColourValue(0.0, 0.0, 0.0));
+	this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));
+	this->textElement->setColourTop(Ogre::ColourValue(0.25, 1.0, 0.25));
 	this->textElement->setDimensions(100, 50);
 	this->textElement->setPosition(120,10);
 

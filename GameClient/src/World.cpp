@@ -18,12 +18,12 @@
 
 #include <OgreOverlayManager.h>
 
+const char* TANK_MESH_NAME = "Tank.mesh";
+const char* MINE_MESH_NAME = "Mine.mesh";
+const char* MISSILE_MESH_NAME = "Missile.mesh";
+
 World::World()
 {
-	TANK_MESH_NAME = "Tank.mesh";
-	MINE_MESH_NAME = "Mine.mesh";
-	MISSILE_MESH_NAME = "Missile.mesh";
-
 	this->sceneManager = NULL;
 	teamCount = 0;
 
@@ -117,7 +117,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 		Missile* missile = new Missile(missileNode, missileName, teamId, i);
 		TextOverlay* nameOverlay = new TextOverlay(labelOverlay, characterNames[i], characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport());
 		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life: ", "Life_" + characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
-		lifeOverlay->setColors(Ogre::ColourValue(1.0, 0.5, 0.5), Ogre::ColourValue(1.0, 1.0, 1.0));
+		lifeOverlay->setColors(Ogre::ColourValue(1.0, 0.25, 0.25), Ogre::ColourValue(1.0, 0.25, 0.25));
 
 		Character* character = new Character(bodyNode, mine, missile, nameOverlay, lifeOverlay, characterNames[i], teamId, i);
 		team->addCharacter(character);
@@ -133,6 +133,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 void World::removeTeam(int teamId)
 {
+	//TODO: dont delete just disable and kill it
 	Team* team = getTeam(teamId);
 	if(team)
 	{
@@ -206,28 +207,31 @@ void World::sendAllPosition()
 	}
 }
 
-void World::mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+void World::characterHit(int hitTeamId, int hitCharacterId)
 {
-	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMine()->setVisible(false);
-	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->hit();
+	Team* hitTeam = getTeam(hitTeamId);
+	if(hitTeam->isAlive())
+	{
+		hitTeam->characterHit(hitCharacterId);
+		if(!hitTeam->isAlive())
+		{
+			--teamCount;
+			if(teamCount < 2)
+			{
+				endGame();
+			}
+		}
+	}
 }
 
-void World::missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+void World::mineHit(int mineTeamId, int mineCharacterId)
 {
-	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->hit();
-	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
+	getTeam(mineTeamId)->getCharacter(mineCharacterId)->getMine()->setVisible(false);
 }
 
-void World::missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
+void World::missileHit(int missileTeamId, int missileCharacterId)
 {
-	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
-	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMine()->setVisible(false);
-}
-
-void World::missileHitMissile(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId)
-{
-	getTeam(originPlayerId)->getCharacter(originCharacterId)->getMissile()->setVisible(false);
-	getTeam(hitPlayerId)->getCharacter(hitCharacterId)->getMissile()->setVisible(false);
+	getTeam(missileTeamId)->getCharacter(missileCharacterId)->getMissile()->setVisible(false);
 }
 
 void World::generateMap()
@@ -312,34 +316,66 @@ void World::generateMapDelimiter()
 	}
 }
 
-std::string World::getWinnerName()
-{
-	int winingId = 0;
-	int teamAlive = 0;
-	for(int i = 0; i < teamCount; ++i)
-	{
-		if(teams[i]->getCumulativeLife() > 0)
-		{
-			++teamAlive;
-			winingId = teams[i]->getId();
-		}
-	}
-
-	if(teamAlive < 2 && winingId != 0)
-	{
-		if(winingId != 0)
-		{
-			return getTeam(winingId)->getName();
-		}
-		else
-		{
-			return "Tie";
-		}
-	}
-	return "";
-}
-
 bool World::isGameStarted()
 {
 	return gameStarted;
+}
+
+void World::endGame()
+{
+	Team* winingTeam = findWiningTeam();
+
+	if(winingTeam)
+	{
+		winingTeam->deactivate();
+
+		std::string winingMessage = "Winner : ";
+		winingMessage += winingTeam->getName();
+		showMessage(winingMessage);
+	}
+	else
+	{
+		std::string winingMessage = "Tie : No winner";
+		showMessage(winingMessage);
+	}
+
+	//TODO: send a endgame event
+}
+
+Team* World::findWiningTeam()
+{
+	for(int teamIndex = 0; teamIndex < MAX_TEAM; ++teamIndex)
+	{
+		if(teams[teamIndex]->isAlive())
+			return teams[teamIndex];
+	}
+	return NULL;
+}
+
+
+void World::showMessage(std::string message)
+{
+	textElement;
+
+	this->panel = static_cast<Ogre::OverlayContainer*>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "MainPanel"));
+	this->panel->setMetricsMode(Ogre::GMM_PIXELS);
+	this->panel->setPosition(300, 100);
+	this->panel->setDimensions(300, 120);
+
+	this->textElement = new Ogre::TextAreaOverlayElement("Label_MainPanel");
+	this->textElement->setCaption(message);
+	this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
+	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Alignment::Center);
+	this->textElement->setCharHeight(40);
+	this->textElement->setFontName("SdkTrays/Caption");
+	this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));
+	this->textElement->setColourTop(Ogre::ColourValue(0.25, 1.0, 0.25));
+	this->textElement->setDimensions(300, 120);
+	this->textElement->setPosition(0, 0);
+
+	Ogre::Overlay* labelOverlay = Ogre::OverlayManager::getSingleton().create("main_label");
+
+	this->panel->addChild(this->textElement);
+	labelOverlay->add2D(this->panel);
+	labelOverlay->show();
 }

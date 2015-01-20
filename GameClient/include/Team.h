@@ -24,19 +24,25 @@ class Team
 private:
 	int id;
 	std::string name;
-	Character* characters[MAX_CHARACTER_PER_TEAM];
+
 	int characterCount;
+	Character* characters[MAX_CHARACTER_PER_TEAM];
 
 public:
 	Team(std::string name, int id);
 	virtual ~Team();
 
-	void addCharacter(Character* character);
+	// Getters
 	Character* getCharacter(int characterId);
-	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
 	int getId();
 	std::string getName();
-	int getCumulativeLife();
+	bool isAlive();
+
+	// Action
+	void characterHit(int characterId);
+	void addCharacter(Character* character);
+	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
+	void deactivate();
 };
 
-#endif // #ifndef __Team_h_
+#endif

@@ -46,7 +46,7 @@ void Team::addCharacter(Character* character)
 
 Character* Team::getCharacter(int characterId)
 {
-	if(characterId < characterCount)
+	if(characterId < MAX_CHARACTER_PER_TEAM)
 		return characters[characterId];
 	else
 		return NULL;
@@ -73,12 +73,31 @@ std::string Team::getName()
 	return name;
 }
 
-int Team::getCumulativeLife()
+bool Team::isAlive()
 {
-	int cumulativeLife = 0;
-	for(int i = 0; i < characterCount; ++i)
+	return characterCount > 0;
+}
+
+void Team::characterHit(int characterId)
+{
+	Character* hitCharacter = getCharacter(characterId);
+	if(hitCharacter->isAlive())
 	{
-		cumulativeLife += characters[i]->getLife();
+		hitCharacter->hit();
+		if(!hitCharacter->isAlive())
+		{
+			--characterCount;
+		}
 	}
-	return cumulativeLife;
+}
+
+void Team::deactivate()
+{
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
+	{
+		if(characters[i])
+		{
+			characters[i]->deactivate();
+		}
+	}
 }

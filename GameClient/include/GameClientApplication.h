@@ -28,9 +28,6 @@ class GameClientApplication : public BaseApplication
 private:
 	NetworkController* networkController;
 	EventController* eventController;
-	bool isGameOver;
-	Ogre::OverlayContainer* panel;
-	Ogre::TextAreaOverlayElement* textElement;
 
 public:
     GameClientApplication();
@@ -39,8 +36,6 @@ public:
 protected:
     virtual void createScene();
 	virtual bool setup();
-
-	void showMessage(std::string message);
 
     // Ogre::FrameListener
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);

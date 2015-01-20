@@ -45,6 +45,7 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, Te
 	this->askForMissile = false;
 	this->timeToWait = 0.0;
 	this->life = 3;
+	this->disable = false;
 
 	char numstr[21];
 	sprintf(numstr, "%d", this->life);
@@ -71,9 +72,12 @@ Character::~Character()
 
 void Character::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 {
-	missile->addTime(deltaTime);
+	if(!disable)
+	{
+		missile->addTime(deltaTime);
+	}
 
-	if(isVisible())
+	if(isAlive())
 	{
 		updateBody(deltaTime);
 		nameOverlay->update(camera);
@@ -96,7 +100,7 @@ void Character::setTargetPosition(int x, int z)
 
 void Character::updateBody(Ogre::Real deltaTime)
 {
-	if(bodyNode != NULL)
+	if(bodyNode != NULL && !disable)
 	{
 		Ogre::Vector3 currentPosition = bodyNode->getPosition();
 		Ogre::Vector3 goalDirection = subStepPosition - currentPosition;
@@ -182,7 +186,6 @@ bool Character::isMineReady()
 void Character::askMine()
 {
 	askForMine = true;
-	mine->setPosition(position);
 }
 
 void Character::dropMine()
@@ -191,6 +194,7 @@ void Character::dropMine()
 	if(mine && isMineReady())
 	{
 		Map::getInstance().setTile(position, MapEntity::CHARACTER_MINE, teamId, characterId);
+		mine->setPosition(position);
 		mine->setVisible(true);
 	}
 }
@@ -237,21 +241,29 @@ Missile* Character::getMissile()
 
 void Character::hit()
 {
-	--life;
-
-	if(life > 0)
+	if(isAlive())
 	{
-		char numstr[21];
-		sprintf(numstr, "%d", life);
-		std::string text = "Life: ";
-		text += numstr;
+		--life;
 
-		this->lifeOverlay->setText(text);
+		if(!isAlive())
+		{
+			die();
+		}
+		else
+		{
+			char numstr[21];
+			sprintf(numstr, "%d", life);
+			std::string text = "Life: ";
+			text += numstr;
+
+			this->lifeOverlay->setText(text);
+		}
 	}
-	else if(isVisible())
-	{
-		die();
-	}
+}
+
+bool Character::isAlive()
+{
+	return life > 0;
 }
 
 bool Character::isVisible()
@@ -267,7 +279,7 @@ void Character::die()
 	Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
 }
 
-int Character::getLife()
+void Character::deactivate()
 {
-	return life;
+	disable = true;
 }

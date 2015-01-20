@@ -24,21 +24,29 @@
 class World
 {
 private:
-	// TODO: find better place
-	char* TANK_MESH_NAME;
-	char* MINE_MESH_NAME;
-	char* MISSILE_MESH_NAME;
 	Team* teams[MAX_TEAM];
 	int teamCount;
+
 	bool gameStarted;
 
 	Ogre::Overlay* labelOverlay;
-
 	Ogre::SceneManager* sceneManager;
+
+	Ogre::OverlayContainer* panel;
+	Ogre::TextAreaOverlayElement* textElement;
 
 	// Don't implement for singleton
 	World(World const&);
     void operator=(World const&);
+
+	void generateMapDelimiter();
+	void gameStart();
+	void sendAllPosition();
+	void generateMap();
+
+	void endGame();
+	Team* findWiningTeam();
+	void showMessage(std::string message);
 
 public:
 	World();
@@ -52,20 +60,18 @@ public:
     }
 
 	void createScene();
+	void addTime(Ogre::Real deltaTime);
+	
+	// Event action
 	void addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM]);
 	void removeTeam(int teamId);
-	Team* getTeam(int teamId);
-	void addTime(Ogre::Real deltaTime);
-	void gameStart();
-	void sendAllPosition();
-	void generateMap();
-	void mineHit(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
-	void missileHitCharacter(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
-	void missileHitMine(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
-	void missileHitMissile(int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
-	void generateMapDelimiter();
-	std::string getWinnerName();
 
+	void mineHit(int mineTeamId, int mineCharacterId);
+	void missileHit(int missileTeamId, int missileCharacterId);
+	void characterHit(int hitTeamId, int hitCharacterId);
+
+	// Getters
+	Team* getTeam(int teamId);
 	bool isGameStarted();
 };
 

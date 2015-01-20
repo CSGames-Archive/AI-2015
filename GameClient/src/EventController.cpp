@@ -40,6 +40,7 @@ void EventController::dispatchEvent(GameEvent* gameEvent)
 	{
 		error(gameEvent);
 	}
+	//check if game is not started
 	else if(gameEvent->getType() == EventType::DISCONNECT)
 	{
 		disconnect(gameEvent);
@@ -48,6 +49,7 @@ void EventController::dispatchEvent(GameEvent* gameEvent)
 	{
 		addTeam(gameEvent);
 	}
+	//check if game is started
 	else if(gameEvent->getType() == EventType::MOVE_CHARACTER)
 	{
 		moveCharacter(gameEvent);
@@ -116,7 +118,8 @@ void EventController::dropMine(GameEvent* gameEvent)
 void EventController::mineHit(GameEvent* gameEvent)
 {
 	MineHitEvent* dropMineEvent = static_cast<MineHitEvent*>(gameEvent);
-	World::getInstance().mineHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
+	World::getInstance().mineHit(dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
+	World::getInstance().characterHit(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId);
 
 	std::string message = NetUtility::generateMineHitMessage(dropMineEvent->hitTeamId, dropMineEvent->hitCharacterId, dropMineEvent->originTeamId, dropMineEvent->originCharacterId);
 	QueueController::getInstance().addMessage(message);
@@ -135,20 +138,22 @@ void EventController::missileHit(GameEvent* gameEvent)
 	MissileHitEvent* missileHitEvent = static_cast<MissileHitEvent*>(gameEvent);
 	if(missileHitEvent->entity == MissileHitEvent::HitEntity::CHARACTER)
 	{
-		World::getInstance().missileHitCharacter(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+		World::getInstance().characterHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
 	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::MINE)
 	{
-		World::getInstance().missileHitMine(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+		World::getInstance().mineHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
 	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::MISSILE)
 	{
-		World::getInstance().missileHitMissile(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+		World::getInstance().missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
 	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::NONE)
 	{
-		World::getInstance().getTeam(missileHitEvent->originTeamId)->getCharacter(missileHitEvent->originCharacterId)->getMissile()->setVisible(false);
+		//TODO: add something with the point sytem
 	}
+
+	World::getInstance().missileHit(missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
 
 	std::string message = NetUtility::generateMissileHitMessage(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
 	QueueController::getInstance().addMessage(message);
