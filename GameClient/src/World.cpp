@@ -87,6 +87,7 @@ void World::createScene()
 	labelOverlay = Ogre::OverlayManager::getSingleton().create("labelOverlay");
 
 	generateMapDelimiter();
+	generateMap();
 }
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
@@ -125,7 +126,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	if(teamCount == MAX_TEAM)
 	{
-		generateMap();
+		sendMap();
 		gameStart();
 		sendAllPosition();
 	}
@@ -256,7 +257,21 @@ void World::generateMap()
 				crateNode->attachObject(crate);
 				crateNode->setScale(scaleVector);
 				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 7.5, Ogre::Real(y*MAP_TILE_SIZE));
+			}
+		}
+	}
+}
 
+void World::sendMap()
+{
+	Map& map = Map::getInstance();
+	char numstr[21]; // Enough to hold all numbers up to 64-bits
+	for(int x = 0; x < MAP_WIDTH; ++x)
+	{
+		for(int y = 0; y < MAP_HEIGHT; ++y)
+		{
+			if(map.getTileType(Vector2(x, y)) == MapEntity::BOX)
+			{
 				std::string message = NetUtility::generateUpdateBoxMessage(x, y);
 				QueueController::getInstance().addMessage(message);
 			}

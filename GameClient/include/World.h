@@ -43,6 +43,7 @@ private:
 	void gameStart();
 	void sendAllPosition();
 	void generateMap();
+	void sendMap();
 
 	void endGame();
 	Team* findWiningTeam();
