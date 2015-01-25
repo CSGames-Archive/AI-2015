@@ -12,6 +12,7 @@ from event.MineHitEvent import MineHitEvent
 from event.MissileHitEvent import MissileHitEvent
 from event.UpdateMissileEvent import UpdateMissileEvent
 from event.UpdateBoxEvent import UpdateBoxEvent
+from event.EndGameEvent import EndGameEvent
 
 class EventFactory(object):
     @staticmethod
@@ -39,4 +40,6 @@ class EventFactory(object):
             return UpdateMissileEvent()
         elif eventType == "UpdateBox":
             return UpdateBoxEvent()
+        elif eventType == "EndGame":
+            return EndGameEvent()
         return None

@@ -146,6 +146,11 @@ namespace NetUtility
 
 		return message;
 	}
+
+	static std::string generateEndGameMessage()
+	{
+		return "Game:EndGame";
+	}
 };
 
 #endif // #ifndef __NetUtility_h_

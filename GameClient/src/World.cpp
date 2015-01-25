@@ -339,7 +339,8 @@ void World::endGame()
 		showMessage(winingMessage);
 	}
 
-	//TODO: send a endgame event
+	std::string message = NetUtility::generateEndGameMessage();
+	QueueController::getInstance().addMessage(message);
 }
 
 Team* World::findWiningTeam()

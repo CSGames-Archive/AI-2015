@@ -17,7 +17,7 @@ ai = AI()
 
 netController.init()
 
-while netController.connected:
+while netController.connected and not world.gameIsFinished:
     eventController.executeIngoingEvents()
     
     if world.gameIsStarted:

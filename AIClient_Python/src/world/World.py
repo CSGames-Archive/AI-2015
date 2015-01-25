@@ -16,6 +16,7 @@ class World(object):
     _instance = None
     yourId = 0
     gameIsStarted = False
+    gameIsFinished = False
     teams = []
     map = {}
 
@@ -67,3 +68,7 @@ class World(object):
         if self.isCharacterAtposition(position):
             return Entity.CHARACTER
         return Entity.EMPTY
+    
+    def endGame(self):
+        print("End game")
+        self.gameIsFinished = True
