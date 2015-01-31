@@ -6,38 +6,26 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** Team.java
- ** A team
+ ** DropMineEvent.java
+ ** Event call when a character ask to drop a mine
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package world;
+package event;
 
-import java.util.ArrayList;
-import java.util.List;
+public class DropMineEvent extends OutgoingEvent {
+	private int characterId;
 
-public class Team {
-	private int id;
-	private List<Character> characters = new ArrayList<Character>();
-
-	public Team(int id, int numberOfCharacter) {
-		this.id = id;
-		for (int index = 0; index < numberOfCharacter; ++index) {
-			// TODO: refactor with map
-			characters.add(new Character(0, 0));
-		}
+	public DropMineEvent(int characterId) {
+		this.characterId = characterId;
 	}
 
-	public int getId() {
-		return id;
-	}
+	@Override
+	public String toString() {
+		String message = "Game:DropMine:";
+		message += characterId;
 
-	public Character getCharacter(int id) {
-		return characters.get(id);
-	}
-
-	public List<Character> getCharacters() {
-		return characters;
+		return message;
 	}
 }

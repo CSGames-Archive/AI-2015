@@ -6,38 +6,26 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** Team.java
- ** A team
+ ** EndGameEvent.java
+ ** Event that happen when the game end
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package world;
+package event;
 
-import java.util.ArrayList;
-import java.util.List;
+import world.World;
 
-public class Team {
-	private int id;
-	private List<Character> characters = new ArrayList<Character>();
+public class EndGameEvent extends IngoingEvent {
 
-	public Team(int id, int numberOfCharacter) {
-		this.id = id;
-		for (int index = 0; index < numberOfCharacter; ++index) {
-			// TODO: refactor with map
-			characters.add(new Character(0, 0));
-		}
+	@Override
+	public void execute() {
+		System.out.println("Game End");
+		World.getInstance().endGame();
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public Character getCharacter(int id) {
-		return characters.get(id);
-	}
-
-	public List<Character> getCharacters() {
-		return characters;
+	@Override
+	public boolean fillArguments(String message) {
+		return true;
 	}
 }

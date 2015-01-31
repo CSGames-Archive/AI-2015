@@ -14,18 +14,24 @@
 
 package world;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import event.AddPlayerEvent;
 import event.QueueController;
 
 public class World {
+
+	public enum MapEntity {
+		EMPTY, BOX, CHARACTER
+	}
+
 	private static World instance = null;
 	private int yourId;
 	private boolean gameIsStarted = false;
 	private List<Team> teams = new ArrayList<Team>();
+	private boolean map[][] = null;
 
 	protected World() {
 		// Exists only to defeat instantiation
@@ -52,9 +58,10 @@ public class World {
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
 
-	public void startGame(int numberOfTeam, int numberOfCharacter,
-			List<Integer> teamIDs) {
+	public void startGame(int mapWidth, int mapHeight, int numberOfTeam,
+			int numberOfCharacter, List<Integer> teamIDs) {
 		gameIsStarted = true;
+		map = new boolean[mapWidth][mapHeight];
 		for (int index = 0; index < numberOfTeam; ++index) {
 			teams.add(new Team(teamIDs.get(index), numberOfCharacter));
 		}
@@ -69,6 +76,45 @@ public class World {
 		}
 		return null;
 	}
+
+	public Team getMyTeam(int id) {
+		return getTeam(yourId);
+	}
+
+	public void updateBox(int x, int y) {
+		map[x][y] = true;
+	}
+
+	public boolean isBoxAtPosition(Point position) {
+		return map[position.x][position.y];
+	}
+
+	public boolean isCharacterAtposition(Point position) {
+		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator.hasNext();) {
+			Team team = teamIterator.next();
+
+			for (Iterator<Character> characterIterator = team.getCharacters().iterator(); characterIterator.hasNext();) {
+				Character character = characterIterator.next();
+				if (character.getPosition() == id) {
+					return team;
+				}
+			}
+		}
+		return false;
+	}
+
+	public MapEntity whatIsAtPosition(Point position){
+        if(isBoxAtPosition(position)){
+        	return MapEntity.BOX;
+        }
+        else if(){
+        	
+        }
+            return Entity.BOX
+        if self.isCharacterAtposition(position):
+            return Entity.CHARACTER
+        return Entity.EMPTY
+    }
 
 	public boolean isGameIsStarted() {
 		return gameIsStarted;

@@ -20,27 +20,29 @@ import java.util.List;
 import world.World;
 
 public class GameStartEvent extends IngoingEvent {
-	private int numberOfTeam, numberOfCharacter;
+	private int mapWidth, mapHeight, numberOfTeam, numberOfCharacter;
 	private List<Integer> teamIDs = new ArrayList<Integer>();
 
 	@Override
 	public void execute() {
-		World.getInstance().startGame(numberOfTeam, numberOfCharacter, teamIDs);
+		World.getInstance().startGame(mapWidth, mapHeight, numberOfTeam, numberOfCharacter, teamIDs);
 	}
 
 	@Override
 	public boolean fillArguments(String message) {
-		String[] headerParts = message.split(SEPARATOR, 3);
+		String[] headerParts = message.split(SEPARATOR, 5);
 
-		numberOfTeam = convertCharToNumeral(headerParts[0]);
-		numberOfCharacter = convertCharToNumeral(headerParts[1]);
+		mapWidth = convertCharToNumeral(headerParts[0]);
+		mapHeight = convertCharToNumeral(headerParts[1]);
+		numberOfTeam = convertCharToNumeral(headerParts[2]);
+		numberOfCharacter = convertCharToNumeral(headerParts[3]);
 
 		if (numberOfTeam < 1 || numberOfCharacter < 1) {
 			return false;
 		}
 
 		//Plus one for the sender id that we don't use
-		String[] ids = headerParts[2].split(SEPARATOR, numberOfTeam+1);
+		String[] ids = headerParts[4].split(SEPARATOR, numberOfTeam+1);
 		for (int index = 0; index < ids.length-1; ++index) {
 			teamIDs.add(convertCharToNumeral(ids[index]));
 			if (teamIDs.get(index) == 0) {
