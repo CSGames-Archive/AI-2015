@@ -94,4 +94,8 @@ public class Character {
 	public boolean isAlive() {
 		return life > 0;
 	}
+
+	public Missile getMissile() {
+		return missile;
+	}
 }

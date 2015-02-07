@@ -82,8 +82,8 @@ public class World {
 		return getTeam(yourId);
 	}
 
-	public void updateBox(int x, int y) {
-		map[x][y] = true;
+	public void updateBox(Point position) {
+		map[position.x][position.y] = true;
 	}
 
 	public boolean isBoxAtPosition(Point position) {
