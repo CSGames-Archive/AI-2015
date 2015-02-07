@@ -6,31 +6,54 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** MoveCharacter.java
- ** Event call to move a character
+ ** Missile.java
+ ** A missile
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package event;
+package world;
 
 import java.awt.Point;
 
-public class MoveCharacterEvent extends OutgoingEvent {
-	private int characterID;
-	private Point position;
+public class Missile {
 
-	public MoveCharacterEvent(int characterID, Point position) {
-		this.characterID = characterID;
-		this.position = position;
+	public enum Direction {
+		UP, DOWN, LEFT, RIGHT
 	}
 
-	@Override
-	public String toString() {
-		String message = "Game:Move" + SEPARATOR;
-		message += characterID + SEPARATOR;
-		message += position.x + SEPARATOR;
-		message += position.y;
-		return message;
+	private Point position;
+	private Direction direction;
+	private boolean isReady;
+
+	public Missile() {
+		this.position = new Point(0, 0);
+		this.direction = Direction.UP;
+		this.isReady = true;
+	}
+
+	public void shoot() {
+		this.isReady = false;
+	}
+	
+	public void updateInfo(Point position, Direction direction) {
+		this.position = position;
+		this.direction = direction;
+	}
+
+	public void hit() {
+		this.isReady = true;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public boolean isReady() {
+		return isReady;
 	}
 }

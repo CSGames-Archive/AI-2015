@@ -14,6 +14,8 @@
 
 package event;
 
+import java.awt.Point;
+
 import world.World;
 
 public class UpdateCharacterEvent extends IngoingEvent {
@@ -24,8 +26,9 @@ public class UpdateCharacterEvent extends IngoingEvent {
 	public void execute() {
 		System.out.println("Move character:" + characterID + " from " + teamID
 				+ " to " + positionX + "," + positionY);
+		Point position = new Point(positionX, positionY);
 		World.getInstance().getTeam(teamID).getCharacter(characterID)
-				.move(positionX, positionY);
+				.move(position);
 	}
 
 	@Override

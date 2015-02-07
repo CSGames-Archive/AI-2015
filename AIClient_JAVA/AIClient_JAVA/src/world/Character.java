@@ -14,24 +14,83 @@
 
 package world;
 
+import java.awt.Point;
+
+import event.DropMineEvent;
+import event.MoveCharacterEvent;
+import event.QueueController;
+import event.ShootMissileEvent;
+
 public class Character {
-	private int positionX, positionY;
+	private Point position;
+	private int id;
+	private int life;
+	private Mine mine;
+	private Missile missile;
 
-	public Character(int positionX, int positionY) {
-		this.positionX = positionX;
-		this.positionY = positionY;
+	public Character(int id) {
+		this.id = id;
+		this.position = new Point(0,0);
+		this.life = 3;
 	}
 
-	public void move(int x, int y) {
-		positionX = x;
-		positionY = y;
+	public void move(Point position) {
+		QueueController queueController = QueueController.getInstance();
+		MoveCharacterEvent event = new MoveCharacterEvent(id, position);
+		queueController.addOutgoingEvent(event);
 	}
 
-	public int getPositionX() {
-		return positionX;
+	public void dropMine() {
+		if (mine.isReady()) {
+			QueueController queueController = QueueController.getInstance();
+			DropMineEvent event = new DropMineEvent(id);
+			queueController.addOutgoingEvent(event);
+			mine.drop();
+		}
 	}
 
-	public int getPositionY() {
-		return positionY;
+	public void shootMissile(Missile.Direction direction) {
+		if (missile.isReady()) {
+			QueueController queueController = QueueController.getInstance();
+			ShootMissileEvent event = new ShootMissileEvent(id, direction.ordinal());
+			queueController.addOutgoingEvent(event);
+			missile.shoot();
+		}
+	}	
+	
+	public void updateInfo(Point position) {
+		this.position = position;
+	}
+
+	public void hitByMine() {
+		if (isAlive()) {
+			--life;
+			System.out.println("Character " + id + " hit a mine");
+		}
+	}
+
+	public void hitByMissile() {
+		if (isAlive()) {
+			--life;
+			System.out.println("Character " + id + " hit a missile");
+		}
+	}
+	
+	public void mineHit() {
+		mine.hit();
+		System.out.println("Character " + id + " mine hit target");
+	}	
+	
+	public void missileHit() {
+		missile.hit();
+		System.out.println("Character " + id + " missile hit target");
+	}
+	
+	public Point getPosition() {
+		return position;
+	}
+
+	public boolean isAlive() {
+		return life > 0;
 	}
 }

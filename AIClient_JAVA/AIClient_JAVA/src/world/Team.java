@@ -24,8 +24,7 @@ public class Team {
 	public Team(int id, int numberOfCharacter) {
 		this.id = id;
 		for (int index = 0; index < numberOfCharacter; ++index) {
-			// TODO: refactor with map
-			characters.add(new Character(0, 0));
+			characters.add(new Character(index));
 		}
 	}
 

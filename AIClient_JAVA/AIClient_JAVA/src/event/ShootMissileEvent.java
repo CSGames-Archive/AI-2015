@@ -6,31 +6,29 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** MoveCharacter.java
- ** Event call to move a character
+ ** ShootMissileEvent.java
+ ** Event call when a character ask to shoot a missile
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
 package event;
 
-import java.awt.Point;
+public class ShootMissileEvent extends OutgoingEvent {
+	private int characterId;
+	private int direction;
 
-public class MoveCharacterEvent extends OutgoingEvent {
-	private int characterID;
-	private Point position;
-
-	public MoveCharacterEvent(int characterID, Point position) {
-		this.characterID = characterID;
-		this.position = position;
+	public ShootMissileEvent(int characterId, int direction) {
+		this.characterId = characterId;
+		this.direction = direction;
 	}
 
 	@Override
 	public String toString() {
-		String message = "Game:Move" + SEPARATOR;
-		message += characterID + SEPARATOR;
-		message += position.x + SEPARATOR;
-		message += position.y;
+		String message = "Game:ThrowMissile:";
+		message += characterId + SEPARATOR;
+		message += direction;
+
 		return message;
 	}
 }

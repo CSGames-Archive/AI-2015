@@ -30,6 +30,7 @@ public class World {
 	private static World instance = null;
 	private int yourId;
 	private boolean gameIsStarted = false;
+	private boolean gameIsFinished = false;
 	private List<Team> teams = new ArrayList<Team>();
 	private boolean map[][] = null;
 
@@ -52,8 +53,8 @@ public class World {
 		yourId = id;
 		System.out.println("Join game with id:" + yourId);
 
-		String teamName = "team" + id;
-		String[] characterNames = { "character1" + id, "character2" + id };
+		String teamName = "java team" + id;
+		String[] characterNames = { "java king" + id, "java soldier" + id };
 		AddPlayerEvent event = new AddPlayerEvent(teamName, characterNames);
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
@@ -90,37 +91,40 @@ public class World {
 	}
 
 	public boolean isCharacterAtposition(Point position) {
-		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator.hasNext();) {
+		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator
+				.hasNext();) {
 			Team team = teamIterator.next();
 
-			for (Iterator<Character> characterIterator = team.getCharacters().iterator(); characterIterator.hasNext();) {
+			for (Iterator<Character> characterIterator = team.getCharacters()
+					.iterator(); characterIterator.hasNext();) {
 				Character character = characterIterator.next();
-				if (character.getPosition() == id) {
-					return team;
+				if (character.getPosition() == position) {
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 
-	public MapEntity whatIsAtPosition(Point position){
-        if(isBoxAtPosition(position)){
-        	return MapEntity.BOX;
-        }
-        else if(){
-        	
-        }
-            return Entity.BOX
-        if self.isCharacterAtposition(position):
-            return Entity.CHARACTER
-        return Entity.EMPTY
-    }
+	public MapEntity whatIsAtPosition(Point position) {
+		if (isBoxAtPosition(position)) {
+			return MapEntity.BOX;
+		} else if (isCharacterAtposition(position)) {
+			return MapEntity.CHARACTER;
+		}
+		return MapEntity.EMPTY;
+	}
+
+	public void endGame() {
+		System.out.println("End game");
+		gameIsFinished = true;
+	}
 
 	public boolean isGameIsStarted() {
 		return gameIsStarted;
 	}
 
-	public int getYourId() {
-		return yourId;
+	public boolean isGameIsFinished() {
+		return gameIsFinished;
 	}
 }

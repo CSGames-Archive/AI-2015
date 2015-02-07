@@ -6,31 +6,31 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** MoveCharacter.java
- ** Event call to move a character
+ ** Mine.java
+ ** A mine
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
-package event;
+package world;
 
-import java.awt.Point;
+public class Mine {
 
-public class MoveCharacterEvent extends OutgoingEvent {
-	private int characterID;
-	private Point position;
+	private boolean isReady;
 
-	public MoveCharacterEvent(int characterID, Point position) {
-		this.characterID = characterID;
-		this.position = position;
+	public Mine() {
+		this.isReady = true;
 	}
 
-	@Override
-	public String toString() {
-		String message = "Game:Move" + SEPARATOR;
-		message += characterID + SEPARATOR;
-		message += position.x + SEPARATOR;
-		message += position.y;
-		return message;
+	public boolean isReady() {
+		return isReady;
 	}
+	
+	public void drop() {
+		isReady = false;
+	}
+	
+	public void hit() {
+		isReady = true;
+	}	
 }
