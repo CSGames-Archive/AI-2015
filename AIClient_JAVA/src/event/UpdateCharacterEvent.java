@@ -24,11 +24,11 @@ public class UpdateCharacterEvent extends IngoingEvent {
 
 	@Override
 	public void execute() {
-		System.out.println("Move character:" + characterID + " from " + teamID
-				+ " to " + positionX + "," + positionY);
+		//System.out.println("Move character:" + characterID + " from " + teamID
+		//		+ " to " + positionX + "," + positionY);
 		Point position = new Point(positionX, positionY);
 		World.getInstance().getTeam(teamID).getCharacter(characterID)
-				.move(position);
+				.updateInfo(position);
 	}
 
 	@Override

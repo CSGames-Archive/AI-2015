@@ -22,7 +22,7 @@ import world.World;
 public class UpdateMissileEvent extends IngoingEvent {
 	private int teamID, characterID;
 	private Missile.Direction direction;
-	private Point position;
+	private Point position = new Point();
 
 	@Override
 	public void execute() {

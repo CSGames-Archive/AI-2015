@@ -121,7 +121,7 @@ public class NetworkController {
 		String textServer = "";
 		try {
 			textServer = inFromServer.readLine();
-			System.out.println("Server: " + textServer);
+			//System.out.println("Server: " + textServer);
 		} catch (Exception e) {
 			System.out.println("Error: can't read on socket");
 			return null;

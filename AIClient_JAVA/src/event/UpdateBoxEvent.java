@@ -19,7 +19,7 @@ import java.awt.Point;
 import world.World;
 
 public class UpdateBoxEvent extends IngoingEvent {
-	private Point position;
+	private Point position = new Point();
 
 	@Override
 	public void execute() {

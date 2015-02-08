@@ -29,7 +29,7 @@ class Client {
 		// Initialization
 		networkController.init();
 
-		while (networkController.isConnected()) {
+		while (networkController.isConnected() && !world.isGameIsFinished()) {
 			eventController.executeIngoingEvents();
 
 			if (world.isGameIsStarted()) {
@@ -48,7 +48,6 @@ class Client {
 		try {
 			Thread.sleep(milli);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

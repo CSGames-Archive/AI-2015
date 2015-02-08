@@ -78,7 +78,7 @@ public class World {
 		return null;
 	}
 
-	public Team getMyTeam(int id) {
+	public Team getMyTeam() {
 		return getTeam(yourId);
 	}
 

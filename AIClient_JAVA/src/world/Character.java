@@ -25,8 +25,8 @@ public class Character {
 	private Point position;
 	private int id;
 	private int life;
-	private Mine mine;
-	private Missile missile;
+	private Mine mine = new Mine();
+	private Missile missile = new Missile();
 
 	public Character(int id) {
 		this.id = id;
@@ -66,25 +66,25 @@ public class Character {
 	public void hitByMine() {
 		if (isAlive()) {
 			--life;
-			System.out.println("Character " + id + " hit a mine");
+			//System.out.println("Character " + id + " hit a mine");
 		}
 	}
 
 	public void hitByMissile() {
 		if (isAlive()) {
 			--life;
-			System.out.println("Character " + id + " hit a missile");
+			//System.out.println("Character " + id + " hit a missile");
 		}
 	}
 
 	public void mineHit() {
 		mine.hit();
-		System.out.println("Character " + id + " mine hit target");
+		//System.out.println("Character " + id + " mine hit target");
 	}
 
 	public void missileHit() {
 		missile.hit();
-		System.out.println("Character " + id + " missile hit target");
+		//System.out.println("Character " + id + " missile hit target");
 	}
 
 	public Point getPosition() {

@@ -21,7 +21,7 @@
 #include "NetUtility.h"
 #include <cmath>
 
-#define MAP_TILE_SIZE 25
+#define MAP_TILE_SIZE 20
 
 namespace MapEntity
 {

@@ -126,8 +126,8 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	if(teamCount == MAX_TEAM)
 	{
-		sendMap();
 		gameStart();
+		sendMap();
 		sendAllPosition();
 	}
 }
@@ -238,7 +238,7 @@ void World::missileHit(int missileTeamId, int missileCharacterId)
 void World::generateMap()
 {
 	Map& map = Map::getInstance();
-	Ogre::Vector3 scaleVector(1.5, 1.5, 1.5);
+	Ogre::Vector3 scaleVector(2.0, 2.0, 2.0);
 	char numstr[21]; // Enough to hold all numbers up to 64-bits
 	sprintf(numstr, "%d", MAX_TEAM);
 
@@ -256,7 +256,7 @@ void World::generateMap()
 				Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 				crateNode->attachObject(crate);
 				crateNode->setScale(scaleVector);
-				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 7.5, Ogre::Real(y*MAP_TILE_SIZE));
+				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
 			}
 		}
 	}
@@ -282,7 +282,7 @@ void World::sendMap()
 void World::generateMapDelimiter()
 {
 	char numstr[21]; // Enough to hold all numbers up to 64-bits
-	Ogre::Vector3 scaleVector(2.5, 2.5, 2.5);
+	Ogre::Vector3 scaleVector(2.0, 2.0, 2.0);
 
 	for(int x = -1; x < MAP_WIDTH + 1; ++x)
 	{
@@ -294,7 +294,7 @@ void World::generateMapDelimiter()
 		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, -MAP_TILE_SIZE);
+		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, -MAP_TILE_SIZE);
 
 		sprintf(numstr, "%d", x);
 		name = "delimiter_up_";
@@ -304,7 +304,7 @@ void World::generateMapDelimiter()
 		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 12.5, Ogre::Real(MAP_TILE_SIZE*MAP_HEIGHT));
+		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, Ogre::Real(MAP_TILE_SIZE*MAP_HEIGHT));
 	}
 
 	for(int y = 0; y < MAP_HEIGHT; ++y)
@@ -317,7 +317,7 @@ void World::generateMapDelimiter()
 		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(-Ogre::Real(MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+		crateNode->setPosition(-Ogre::Real(MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
 
 		sprintf(numstr, "%d", y);
 		name = "delimiter_right_";
@@ -327,7 +327,7 @@ void World::generateMapDelimiter()
 		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(MAP_WIDTH*MAP_TILE_SIZE), 12.5, Ogre::Real(y*MAP_TILE_SIZE));
+		crateNode->setPosition(Ogre::Real(MAP_WIDTH*MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
 	}
 }
 
