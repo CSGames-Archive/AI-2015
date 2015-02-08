@@ -381,7 +381,7 @@ void World::showMessage(std::string message)
 	this->textElement = new Ogre::TextAreaOverlayElement("Label_MainPanel");
 	this->textElement->setCaption(message);
 	this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
-	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Alignment::Center);
+	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Center);
 	this->textElement->setCharHeight(40);
 	this->textElement->setFontName("SdkTrays/Caption");
 	this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));

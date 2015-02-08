@@ -17,6 +17,7 @@
 
 #include "stdafx.h"
 
+#include <OgreOverlay.h>
 #include <OgreOverlayContainer.h>
 #include <OgreOverlayManager.h>
 #include <OgreOverlayElement.h>
