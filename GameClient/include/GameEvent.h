@@ -111,14 +111,17 @@ struct ThrowMissileEvent : public GameEvent
 	virtual bool fill(std::string arguments);
 };
 
-struct MissileHitEvent : public GameEvent
+namespace HitEntity
 {
 	enum HitEntity{NONE, CHARACTER, MINE, MISSILE};
+}
 
+struct MissileHitEvent : public GameEvent
+{
 	int hitTeamId, hitCharacterId, originTeamId, originCharacterId;
-	HitEntity entity;
+	HitEntity::HitEntity entity;
 
-	MissileHitEvent(HitEntity entity, int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
+	MissileHitEvent(HitEntity::HitEntity entity, int hitPlayerId, int hitCharacterId, int originPlayerId, int originCharacterId);
 	MissileHitEvent() {}
 	virtual ~MissileHitEvent() {}
 

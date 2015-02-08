@@ -20,15 +20,18 @@ set(HEADER_FILES
   include/GameClientApplication.h
   include/GameEvent.h
   include/Map.h
+  include/Mine.h
+  include/Missile.h
   include/NetUtility.h
   include/NetworkController.h
+  include/QueueController.h
   include/stdafx.h
   include/Team.h
+  include/TextOverlay.h
   include/World.h
 )
 
 set(SOURCE_FILES
-  src/BaseApplication.cpp
   src/BaseApplication.cpp
   src/Character.cpp
   src/EventController.cpp
@@ -36,9 +39,13 @@ set(SOURCE_FILES
   src/GameClientApplication.cpp
   src/GameEvent.cpp
   src/Map.cpp
+  src/Mine.cpp
+  src/Missile.cpp
   src/NetworkController.cpp
+  src/QueueController.cpp
   src/stdafx.cpp
   src/Team.cpp
+  src/TextOverlay.cpp
   src/World.cpp
 )
 

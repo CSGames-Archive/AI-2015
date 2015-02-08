@@ -136,19 +136,19 @@ void EventController::throwMissile(GameEvent* gameEvent)
 void EventController::missileHit(GameEvent* gameEvent)
 {
 	MissileHitEvent* missileHitEvent = static_cast<MissileHitEvent*>(gameEvent);
-	if(missileHitEvent->entity == MissileHitEvent::HitEntity::CHARACTER)
+	if(missileHitEvent->entity == HitEntity::CHARACTER)
 	{
 		World::getInstance().characterHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
-	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::MINE)
+	else if(missileHitEvent->entity == HitEntity::MINE)
 	{
 		World::getInstance().mineHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
-	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::MISSILE)
+	else if(missileHitEvent->entity == HitEntity::MISSILE)
 	{
 		World::getInstance().missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
-	else if(missileHitEvent->entity == MissileHitEvent::HitEntity::NONE)
+	else if(missileHitEvent->entity == HitEntity::NONE)
 	{
 		//TODO: add something with the point sytem
 	}

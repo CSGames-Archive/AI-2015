@@ -33,7 +33,7 @@ TextOverlay::TextOverlay(Ogre::Overlay* overlay, std::string text, std::string n
 	this->textElement = new Ogre::TextAreaOverlayElement("Label_" + name);
 	this->textElement->setCaption(text);
 	this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
-	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Alignment::Center);
+	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Center);
 	this->textElement->setCharHeight(15);
 	this->textElement->setFontName("SdkTrays/Caption");
 	this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));

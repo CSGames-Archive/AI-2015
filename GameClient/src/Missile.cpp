@@ -177,12 +177,12 @@ void Missile::hitWall()
 	MapTile* tile = Map::getInstance().getTile(position);
 	if(tile->type == MapEntity::CHARACTER || tile->type == MapEntity::CHARACTER_MINE)
 	{
-		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::CHARACTER, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::CHARACTER, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 	}
 	else
 	{
-		MissileHitEvent* newEvent = new MissileHitEvent(MissileHitEvent::HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
+		MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
 		QueueController::getInstance().addEvent(newEvent);
 		Map::getInstance().setTile(position, MapEntity::EMPTY,0, 0);
 	}
