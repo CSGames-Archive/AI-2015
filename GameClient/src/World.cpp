@@ -16,8 +16,6 @@
 
 #include "World.h"
 
-#include <OgreOverlayManager.h>
-
 const char* TANK_MESH_NAME = "Tank.mesh";
 const char* MINE_MESH_NAME = "Mine.mesh";
 const char* MISSILE_MESH_NAME = "Missile.mesh";
