@@ -1,64 +1,33 @@
 cmake_minimum_required(VERSION 2.8)
 
-SET(GameClient)
+set(GameClient)
 
-set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake/;${CMAKE_MODULE_PATH}")
-set(OGRE_SAMPLES_INCLUDEPATH "/usr/local/share/OGRE/samples/Common/include/")
+set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake;${CMAKE_MODULE_PATH}")
 
-set(Boost_USE_STATIC_LIBS OFF) 
-set(Boost_USE_MULTITHREADED ON)  
-set(Boost_USE_STATIC_RUNTIME OFF) 
+set(OGRE_INCLUDE_DIRS "/usr/local/include/OGRE")
+set(OGRE_Overlay_INCLUDE_DIRS "/usr/local/include/OGRE/Overlay")
+set(OGRE_SAMPLES_INCLUDE_DIRS "/usr/local/share/OGRE/samples/Common/include/")
+set(OIS_INCLUDE_DIRS "/usr/include/OIS")
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.54.0 COMPONENTS system thread regex)
 find_package(OGRE REQUIRED)
 find_package(OIS REQUIRED)
 
-set(HEADER_FILES
-  include/BaseApplication.h
-  include/Character.h
-  include/EventController.h
-  include/EventFactory.h
-  include/GameClientApplication.h
-  include/GameEvent.h
-  include/Map.h
-  include/Mine.h
-  include/Missile.h
-  include/NetUtility.h
-  include/NetworkController.h
-  include/QueueController.h
-  include/stdafx.h
-  include/Team.h
-  include/TextOverlay.h
-  include/World.h
-)
-
-set(SOURCE_FILES
-  src/BaseApplication.cpp
-  src/Character.cpp
-  src/EventController.cpp
-  src/EventFactory.cpp
-  src/GameClientApplication.cpp
-  src/GameEvent.cpp
-  src/Map.cpp
-  src/Mine.cpp
-  src/Missile.cpp
-  src/NetworkController.cpp
-  src/QueueController.cpp
-  src/stdafx.cpp
-  src/Team.cpp
-  src/TextOverlay.cpp
-  src/World.cpp
-)
-
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}
 			${OIS_INCLUDE_DIRS}
 			${OGRE_INCLUDE_DIRS}
-			${OGRE_SAMPLES_INCLUDEPATH}
-			${OGRE_Overlay_INCLUDE_DIRS})
-
+			${OGRE_Overlay_INCLUDE_DIRS}
+			${OGRE_SAMPLES_INCLUDE_DIRS})
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
     add_executable (GameClient ${HEADER_FILES} ${SOURCE_FILES})
-    target_link_libraries(GameClient ${Boost_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES}${OGRE_Overlay_LIBRARIES})                                                                                                                                                                                                                            
+    target_link_libraries(GameClient ${Boost_LIBRARIES} ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${OGRE_Overlay_LIBRARIES})
+    
 endif()
 
