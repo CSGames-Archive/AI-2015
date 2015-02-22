@@ -60,6 +60,7 @@ namespace OgreBites
 		, mGoingUp(false)
 		, mGoingDown(false)
 		, mFastMove(false)
+		, activeMove(false)
 		{
 
 			setCamera(cam);
@@ -291,7 +292,7 @@ namespace OgreBites
 					mCamera->moveRelative(Ogre::Vector3(0, 0, -evt.state.Z.rel * 0.0008f * dist));
 				}
 			}
-			else if (mStyle == CS_FREELOOK)
+			else if (mStyle == CS_FREELOOK && activeMove)
 			{
 				mCamera->yaw(Ogre::Degree(-evt.state.X.rel * 0.15f));
 				mCamera->pitch(Ogre::Degree(-evt.state.Y.rel * 0.15f));
@@ -318,6 +319,7 @@ namespace OgreBites
 				if (id == OIS::MB_Left) mOrbiting = true;
 				else if (id == OIS::MB_Right) mZooming = true;
 			}
+			if(id == OIS::MB_Left) activeMove = true;
 		}
 #endif
 
@@ -341,6 +343,7 @@ namespace OgreBites
 				if (id == OIS::MB_Left) mOrbiting = false;
 				else if (id == OIS::MB_Right) mZooming = false;
 			}
+			if(id == OIS::MB_Left) activeMove = false;
 		}
 #endif
 
@@ -360,6 +363,7 @@ namespace OgreBites
 		bool mGoingUp;
 		bool mGoingDown;
 		bool mFastMove;
+		bool activeMove;
     };
 }
 

@@ -29,6 +29,7 @@
     <ClInclude Include="include\Mine.h" />
     <ClInclude Include="include\Missile.h" />
     <ClInclude Include="include\QueueController.h" />
+    <ClInclude Include="include\SdkCameraMan.h" />
     <ClInclude Include="include\TextOverlay.h" />
     <ClInclude Include="include\World.h" />
     <ClInclude Include="include\Team.h" />
