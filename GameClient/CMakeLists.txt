@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake;${CMAKE_MODULE_PATH}")
 
 set(OGRE_INCLUDE_DIRS "/usr/local/include/OGRE")
 set(OGRE_Overlay_INCLUDE_DIRS "/usr/local/include/OGRE/Overlay")
-set(OGRE_SAMPLES_INCLUDE_DIRS "/usr/local/share/OGRE/samples/Common/include/")
+#set(OGRE_SAMPLES_INCLUDE_DIRS "/usr/local/share/OGRE/samples/Common/include/")
 set(OIS_INCLUDE_DIRS "/usr/include/OIS")
 
 set(Boost_USE_STATIC_LIBS OFF)

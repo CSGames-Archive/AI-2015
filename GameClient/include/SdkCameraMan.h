@@ -266,7 +266,7 @@ namespace OgreBites
 		virtual void injectMouseMove(const OIS::MouseEvent& evt)
 #endif
 		{
-			if (mStyle == CS_ORBIT)
+			if (mStyle == CS_ORBIT && activeMove)
 			{
 				Ogre::Real dist = (mCamera->getPosition() - mTarget->_getDerivedPosition()).length();
 
