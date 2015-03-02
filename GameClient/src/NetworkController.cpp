@@ -16,7 +16,7 @@
 
 #include "NetworkController.h"
 
-NetworkController::NetworkController(std::queue<GameEvent*>* gameEventQueue) : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), eventFactory(gameEventQueue)
+NetworkController::NetworkController() : resolver(io_service), query("127.0.0.1", "1337"), socket(io_service), eventFactory()
 {
 	endpoint_iterator = resolver.resolve(query);
 	readerThread = NULL;
@@ -47,10 +47,9 @@ void NetworkController::writeFunc()
 
 		while(!exit)
 		{
-			if(!messageQueue.empty())
+			if(!QueueController::getInstance().isMessageQueueEmpty())
 			{
-				message = messageQueue.front();
-				messageQueue.pop();
+				message = QueueController::getInstance().getMessage();
 
 				if(message == "Exit")
 				{
@@ -126,7 +125,7 @@ bool NetworkController::tryToConnect()
 
 void NetworkController::tryJoinGame()
 {
-	messageQueue.push("GameClientReady");
+	QueueController::getInstance().addMessage("GameClientReady");
 	status = ControllerStatus::WaitingYouAreTheGameClient;
 }
 
@@ -176,19 +175,13 @@ void NetworkController::parseMessage(std::string message)
 
 void NetworkController::close()
 {
-	std::string message = "Exit";
-	messageQueue.push(message);
+	QueueController::getInstance().addMessage("Exit");
 
 	if(readerThread)
 		readerThread->join();
 
 	if(writerThread)
 		writerThread->join();
-}
-
-std::queue<std::string>* NetworkController::getQueue()
-{
-	return &messageQueue;
 }
 
 void NetworkController::parseMessageBody(std::string body)

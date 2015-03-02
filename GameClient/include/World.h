@@ -17,31 +17,63 @@
 
 #include "stdafx.h"
 
+#include "TextOverlay.h"
 #include "Team.h"
+#include "QueueController.h"
 
 class World
 {
 private:
-	// TODO: find better place
-	char* TANK_MESH_NAME;
-	Ogre::Real TANK_MESH_HEIGHT;
-
-	std::queue<std::string>* netMessageQueue;
-	Ogre::SceneManager* sceneManager;
-
 	Team* teams[MAX_TEAM];
 	int teamCount;
 
+	bool gameStarted;
+
+	Ogre::Overlay* labelOverlay;
+	Ogre::SceneManager* sceneManager;
+
+	Ogre::OverlayContainer* panel;
+	Ogre::TextAreaOverlayElement* textElement;
+
+	// Don't implement for singleton
+	World(World const&);
+    void operator=(World const&);
+
+	void generateMapDelimiter();
+	void gameStart();
+	void sendAllPosition();
+	void generateMap();
+	void sendMap();
+
+	void endGame();
+	Team* findWiningTeam();
+	void showMessage(std::string message);
+
 public:
-	World(Ogre::SceneManager* sceneManager, std::queue<std::string>* netMessageQueue);
+	World();
 	virtual ~World();
+	void init(Ogre::SceneManager* sceneManager);
+
+	static World& getInstance()
+    {
+        static World instance;
+        return instance;
+    }
 
 	void createScene();
+	void addTime(Ogre::Real deltaTime);
+	
+	// Event action
 	void addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM]);
 	void removeTeam(int teamId);
+
+	void mineHit(int mineTeamId, int mineCharacterId);
+	void missileHit(int missileTeamId, int missileCharacterId);
+	void characterHit(int hitTeamId, int hitCharacterId);
+
+	// Getters
 	Team* getTeam(int teamId);
-	void addTime(Ogre::Real deltaTime);
-	void gameStart();
+	bool isGameStarted();
 };
 
 #endif // #ifndef __World_h_

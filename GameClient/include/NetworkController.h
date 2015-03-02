@@ -19,6 +19,7 @@
 
 #include "EventFactory.h"
 #include "NetUtility.h"
+#include "QueueController.h"
 
 using boost::asio::ip::tcp;
 
@@ -37,7 +38,6 @@ class NetworkController
 {
 private:
 	// Structure
-	std::queue<std::string> messageQueue;
 	EventFactory eventFactory;
 
 	// Attributes for connection
@@ -58,7 +58,7 @@ private:
 	boost::thread* writerThread;
 
 public:
-    NetworkController(std::queue<GameEvent*>* gameEventQueue);
+    NetworkController();
     virtual ~NetworkController();
 
 	// Threads functions
@@ -69,9 +69,7 @@ public:
 	void tryJoinGame();
 	void parseMessage(std::string message);
 	void parseMessageBody(std::string body);
-
 	void close();
-	std::queue<std::string>* getQueue();
 };
 
 #endif // #ifndef __NetworkController_h_

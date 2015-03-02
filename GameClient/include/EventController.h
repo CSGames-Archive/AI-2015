@@ -18,19 +18,27 @@
 #include "stdafx.h"
 
 #include "GameEvent.h"
+#include "QueueController.h"
+#include "World.h"
 
 class EventController
 {
 private:
-	std::queue<GameEvent*> gameEventQueue;
 
 public:
     EventController();
     virtual ~EventController();
 
-	void executeAllGameEvent(World* world);
-	void addGameEvent(GameEvent* gameEvent);
-	std::queue<GameEvent*>* getQueue();
+	void executeAllGameEvent();
+	void dispatchEvent(GameEvent* gameEvent);
+	void error(GameEvent* gameEvent);
+	void disconnect(GameEvent* gameEvent);
+	void addTeam(GameEvent* gameEvent);
+	void moveCharacter(GameEvent* gameEvent);
+	void dropMine(GameEvent* gameEvent);
+	void mineHit(GameEvent* gameEvent);
+	void throwMissile(GameEvent* gameEvent);
+	void missileHit(GameEvent* gameEvent);
 };
 
 #endif // #ifndef __EventController_h_

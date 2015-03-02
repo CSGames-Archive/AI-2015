@@ -19,15 +19,15 @@
 
 #include "GameEvent.h"
 #include "NetUtility.h"
+#include "QueueController.h"
 
 class EventFactory
 {
 private:
-	std::queue<GameEvent*>* gameEventQueue;
 	GameEvent* createEvent(std::string type);
 
 public:
-	EventFactory(std::queue<GameEvent*>* gameEventQueue);
+	EventFactory();
     virtual ~EventFactory();
 
 	void generate(std::string message);

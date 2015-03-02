@@ -17,37 +17,73 @@
 
 #include "stdafx.h"
 
+#include "TextOverlay.h"
 #include "NetUtility.h"
-
-#define WALK_SPEED 50
+#include "Map.h"
+#include "Mine.h"
+#include "Missile.h"
+#include "QueueController.h"
 
 class Character
 {
 
 private:
-	// Network
-	std::queue<std::string>* netMessageQueue;
+	// Character infos
 	int teamId;
 	int characterId;
-	Ogre::Vector3 lastSendPosition;
-
-	// Character Infos
 	std::string name;
-	Ogre::Vector3 targetPosition;
+	int life;
+	bool disable;
+
+	// Action infos
+	bool askForMine;
+	bool askForMissile;
+	Mine* mine;
+	Missile* missile;
+	Ogre::Real timeToWait;
+
+	// 3D world infos
+	Vector2 position;
+	Vector2 lastPosition;
+	Vector2 targetPosition;
+	Ogre::Vector3 subStepPosition;
+	Ogre::Real TANK_MESH_HEIGHT;
 
 	// 3D world components
 	Ogre::SceneNode* bodyNode;
+	TextOverlay* nameOverlay;
+	TextOverlay* lifeOverlay;
 
 	void updateBody(Ogre::Real deltaTime);
+	void dropMine();
+	void throwMissile();
+	void die();
 
 public:
-	Character(std::queue<std::string>* netMessageQueue, Ogre::SceneNode* bodyNode, std::string name, int teamId, int characterId);
+	Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, TextOverlay* nameOverlay, TextOverlay* lifeOverlay, std::string name, int teamId, int characterId);
 	virtual ~Character();
 
-	void addTime(Ogre::Real deltaTime);
-	void setTargetPosition(Ogre::Vector3 targetPosition);
-	void setTargetPosition(int x, int z);
+	void addTime(Ogre::Real deltaTime, Ogre::Camera* camera);
+
+	// Getters
 	int getId();
+	std::string getName();
+	bool isMineReady();
+	bool isMissileReady();
+	Mine* getMine();
+	Missile* getMissile();
+	bool isVisible();
+	bool isAlive();
+
+	// Setters
+	void setTargetPosition(int x, int z);
+
+	// Actions
+	void askMine();
+	void askMissile(int direction);
+	void hit();
+	void sendPosition();
+	void deactivate();
 };
 
-#endif // #ifndef __Character_h_
+#endif

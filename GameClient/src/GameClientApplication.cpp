@@ -33,17 +33,13 @@ GameClientApplication::~GameClientApplication()
 		delete eventController;
 		eventController = NULL;
 	}
-
-	if(world)
-	{
-		delete world;
-		world = NULL;
-	}
 }
 
 void GameClientApplication::createScene()
 {
-	world->createScene();
+	mCameraMan->getCamera()->setPosition(87.5, 300.0, 87.5);
+	mCameraMan->getCamera()->pitch(Ogre::Radian(Ogre::Degree(-90)));
+	World::getInstance().createScene();
 }
 
 bool GameClientApplication::setup()
@@ -69,13 +65,15 @@ bool GameClientApplication::setup()
 
 	// Create world & controller
 	eventController = new EventController();
-	networkController = new NetworkController(eventController->getQueue());
+	networkController = new NetworkController();
 	networkController->init();
-	world = new World(mSceneMgr, networkController->getQueue());
+	World::getInstance().init(mSceneMgr);
 
 	// Create the scene
 	createScene();
 	createFrameListener();
+
+	//mTrayMgr->hideAll();
 
 	return true;
 };
@@ -94,27 +92,22 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mKeyboard->capture();
     mMouse->capture();
 
-    mTrayMgr->frameRenderingQueued(evt);
+	mTrayMgr->frameRenderingQueued(evt);
 
-    if (!mTrayMgr->isDialogVisible())
-    {
-		eventController->executeAllGameEvent(world);
-		world->addTime(evt.timeSinceLastFrame);
-        mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
-        if (mDetailsPanel->isVisible())          // If details panel is visible, then update its contents
-        {
-            mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
-            mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
-            mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
-            mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
-            mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
-            mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
-            mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
-        }
-    }
+	eventController->executeAllGameEvent();
+
+	if(World::getInstance().isGameStarted())
+	{
+		World::getInstance().addTime(evt.timeSinceLastFrame);
+	}
+
+    mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
 
 	Ogre::Real ttW = 1000.0 / 60.0 - 1000.0 * evt.timeSinceLastFrame;
-	if (ttW > 0) Sleep(ttW);
+	if (ttW > 0)
+	{
+	    boost::this_thread::sleep(boost::posix_time::milliseconds(ttW));
+	}
 
 	return true;
 }
@@ -130,7 +123,6 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 
 	if (arg.key == OIS::KC_ESCAPE)
 	{
-		//TODO: test if call in the destructor
 		networkController->close();
 		mShutDown = true;
 	}
@@ -166,7 +158,6 @@ bool GameClientApplication::mouseReleased( const OIS::MouseEvent &arg, OIS::Mous
 	return true;
 }
 
-//TODO: some refactor, this code came with the sdk
 #ifdef __cplusplus
 extern "C" {
 #endif

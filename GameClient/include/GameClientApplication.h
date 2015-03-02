@@ -28,7 +28,6 @@ class GameClientApplication : public BaseApplication
 private:
 	NetworkController* networkController;
 	EventController* eventController;
-	World* world;
 
 public:
     GameClientApplication();
