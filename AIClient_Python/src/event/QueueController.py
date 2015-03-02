@@ -4,6 +4,7 @@ Created on Dec 20, 2014
 @author: samuel
 '''
 
+import sys
 import queue
 from event.OutgoingEvent import OutgoingEvent
 from event.IngoingEvent import IngoingEvent

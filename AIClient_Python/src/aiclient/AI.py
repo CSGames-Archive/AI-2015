@@ -11,19 +11,41 @@ from world.World import World
 from mathUtils.Vector2 import Vector2
 
 class AIStatus(Enum):
+    '''
+    enumememememememe
+    '''
     INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT = range(5)
 
 class AI(object):
+    '''
+    Represents the A.I. that need to be implemented
+    
+    Attributes:
+      aiStatus	the status of the ai (Can be deleted, usefull only for the exemple)
+      world	the world that contain all information that the A.I. need
+    '''
     aiStatus = AIStatus.INIT
     queueController = Singleton(QueueController)
     world = Singleton(World)
+    '''
+    Represent la world
+    '''
 
     position1 = Vector2(0,0)
     position2 = Vector2(7,0)
     position3 = Vector2(0,7)
     position4 = Vector2(7,7)
+    '''
+    Represent la position 4
+    '''
     
+    '''
+    classdocs
+    '''
     def tick(self):
+        '''
+        Function call every 30 ms, this is the starting point for the A.I.
+        '''
         if self.aiStatus == AIStatus.INIT:
             self.init()
         elif self.aiStatus == AIStatus.LOWER_RIGHT:
