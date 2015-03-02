@@ -21,7 +21,7 @@ http://www.ogre3d.org/wiki/
 #include "stdafx.h"
 
 #include <SdkTrays.h>
-#include <SdkCameraMan.h>
+#include "SdkCameraMan.h"
 
 //---------------------------------------------------------------------------
 

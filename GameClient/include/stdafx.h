@@ -17,7 +17,12 @@
 
 #define MAX_CHARACTER_PER_TEAM 2
 #define MAX_TEAM 2
+#define MAP_HEIGHT 8
+#define MAP_WIDTH 8
 #define MESSAGE_MAX_ARGUMENT 16
+
+#define CHARACTER_WALK_SPEED 35
+#define MISSILE_WALK_SPEED 70
 
 // Boost
 #include <boost/asio.hpp>

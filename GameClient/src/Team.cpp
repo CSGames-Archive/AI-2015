@@ -46,19 +46,19 @@ void Team::addCharacter(Character* character)
 
 Character* Team::getCharacter(int characterId)
 {
-	if(characterId < characterCount)
+	if(characterId < MAX_CHARACTER_PER_TEAM)
 		return characters[characterId];
 	else
 		return NULL;
 }
 
-void Team::addTime(Ogre::Real deltaTime)
+void Team::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 {
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
 		if(characters[i])
 		{
-			characters[i]->addTime(deltaTime);
+			characters[i]->addTime(deltaTime, camera);
 		}
 	}
 }
@@ -66,4 +66,38 @@ void Team::addTime(Ogre::Real deltaTime)
 int Team::getId()
 {
 	return id;
+}
+
+std::string Team::getName()
+{
+	return name;
+}
+
+bool Team::isAlive()
+{
+	return characterCount > 0;
+}
+
+void Team::characterHit(int characterId)
+{
+	Character* hitCharacter = getCharacter(characterId);
+	if(hitCharacter->isAlive())
+	{
+		hitCharacter->hit();
+		if(!hitCharacter->isAlive())
+		{
+			--characterCount;
+		}
+	}
+}
+
+void Team::deactivate()
+{
+	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
+	{
+		if(characters[i])
+		{
+			characters[i]->deactivate();
+		}
+	}
 }

@@ -16,9 +16,8 @@
 
 #include "EventFactory.h"
 
-EventFactory::EventFactory(std::queue<GameEvent*>* gameEventQueue)
+EventFactory::EventFactory()
 {
-	this->gameEventQueue = gameEventQueue;
 }
 
 EventFactory::~EventFactory()
@@ -34,7 +33,7 @@ void EventFactory::generate(std::string message)
 	{
 		if(currentEvent->fill(message))
 		{
-			gameEventQueue->push(currentEvent);
+			QueueController::getInstance().addEvent(currentEvent);
 		}
 
 	}
@@ -57,6 +56,14 @@ GameEvent* EventFactory::createEvent(std::string type)
 	else if(type == "Move")
 	{
 		return new MoveCharacterEvent();
+	}
+	else if(type == "DropMine")
+	{
+		return new DropMineEvent();
+	}
+	else if(type == "ThrowMissile")
+	{
+		return new ThrowMissileEvent();
 	}
 	return NULL;
 }
