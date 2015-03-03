@@ -57,17 +57,18 @@
 <span class="kn">from</span> <span class="nn">aiclient.Singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
 <span class="kn">from</span> <span class="nn">world.World</span> <span class="kn">import</span> <span class="n">World</span>
 <span class="kn">from</span> <span class="nn">mathUtils.Vector2</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">from</span> <span class="nn">mathUtils.Direction</span> <span class="kn">import</span> <span class="n">Direction</span>
 
 <div class="viewcode-block" id="AIStatus"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AIStatus">[docs]</a><span class="k">class</span> <span class="nc">AIStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Enum created for the AI exemple</span>
+<span class="sd">    Enum created for the AI example</span>
 <span class="sd">    (Can be deleted)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">INIT</span><span class="p">,</span> <span class="n">LOWER_RIGHT</span><span class="p">,</span> <span class="n">LOWER_LEFT</span><span class="p">,</span> <span class="n">UPPER_RIGHT</span><span class="p">,</span> <span class="n">UPPER_LEFT</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="AI"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI">[docs]</a><span class="k">class</span> <span class="nc">AI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Represents the A.I. that need to be implemented</span>
+<span class="sd">    Represents the AI that need to be implemented</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="n">world</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">World</span><span class="p">)</span>
@@ -78,7 +79,7 @@
     
     <span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    The current status of the AI exemple</span>
+<span class="sd">    The current status of the AI example</span>
 <span class="sd">    (Can be deleted)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
@@ -89,7 +90,7 @@
     
 <div class="viewcode-block" id="AI.tick"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call every 30 ms, this is the starting point for the A.I.</span>
+<span class="sd">        Function call every 30 ms, this is the starting point for the AI</span>
 <span class="sd">        (Cannot be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span><span class="p">:</span>
@@ -105,7 +106,7 @@
     </div>
 <div class="viewcode-block" id="AI.initState"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.initState">[docs]</a>    <span class="k">def</span> <span class="nf">initState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call for the init state of the ai exemple</span>
+<span class="sd">        Function call for the init state of the AI example</span>
 <span class="sd">        (Can be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
@@ -114,14 +115,14 @@
         <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
         <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
         
-        <span class="n">character1</span><span class="o">.</span><span class="n">shootRight</span><span class="p">()</span>
-        <span class="n">character2</span><span class="o">.</span><span class="n">shootLeft</span><span class="p">()</span>
+        <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+        <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span>
     </div>
 <div class="viewcode-block" id="AI.lowerRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.lowerRight">[docs]</a>    <span class="k">def</span> <span class="nf">lowerRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call for the lowerRight state of the ai exemple</span>
+<span class="sd">        Function call for the lowerRight state of the AI example</span>
 <span class="sd">        (Can be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
@@ -134,14 +135,14 @@
             <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             
-            <span class="n">character1</span><span class="o">.</span><span class="n">shootLeft</span><span class="p">()</span>
-            <span class="n">character2</span><span class="o">.</span><span class="n">shootRight</span><span class="p">()</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_LEFT</span>
     </div>
 <div class="viewcode-block" id="AI.lowerLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.lowerLeft">[docs]</a>    <span class="k">def</span> <span class="nf">lowerLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call for the lowerLeft state of the ai exemple</span>
+<span class="sd">        Function call for the lowerLeft state of the AI example</span>
 <span class="sd">        (Can be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
@@ -151,8 +152,8 @@
             <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position4</span><span class="p">)</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position1</span><span class="p">)</span>
             
-            <span class="n">character1</span><span class="o">.</span><span class="n">shootUp</span><span class="p">()</span>
-            <span class="n">character2</span><span class="o">.</span><span class="n">shootDown</span><span class="p">()</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">)</span>
             
             <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
@@ -161,7 +162,7 @@
     </div>
 <div class="viewcode-block" id="AI.upperRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.upperRight">[docs]</a>    <span class="k">def</span> <span class="nf">upperRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call for the upperRight state of the ai exemple</span>
+<span class="sd">        Function call for the upperRight state of the AI example</span>
 <span class="sd">        (Can be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
@@ -171,8 +172,8 @@
             <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
 
-            <span class="n">character1</span><span class="o">.</span><span class="n">shootDown</span><span class="p">()</span>
-            <span class="n">character2</span><span class="o">.</span><span class="n">shootUp</span><span class="p">()</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
 
             <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
@@ -181,7 +182,7 @@
     </div>
 <div class="viewcode-block" id="AI.upperLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.upperLeft">[docs]</a>    <span class="k">def</span> <span class="nf">upperLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Function call for the upperLeft state of the ai exemple</span>
+<span class="sd">        Function call for the upperLeft state of the AI example</span>
 <span class="sd">        (Can be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
@@ -191,8 +192,8 @@
             <span class="n">character1</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position2</span><span class="p">)</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">goTo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position3</span><span class="p">)</span>
             
-            <span class="n">character1</span><span class="o">.</span><span class="n">shootRight</span><span class="p">()</span>
-            <span class="n">character2</span><span class="o">.</span><span class="n">shootLeft</span><span class="p">()</span>
+            <span class="n">character1</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">)</span>
+            <span class="n">character2</span><span class="o">.</span><span class="n">shootMissile</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
             
             <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>

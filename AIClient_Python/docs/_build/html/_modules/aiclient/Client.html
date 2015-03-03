@@ -81,10 +81,10 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">netController</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-        <span class="k">while</span> <span class="n">netController</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">gameIsFinished</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">netController</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">_gameIsFinished</span><span class="p">:</span>
             <span class="n">eventController</span><span class="o">.</span><span class="n">executeIngoingEvents</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">gameIsStarted</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">_gameIsStarted</span><span class="p">:</span>
                 <span class="n">ai</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
 
             <span class="n">netController</span><span class="o">.</span><span class="n">executeOutgoingEvents</span><span class="p">()</span>
