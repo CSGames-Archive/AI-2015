@@ -17,6 +17,8 @@
 *.sln
 *.pyc
 *.class
+*.iml
+*.idea/
 AIClient_JAVA/.settings/
 .metadata/
 AIClient_JAVA/bin/.project

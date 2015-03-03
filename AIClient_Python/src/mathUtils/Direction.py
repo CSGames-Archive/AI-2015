@@ -6,6 +6,7 @@ Created on Jan 6, 2015
 
 from enum import Enum
 
+
 class Direction(Enum):
     '''
     Enum that represent every direction possible
