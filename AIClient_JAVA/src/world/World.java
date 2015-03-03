@@ -102,7 +102,8 @@ public class World {
 	 */
 	
 	/**
-	 * This function return the team associate with a certain id
+	 * Return the team associate with a certain id
+	 * Important : the id of the team are not starting at 0
 	 * 
 	 * @param id the id of the team we want
 	 * @return the team or null if not found
