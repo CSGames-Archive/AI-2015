@@ -1,8 +1,9 @@
 '''
 Created on Dec 20, 2014
 
-@author: samuel
+@author: scarriere
 '''
+
 from event.DropMineEvent import DropMineEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
@@ -12,64 +13,100 @@ from event.MoveCharacterEvent import MoveCharacterEvent
 from event.ThrowMissileEvent import ThrowMissileEvent, Direction
 
 class Character(object):
-    queueController = Singleton(QueueController)
+    '''
+    Class that containt all the informations about the Character
+        (You can't use any of the functions or variables that start with an "_")
+    '''
+    _queueController = Singleton(QueueController)
     
     def __init__(self, characterId, position):
-        self.characterId = characterId
+        self._characterId = characterId
         self.position = Vector2(position.x, position.y)
+        '''
+        The current position of the character
+            (see :class:`.Vector2`)
+        '''
         self.mineReady = True
+        '''
+        Is the mine ready to be use
+            (see :class:`.bool`)
+        '''
         self.missile = Missile(Vector2(0,0))
+        '''
+        The missile of the character
+            (see :class:`.Missile`)
+        '''
         self.life = 3
+        '''
+        The life total of the character
+            (see :class:`.int`)
+        '''
     
-    def move(self, position):
+    def _updatePosition(self, position):
         self.position.x = position.x
         self.position.y = position.y
         
+    def _hitByMine(self):
+        if self.isAlive():
+            self.life -= 1
+    
+    def _mineHit(self):
+        self.mineReady = True;
+    
+    def _hitByMissile(self):
+        if self.isAlive():
+            self.life -= 1
+        
+    def _missileHit(self):
+        self.missile.isReady = True
+    
     def goTo(self, position):
-        event1 = MoveCharacterEvent(self.characterId, position.x, position.y)
-        self.queueController.outEvents.put(event1)
+        '''
+        Send the order to move the character
+        to a certain position(:class:`.Vector2`)
+            
+        Exemple::
+        
+            aCharacter.goTo(Vector2(6,7))
+        '''
+        event = MoveCharacterEvent(self._characterId, position.x, position.y)
+        self._queueController.outEvents.put(event)
         
     def dropMine(self):
+        '''
+        Send the order to drop a mine on the current position(:class:`.Vector2`)
+            if the mine is ready
+            
+        Exemple::
+        
+            aCharacter.dropMine()
+        '''
         if(self.mineReady):
-            event = DropMineEvent(self.characterId)
-            self.queueController.addOutgoingEvent(event)
+            event = DropMineEvent(self._characterId)
+            self._queueController.addOutgoingEvent(event)
             self.mineReady = False
 
-    def hitByMine(self):
-        if self.isAlive():
-            self.life -= 1
-        print("ouch!! - Mine")
-        
-    def mineHit(self):
-        self.mineReady = True;
-        print("Mine blow!")
-        
     def shootMissile(self, direction):
-        if(self.missile.isReady):
-            event = ThrowMissileEvent(self.characterId, direction)
-            self.queueController.addOutgoingEvent(event)
+        '''
+        Send the order to shoot a missile on a certain direction(:class:`.Direction`)
+            if the missile is ready
             
-    def shootUp(self):
-        self.shootMissile(Direction.UP)
+        Exemple::
         
-    def shootDown(self):
-        self.shootMissile(Direction.DOWN)
-        
-    def shootLeft(self):
-        self.shootMissile(Direction.LEFT)
-        
-    def shootRight(self):
-        self.shootMissile(Direction.RIGHT)
-        
-    def hitByMissile(self):
-        if self.isAlive():
-            self.life -= 1
-        print("ouch!! - Missile")
-        
-    def missileHit(self):
-        self.missile.isReady = True;
-        print("Missile hit target")
+            aCharacter.shootMissile(Direction.UP)
+        '''
+        if(self.missile.isReady):
+            event = ThrowMissileEvent(self._characterId, direction)
+            self._queueController.addOutgoingEvent(event)
+            self.missile.isReady = False
         
     def isAlive(self):
+        '''
+        Check if the character still have some life point
+            
+        Exemple::
+        
+            checkIfAlive = aCharacter.isAlive()
+        '''
         return self.life > 0
     

@@ -1,7 +1,7 @@
 '''
 Created on Dec 21, 2014
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from world.World import World
@@ -25,5 +25,5 @@ class UpdateCharacterEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.getTeam(self.teamId).characters[self.characterId].move(self.position)
+        world.getTeam(self.teamId).characters[self.characterId]._updatePosition(self.position)
         

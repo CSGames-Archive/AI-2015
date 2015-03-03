@@ -50,53 +50,50 @@
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Created on Dec 21, 2014</span>
 
-<span class="sd">@author: samuel</span>
+<span class="sd">@author: scarriere</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">aiclient.Singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
-<span class="kn">from</span> <span class="nn">event.QueueController</span> <span class="kn">import</span> <span class="n">QueueController</span>
 <span class="kn">from</span> <span class="nn">world.World</span> <span class="kn">import</span> <span class="n">World</span>
 <span class="kn">from</span> <span class="nn">mathUtils.Vector2</span> <span class="kn">import</span> <span class="n">Vector2</span>
 
-<div class="viewcode-block" id="AIStatus"><a class="viewcode-back" href="../../index.html#aiclient.AI.AIStatus">[docs]</a><span class="k">class</span> <span class="nc">AIStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="AIStatus"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AIStatus">[docs]</a><span class="k">class</span> <span class="nc">AIStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    enumememememememe</span>
+<span class="sd">    Enum created for the AI exemple</span>
+<span class="sd">    (Can be deleted)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">INIT</span><span class="p">,</span> <span class="n">LOWER_RIGHT</span><span class="p">,</span> <span class="n">LOWER_LEFT</span><span class="p">,</span> <span class="n">UPPER_RIGHT</span><span class="p">,</span> <span class="n">UPPER_LEFT</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="AI"><a class="viewcode-back" href="../../index.html#aiclient.AI.AI">[docs]</a><span class="k">class</span> <span class="nc">AI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="AI"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI">[docs]</a><span class="k">class</span> <span class="nc">AI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Represents the A.I. that need to be implemented</span>
-<span class="sd">    </span>
-<span class="sd">    Attributes:</span>
-<span class="sd">      aiStatus	the status of the ai (Can be deleted, usefull only for the exemple)</span>
-<span class="sd">      world	the world that contain all information that the A.I. need</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span>
-    <span class="n">queueController</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">QueueController</span><span class="p">)</span>
+    
     <span class="n">world</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">World</span><span class="p">)</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Represent la world</span>
+<span class="sd">    The world singleton needed to get the info on the current state of the world</span>
+<span class="sd">       (see :class:`.World`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The current status of the AI exemple</span>
+<span class="sd">    (Can be deleted)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">position1</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">position2</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">position3</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
     <span class="n">position4</span> <span class="o">=</span> <span class="n">Vector2</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Represent la position 4</span>
-<span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    classdocs</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="AI.tick"><a class="viewcode-back" href="../../index.html#aiclient.AI.AI.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AI.tick"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function call every 30 ms, this is the starting point for the A.I.</span>
+<span class="sd">        (Cannot be deleted)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">INIT</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initState</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lowerRight</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_LEFT</span><span class="p">:</span>
@@ -106,7 +103,11 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">==</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_LEFT</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">upperLeft</span><span class="p">()</span>
     </div>
-    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AI.initState"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.initState">[docs]</a>    <span class="k">def</span> <span class="nf">initState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the init state of the ai exemple</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
         <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
         
@@ -117,8 +118,12 @@
         <span class="n">character2</span><span class="o">.</span><span class="n">shootLeft</span><span class="p">()</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span>
-    
-    <span class="k">def</span> <span class="nf">lowerRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="AI.lowerRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.lowerRight">[docs]</a>    <span class="k">def</span> <span class="nf">lowerRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the lowerRight state of the ai exemple</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
         <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
         
@@ -133,8 +138,12 @@
             <span class="n">character2</span><span class="o">.</span><span class="n">shootRight</span><span class="p">()</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_LEFT</span>
-    
-    <span class="k">def</span> <span class="nf">lowerLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="AI.lowerLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.lowerLeft">[docs]</a>    <span class="k">def</span> <span class="nf">lowerLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the lowerLeft state of the ai exemple</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
         <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
         
@@ -149,8 +158,12 @@
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_RIGHT</span>
-    
-    <span class="k">def</span> <span class="nf">upperRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="AI.upperRight"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.upperRight">[docs]</a>    <span class="k">def</span> <span class="nf">upperRight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the upperRight state of the ai exemple</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
         <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
         
@@ -165,8 +178,12 @@
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">UPPER_LEFT</span>
-    
-    <span class="k">def</span> <span class="nf">upperLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="AI.upperLeft"><a class="viewcode-back" href="../../aiclient.html#aiclient.AI.AI.upperLeft">[docs]</a>    <span class="k">def</span> <span class="nf">upperLeft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function call for the upperLeft state of the ai exemple</span>
+<span class="sd">        (Can be deleted)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">character1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getFirstCharacter</span><span class="p">()</span>
         <span class="n">character2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">getMyTeam</span><span class="p">()</span><span class="o">.</span><span class="n">getSecondCharacter</span><span class="p">()</span>
         
@@ -180,7 +197,7 @@
             <span class="n">character1</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             <span class="n">character2</span><span class="o">.</span><span class="n">dropMine</span><span class="p">()</span>
             
-            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aiStatus</span> <span class="o">=</span> <span class="n">AIStatus</span><span class="o">.</span><span class="n">LOWER_RIGHT</span></div></div>
 </pre></div>
 
           </div>

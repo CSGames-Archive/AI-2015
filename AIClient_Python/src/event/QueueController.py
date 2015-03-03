@@ -1,7 +1,7 @@
 '''
 Created on Dec 20, 2014
 
-@author: samuel
+@author: scarriere
 '''
 
 import sys

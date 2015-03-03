@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="AI Client Python 1.0.0 documentation" href="#" /> 
+    <link rel="top" title="AI Client Python 1.0.0 documentation" href="#" />
+    <link rel="next" title="aiclient Package" href="aiclient.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,6 +36,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="aiclient.html" title="aiclient Package"
+             accesskey="N">next</a> |</li>
         <li><a href="#">AI Client Python 1.0.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -46,50 +50,53 @@
             
   <div class="section" id="welcome-to-ai-client-python-s-documentation">
 <h1>Welcome to AI Client Python&#8217;s documentation!<a class="headerlink" href="#welcome-to-ai-client-python-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="aiclient.html">aiclient Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aiclient.html#module-aiclient.AI"><tt class="docutils literal"><span class="pre">AI</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aiclient.html#ai-class"><tt class="docutils literal"><span class="pre">AI</span></tt> Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aiclient.html#aistatus-class"><tt class="docutils literal"><span class="pre">AIStatus</span></tt> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aiclient.html#module-aiclient.Client"><tt class="docutils literal"><span class="pre">Client</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aiclient.html#client-class"><tt class="docutils literal"><span class="pre">Client</span></tt> Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mathUtils.html">mathUtils Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mathUtils.html#module-mathUtils.Vector2"><tt class="docutils literal"><span class="pre">Vector2</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mathUtils.html#vector2-class"><tt class="docutils literal"><span class="pre">Vector2</span></tt> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mathUtils.html#module-mathUtils.Direction"><tt class="docutils literal"><span class="pre">Direction</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mathUtils.html#direction-class"><tt class="docutils literal"><span class="pre">Direction</span></tt> Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">world Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-world.World"><tt class="docutils literal"><span class="pre">World</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="world.html#world-class"><tt class="docutils literal"><span class="pre">World</span></tt> Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html#entity-class"><tt class="docutils literal"><span class="pre">Entity</span></tt> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-world.Team"><tt class="docutils literal"><span class="pre">Team</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="world.html#team-class"><tt class="docutils literal"><span class="pre">Team</span></tt> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-world.Character"><tt class="docutils literal"><span class="pre">Character</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="world.html#character-class"><tt class="docutils literal"><span class="pre">Character</span></tt> Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-world.Missile"><tt class="docutils literal"><span class="pre">Missile</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="world.html#missile-class"><tt class="docutils literal"><span class="pre">Missile</span></tt> Class</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
-<span class="target" id="module-aiclient.AI"></span><p>Created on Dec 21, 2014</p>
-<p>&#64;author: samuel</p>
-<dl class="class">
-<dt id="aiclient.AI.AI">
-<em class="property">class </em><tt class="descclassname">aiclient.AI.</tt><tt class="descname">AI</tt><a class="reference internal" href="_modules/aiclient/AI.html#AI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aiclient.AI.AI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents the A.I. that need to be implemented</p>
-<dl class="docutils">
-<dt>Attributes:</dt>
-<dd>aiStatus  the status of the ai (Can be deleted, usefull only for the exemple)
-world     the world that contain all information that the A.I. need</dd>
-</dl>
-<dl class="attribute">
-<dt id="aiclient.AI.AI.position4">
-<tt class="descname">position4</tt><em class="property"> = &lt;mathUtils.Vector2.Vector2 object at 0x4161394c&gt;</em><a class="headerlink" href="#aiclient.AI.AI.position4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represent la position 4</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="aiclient.AI.AI.tick">
-<tt class="descname">tick</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/aiclient/AI.html#AI.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aiclient.AI.AI.tick" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function call every 30 ms, this is the starting point for the A.I.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="aiclient.AI.AI.world">
-<tt class="descname">world</tt><em class="property"> = &lt;world.World.World object at 0x4160498c&gt;</em><a class="headerlink" href="#aiclient.AI.AI.world" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represent la world</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="aiclient.AI.AIStatus">
-<em class="property">class </em><tt class="descclassname">aiclient.AI.</tt><tt class="descname">AIStatus</tt><a class="reference internal" href="_modules/aiclient/AI.html#AIStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#aiclient.AI.AIStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>enumememememememe</p>
-</dd></dl>
-
-<span class="target" id="module-aiclient.Client"></span><p>Created on Dec 15, 2014</p>
-<p>&#64;author: samuel</p>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
@@ -112,6 +119,9 @@ world     the world that contain all information that the A.I. need</dd>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aiclient.html"
+                        title="next chapter">aiclient Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -143,6 +153,9 @@ world     the world that contain all information that the A.I. need</dd>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="aiclient.html" title="aiclient Package"
+             >next</a> |</li>
         <li><a href="#">AI Client Python 1.0.0 documentation</a> &raquo;</li> 
       </ul>
     </div>

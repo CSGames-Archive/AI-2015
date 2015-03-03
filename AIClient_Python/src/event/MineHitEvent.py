@@ -1,7 +1,7 @@
 '''
 Created on Jan 2, 2015
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -25,5 +25,5 @@ class MineHitEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.getTeam(self.hitTeamId).characters[self.hitCharacterId].hitByMine()
-        world.getTeam(self.originTeamId).characters[self.originCharacterId].mineHit()
+        world.getTeam(self.hitTeamId).characters[self.hitCharacterId]._hitByMine()
+        world.getTeam(self.originTeamId).characters[self.originCharacterId]._mineHit()

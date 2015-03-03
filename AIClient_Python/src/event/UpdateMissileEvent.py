@@ -1,7 +1,7 @@
 '''
 Created on Jan 6, 2015
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -28,5 +28,5 @@ class UpdateMissileEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.getTeam(self.teamId).characters[self.characterId].missile.move(self.position, self.direction)
+        world.getTeam(self.teamId).characters[self.characterId].missile._updatePositionDirection(self.position, self.direction)
         

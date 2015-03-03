@@ -1,7 +1,7 @@
 '''
 Created on Jan 11, 2015
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -21,5 +21,5 @@ class UpdateBoxEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.updateBox(self.x, self.y)
+        world._updateBox(self.x, self.y)
         
