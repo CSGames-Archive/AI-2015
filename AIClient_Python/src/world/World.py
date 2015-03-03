@@ -18,7 +18,7 @@ class Entity(Enum):
 
 class World(object):
     '''
-    Class that containt all the informations about the Teams, Characters and Missiles
+    Class that contain all the informations about the Teams, Characters and Missiles
         (You can't use any of the functions or variables that start with an "_")
     '''
     _instance = None

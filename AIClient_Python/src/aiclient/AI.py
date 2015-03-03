@@ -12,14 +12,14 @@ from mathUtils.Direction import Direction
 
 class AIStatus(Enum):
     '''
-    Enum created for the AI exemple
+    Enum created for the AI example
     (Can be deleted)
     '''
     INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT = range(5)
 
 class AI(object):
     '''
-    Represents the A.I. that need to be implemented
+    Represents the AI that need to be implemented
     '''
     
     world = Singleton(World)
@@ -30,7 +30,7 @@ class AI(object):
     
     aiStatus = AIStatus.INIT
     '''
-    The current status of the AI exemple
+    The current status of the AI example
     (Can be deleted)
     '''
 
@@ -41,7 +41,7 @@ class AI(object):
     
     def tick(self):
         '''
-        Function call every 30 ms, this is the starting point for the A.I.
+        Function call every 30 ms, this is the starting point for the AI
         (Cannot be deleted)
         '''
         if self.aiStatus == AIStatus.INIT:
@@ -57,7 +57,7 @@ class AI(object):
     
     def initState(self):
         '''
-        Function call for the init state of the ai exemple
+        Function call for the init state of the AI example
         (Can be deleted)
         '''
         character1 = self.world.getMyTeam().getFirstCharacter()
@@ -73,7 +73,7 @@ class AI(object):
     
     def lowerRight(self):
         '''
-        Function call for the lowerRight state of the ai exemple
+        Function call for the lowerRight state of the AI example
         (Can be deleted)
         '''
         character1 = self.world.getMyTeam().getFirstCharacter()
@@ -93,7 +93,7 @@ class AI(object):
     
     def lowerLeft(self):
         '''
-        Function call for the lowerLeft state of the ai exemple
+        Function call for the lowerLeft state of the AI example
         (Can be deleted)
         '''
         character1 = self.world.getMyTeam().getFirstCharacter()
@@ -113,7 +113,7 @@ class AI(object):
     
     def upperRight(self):
         '''
-        Function call for the upperRight state of the ai exemple
+        Function call for the upperRight state of the AI example
         (Can be deleted)
         '''
         character1 = self.world.getMyTeam().getFirstCharacter()
@@ -133,7 +133,7 @@ class AI(object):
     
     def upperLeft(self):
         '''
-        Function call for the upperLeft state of the ai exemple
+        Function call for the upperLeft state of the AI example
         (Can be deleted)
         '''
         character1 = self.world.getMyTeam().getFirstCharacter()
