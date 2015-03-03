@@ -4,6 +4,7 @@ Created on Jan 6, 2015
 @author: samuel
 '''
 
+
 class Vector2(object):
 
     def __init__(self, x, y):
