@@ -61,6 +61,13 @@ class World(object):
                 if character.position == position:
                     return True
         return False
+
+    def isMissileAtPosition(self, position) -> bool:
+        for team in self.teams:
+            for character in team.characters:
+                if character.missile.position == position and character.missile.isReady is False:
+                    return True
+        return False
     
     def whatIsAtPosition(self, position):
         if self.isBoxAtPosition(position):
