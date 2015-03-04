@@ -21,6 +21,9 @@ import event.MoveCharacterEvent;
 import event.QueueController;
 import event.ShootMissileEvent;
 
+/**
+ * Class that contain all the information about the character
+ */
 public class Character {
 	private Point position;
 	private int id;
@@ -34,12 +37,49 @@ public class Character {
 		this.life = 3;
 	}
 
+	public void updateInfo(Point position) {
+		this.position = position;
+	}
+	
+	public void hitByMine() {
+		if (isAlive()) {
+			--life;
+		}
+	}
+
+	public void hitByMissile() {
+		if (isAlive()) {
+			--life;
+		}
+	}
+
+	public void mineHit() {
+		mine.hit();
+	}
+
+	public void missileHit() {
+		missile.hit();
+	}
+	
+	/**
+	 * Send the order to move the character to a certain position
+	 * 
+	 * Exemple :
+	 *		character.move(new Point(5,5));
+	 */	
 	public void move(Point position) {
 		QueueController queueController = QueueController.getInstance();
 		MoveCharacterEvent event = new MoveCharacterEvent(id, position);
 		queueController.addOutgoingEvent(event);
 	}
 
+	/**
+	 * Send the order to drop a mine at the character position
+	 * if the mine is ready
+	 * 
+	 * Exemple :
+	 *		character.dropMine();
+	 */	
 	public void dropMine() {
 		if (mine.isReady()) {
 			QueueController queueController = QueueController.getInstance();
@@ -49,6 +89,13 @@ public class Character {
 		}
 	}
 
+	/**
+	 * Send the order to shoot a missile on a certain direction
+	 * if the missile is ready
+	 * 
+	 * Exemple :
+	 *		character.shootMissile(Missile.Direction.UP);
+	 */	
 	public void shootMissile(Missile.Direction direction) {
 		if (missile.isReady()) {
 			QueueController queueController = QueueController.getInstance();
@@ -59,42 +106,29 @@ public class Character {
 		}
 	}
 
-	public void updateInfo(Point position) {
-		this.position = position;
-	}
-
-	public void hitByMine() {
-		if (isAlive()) {
-			--life;
-			//System.out.println("Character " + id + " hit a mine");
-		}
-	}
-
-	public void hitByMissile() {
-		if (isAlive()) {
-			--life;
-			//System.out.println("Character " + id + " hit a missile");
-		}
-	}
-
-	public void mineHit() {
-		mine.hit();
-		//System.out.println("Character " + id + " mine hit target");
-	}
-
-	public void missileHit() {
-		missile.hit();
-		//System.out.println("Character " + id + " missile hit target");
-	}
-
+	/**
+	 * Return the id of this team
+	 * 
+	 * @return the id of this team
+	 */
 	public Point getPosition() {
 		return position;
 	}
 
+	/**
+	 * Check if the character still have some life point
+	 * 
+	 * @return true if the character is alive, else false
+	 */
 	public boolean isAlive() {
 		return life > 0;
 	}
 
+	/**
+	 * Return the missile of the character
+	 * 
+	 * @return the missile
+	 */
 	public Missile getMissile() {
 		return missile;
 	}

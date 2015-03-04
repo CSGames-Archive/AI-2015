@@ -1,7 +1,7 @@
 '''
 Created on Dec 17, 2014
 
-@author: samuel
+@author: scarriere
 '''
 from event.OutgoingEvent import OutgoingEvent
 

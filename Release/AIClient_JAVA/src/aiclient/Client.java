@@ -18,7 +18,14 @@ import network.NetworkController;
 import world.World;
 import event.EventController;
 
+/**
+ * Main class (Any changes made to this class won't be taken)
+ */
 class Client {
+	/**
+	 * The main loop
+	 * @param args
+	 */
 	public static void main(String args[]) {
 
 		NetworkController networkController = NetworkController.getInstance();
@@ -26,7 +33,6 @@ class Client {
 		World world = World.getInstance();
 		AI ai = new AI();
 
-		// Initialization
 		networkController.init();
 
 		while (networkController.isConnected() && !world.isGameIsFinished()) {
@@ -44,6 +50,10 @@ class Client {
 		System.out.println(" - end - ");
 	}
 
+	/**
+	 * Put the current Thread on sleep for a certain time
+	 * @param milli time to sleep
+	 */
 	public static void pause(long milli) {
 		try {
 			Thread.sleep(milli);

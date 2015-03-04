@@ -1,7 +1,7 @@
 '''
 Created on Jan 3, 2015
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -27,10 +27,10 @@ class MissileHitEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.getTeam(self.originTeamId).characters[self.originCharacterId].missileHit()
+        world.getTeam(self.originTeamId).characters[self.originCharacterId]._missileHit()
         if(self.hitEntity == 1):
-            world.getTeam(self.hitTeamId).characters[self.hitCharacterId].hitByMissile()
+            world.getTeam(self.hitTeamId).characters[self.hitCharacterId]._hitByMissile()
         elif(self.hitEntity == 2):
-            world.getTeam(self.hitTeamId).characters[self.hitCharacterId].mineHit()
+            world.getTeam(self.hitTeamId).characters[self.hitCharacterId]._mineHit()
         elif(self.hitEntity == 3):
-            world.getTeam(self.hitTeamId).characters[self.hitCharacterId].missileHit()
+            world.getTeam(self.hitTeamId).characters[self.hitCharacterId]._missileHit()

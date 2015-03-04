@@ -1,7 +1,7 @@
 '''
 Created on Dec 16, 2014
 
-@author: samuel
+@author: scarriere
 '''
 from event.JoinGameEvent import JoinGameEvent
 from aiclient.Singleton import Singleton

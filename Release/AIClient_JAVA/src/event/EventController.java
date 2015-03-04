@@ -33,8 +33,10 @@ public class EventController {
 		QueueController queueController = QueueController.getInstance();
 		
 		while (!queueController.getInEvents().isEmpty()) {
-			IngoingEvent event = queueController.getInEvents().remove();
-			event.execute();
+			IngoingEvent event = queueController.getInEvents().poll();
+			if(event != null) {
+				event.execute();
+			}
 		}
 	}
 }
