@@ -8,7 +8,7 @@ from mathUtils.Vector2 import Vector2
 
 class Team(object):
     '''
-    Class that containt all the informations about the Team
+    Class that contain all the informations about the Team
         (You can't use any of the functions or variables that start with an "_")
     '''
     def __init__(self, teamId, numberOfCharacter):

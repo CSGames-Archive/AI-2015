@@ -25,3 +25,15 @@ mathUtils Package
     :members:
     :undoc-members:
     :show-inheritance:
+
+:mod:`MathUtils` Module
++++++++++++++++++++++++
+
+.. automodule:: mathUtils.MathUtils
+
+:class:`MathUtils` Class
+------------------------
+
+.. autoclass:: mathUtils.MathUtils.MathUtils
+    :members:
+    :show-inheritance:

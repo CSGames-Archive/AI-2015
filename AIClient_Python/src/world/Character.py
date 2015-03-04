@@ -14,7 +14,7 @@ from event.ThrowMissileEvent import ThrowMissileEvent, Direction
 
 class Character(object):
     '''
-    Class that containt all the informations about the Character
+    Class that contain all the informations about the Character
         (You can't use any of the functions or variables that start with an "_")
     '''
     _queueController = Singleton(QueueController)

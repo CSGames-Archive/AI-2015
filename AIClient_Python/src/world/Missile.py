@@ -9,7 +9,7 @@ from mathUtils.Direction import Direction
 
 class Missile(object):
     '''
-    Class that containt all the informations about the Missile
+    Class that contain all the informations about the Missile
         (You can't use any of the functions or variables that start with an "_")
     '''
     def __init__(self, position):
