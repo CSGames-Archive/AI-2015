@@ -14,16 +14,15 @@
 
 package world;
 
+/**
+ * Class that contain all the informations about the mine
+ */
 public class Mine {
 
 	private boolean isReady;
 
 	public Mine() {
 		this.isReady = true;
-	}
-
-	public boolean isReady() {
-		return isReady;
 	}
 	
 	public void drop() {
@@ -32,5 +31,14 @@ public class Mine {
 	
 	public void hit() {
 		isReady = true;
-	}	
+	}
+
+	/**
+	 * Check if the mine is ready
+	 * 
+	 * @return true if the missile is ready, else false
+	 */
+	public boolean isReady() {
+		return isReady;
+	}
 }

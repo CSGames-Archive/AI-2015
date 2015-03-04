@@ -115,10 +115,20 @@ public class Character {
 		return position;
 	}
 
+	/**
+	 * Check if the character still have some life point
+	 * 
+	 * @return true if the character is alive, else false
+	 */
 	public boolean isAlive() {
 		return life > 0;
 	}
 
+	/**
+	 * Return the missile of the character
+	 * 
+	 * @return the missile
+	 */
 	public Missile getMissile() {
 		return missile;
 	}
