@@ -272,3 +272,15 @@ Vector2 Map::getStartingPosition(int teamId, int characterId)
 	}
 	return startingPosition;
 }
+
+void Map::print()
+{
+	for(int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for(int x = 0; x < MAP_WIDTH; ++x)
+		{
+			std::cout << map[x][y].type;
+		}
+		std::cout << std::endl;
+	}
+}

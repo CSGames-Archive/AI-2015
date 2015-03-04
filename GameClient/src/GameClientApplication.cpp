@@ -86,8 +86,6 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mShutDown)
         return false;
 
-	//mWindow->setActive(true);
-
     // Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
@@ -98,11 +96,15 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	if(World::getInstance().isGameStarted())
 	{
-		World::getInstance().addTime(evt.timeSinceLastFrame);
+		Ogre::Real timeSinceLastFrame = evt.timeSinceLastFrame;
+		if(timeSinceLastFrame > Ogre::Real(0.033))
+			timeSinceLastFrame = Ogre::Real(0.033);
+		World::getInstance().addTime(timeSinceLastFrame);
 	}
 
-    mCameraMan->frameRenderingQueued(evt);   // If dialog isn't up, then update the camera
+    mCameraMan->frameRenderingQueued(evt);
 
+    // Limit the FPS to 60
 	Ogre::Real ttW = 1000.0 / 60.0 - 1000.0 * evt.timeSinceLastFrame;
 	if (ttW > 0)
 	{
@@ -125,6 +127,10 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 	{
 		networkController->close();
 		mShutDown = true;
+	}
+	else if (arg.key == OIS::KC_P)
+	{
+		World::getInstance().printMap();
 	}
 
 	return true;
