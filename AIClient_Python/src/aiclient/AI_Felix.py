@@ -1,5 +1,6 @@
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
+from mathUtils.Direction import Direction
 from mathUtils.MathUtils import MathUtils
 from world.Character import Character
 from world.World import World
@@ -26,19 +27,16 @@ class MyAI(AIDefault):
         self.oponent = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
         self.firstTick = False
+        self.tank1.goTo(Vector2(8, 8))
 
     def tick(self):
-        self.initWorld()
         if self.world.getMyTeam().getFirstCharacter().getPosition() ==\
                 self.world.getOtherTeam().getSecondCharacter().getPosition():
             return None
-
-        if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()):
-            targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
-            self.tank1.shootMissile(targetDirection)
-            print('shoot')
-        else:
-            self.tank1.goTo(self.oponent.getPosition())
+        if self.firstTick is True:
+            self.initWorld()
+        if self.tank1.getPosition().x > 3:
+            self.tank1.shootMissile(Direction.LEFT)
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()
