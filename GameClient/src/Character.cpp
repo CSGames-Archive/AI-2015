@@ -117,10 +117,12 @@ void Character::updateBody(Ogre::Real deltaTime)
 				if(askForMine)
 				{
 					dropMine();
+					goalDirection = Ogre::Vector3::ZERO;
 				}
 				else if(askForMissile)
 				{
 					throwMissile();
+					goalDirection = Ogre::Vector3::ZERO;
 				}
 				else if(position == targetPosition)
 				{

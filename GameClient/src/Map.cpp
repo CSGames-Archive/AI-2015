@@ -19,15 +19,21 @@
 Map::Map()
 {
 	//TODO: load from a file
-	map[4][0].type = MapEntity::BOX;
-	map[7][4].type = MapEntity::BOX;
-	map[0][4].type = MapEntity::BOX;
-	map[4][7].type = MapEntity::BOX;
-	
-	map[3][0].type = MapEntity::BOX;
-	map[7][3].type = MapEntity::BOX;
 	map[0][3].type = MapEntity::BOX;
-	map[3][7].type = MapEntity::BOX;
+	map[0][4].type = MapEntity::BOX;
+	map[0][5].type = MapEntity::BOX;
+
+	map[8][3].type = MapEntity::BOX;
+	map[8][4].type = MapEntity::BOX;
+	map[8][5].type = MapEntity::BOX;
+
+	map[3][0].type = MapEntity::BOX;
+	map[4][0].type = MapEntity::BOX;
+	map[5][0].type = MapEntity::BOX;
+
+	map[3][8].type = MapEntity::BOX;
+	map[4][8].type = MapEntity::BOX;
+	map[5][8].type = MapEntity::BOX;
 
 	map[3][3].type = MapEntity::BOX;
 	map[5][5].type = MapEntity::BOX;
