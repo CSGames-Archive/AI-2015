@@ -12,6 +12,7 @@ from mathUtils.Vector2 import Vector2
 from event.MoveCharacterEvent import MoveCharacterEvent
 from event.ThrowMissileEvent import ThrowMissileEvent, Direction
 
+
 class Character(object):
     '''
     Class that contain all the informations about the Character
@@ -51,7 +52,7 @@ class Character(object):
             self.life -= 1
     
     def _mineHit(self):
-        self.mineReady = True;
+        self.mineReady = True
     
     def _hitByMissile(self):
         if self.isAlive():
@@ -59,7 +60,7 @@ class Character(object):
         
     def _missileHit(self):
         self.missile.isReady = True
-    
+
     def goTo(self, position):
         '''
         Send the order to move the character
