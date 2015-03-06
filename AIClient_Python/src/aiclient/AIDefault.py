@@ -1,14 +1,9 @@
-'''
-Created on Dec 21, 2014
-
-@author: scarriere
-'''
-
 from enum import Enum
 from aiclient.Singleton import Singleton
 from world.World import World
 from mathUtils.Vector2 import Vector2
 from mathUtils.Direction import Direction
+
 
 class AIStatus(Enum):
     '''
@@ -17,7 +12,8 @@ class AIStatus(Enum):
     '''
     INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT = range(5)
 
-class AI(object):
+
+class AIDefault(object):
     '''
     Represents the AI that need to be implemented
     '''

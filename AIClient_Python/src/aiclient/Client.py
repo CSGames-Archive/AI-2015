@@ -9,12 +9,12 @@ from event.EventController import EventController
 from network.NetworkController import NetworkController
 from aiclient.Singleton import Singleton
 from world.World import World
-from aiclient.AI import AI
+from aiclient.MyAI import MyAI
 
 eventController = Singleton(EventController)
 world = Singleton(World)
 netController = Singleton(NetworkController)
-ai = AI()
+ai = MyAI()
 
 class Client(object):
     '''
@@ -24,8 +24,9 @@ class Client(object):
     eventController = Singleton(EventController)
     world = Singleton(World)
     netController = Singleton(NetworkController)
-    ai = AI()
-    
+    ai = MyAI()
+
+    @staticmethod
     def main():
         '''
         Main loop
