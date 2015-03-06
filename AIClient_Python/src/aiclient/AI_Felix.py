@@ -37,9 +37,8 @@ class MyAI(AIDefault):
             targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
             self.tank1.shootMissile(targetDirection)
             print('shoot')
-        elif self.oponent.getPosition() != self.oponentLastPosition:
+        else:
             self.tank1.goTo(self.oponent.getPosition())
-            self.oponentLastPosition = self.oponent.getPosition()
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()
