@@ -1,7 +1,7 @@
 '''
 Created on Jan 24, 2015
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -17,5 +17,5 @@ class EndGameEvent(IngoingEvent):
                 
     def execute(self):
         world = Singleton(World)
-        world.endGame()
+        world._endGame()
         

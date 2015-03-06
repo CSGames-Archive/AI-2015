@@ -110,3 +110,12 @@ class Character(object):
         '''
         return self.life > 0
     
+    def getPosition(self):
+        '''
+        Return the position of the character
+            
+        Exemple::
+
+            position = aCharacter.getPosition()
+        '''
+        return self.position

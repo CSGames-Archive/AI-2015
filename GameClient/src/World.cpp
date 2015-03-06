@@ -369,8 +369,6 @@ Team* World::findWiningTeam()
 
 void World::showMessage(std::string message)
 {
-	textElement;
-
 	this->panel = static_cast<Ogre::OverlayContainer*>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "MainPanel"));
 	this->panel->setMetricsMode(Ogre::GMM_PIXELS);
 	this->panel->setPosition(300, 100);
@@ -392,4 +390,9 @@ void World::showMessage(std::string message)
 	this->panel->addChild(this->textElement);
 	labelOverlay->add2D(this->panel);
 	labelOverlay->show();
+}
+
+void World::printMap()
+{
+	Map::getInstance().print();
 }

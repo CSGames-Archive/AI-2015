@@ -17,6 +17,9 @@ package world;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that contain all the information about the team
+ */
 public class Team {
 	private int id;
 	private List<Character> characters = new ArrayList<Character>();
@@ -28,14 +31,30 @@ public class Team {
 		}
 	}
 
+	/**
+	 * Return the id of this team
+	 * 
+	 * @return the id of this team
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Return character associate with a certain id
+	 * Note: The character id start at 0 and are the same as their index
+	 * 
+	 * @return the character
+	 */
 	public Character getCharacter(int id) {
 		return characters.get(id);
 	}
 
+	/**
+	 * Return the list of character from this team
+	 * 
+	 * @return the list of character
+	 */
 	public List<Character> getCharacters() {
 		return characters;
 	}

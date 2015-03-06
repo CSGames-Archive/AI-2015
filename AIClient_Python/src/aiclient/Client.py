@@ -9,7 +9,7 @@ from event.EventController import EventController
 from network.NetworkController import NetworkController
 from aiclient.Singleton import Singleton
 from world.World import World
-from aiclient.AI import AI
+from aiclient.AI_Felix import AI
 
 eventController = Singleton(EventController)
 world = Singleton(World)
@@ -39,7 +39,7 @@ class Client(object):
                 ai.tick()
 
             netController.executeOutgoingEvents()
-            time.sleep(0.03)
+            time.sleep(0.033)
 
         netController.closeConnection()
         print(" - end - ")

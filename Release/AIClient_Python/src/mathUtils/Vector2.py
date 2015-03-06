@@ -1,10 +1,14 @@
 '''
 Created on Jan 6, 2015
 
-@author: samuel
+@author: scarriere
 '''
 
+
 class Vector2(object):
+    '''
+    2D Vector, usefull to keep a position or to calculate a direction
+    '''
 
     def __init__(self, x, y):
         self.x = x

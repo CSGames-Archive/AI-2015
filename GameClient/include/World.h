@@ -74,6 +74,9 @@ public:
 	// Getters
 	Team* getTeam(int teamId);
 	bool isGameStarted();
+
+	//Debug functions
+	void printMap();
 };
 
 #endif // #ifndef __World_h_

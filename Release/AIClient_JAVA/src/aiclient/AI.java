@@ -19,15 +19,28 @@ import java.awt.Point;
 import world.Character;
 import world.Missile;
 import world.World;
-import event.QueueController;
 
+/**
+ * Represents the AI that need to be implemented
+ */
 public class AI {
+	/**
+	 * Enum created for the AI example
+     * (Can be deleted)
+	 */
 	public enum AIStatus {
 		INIT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT, UPPER_LEFT
 	}
 
+	/**
+	 * The current status of the AI example
+	 * (Can be deleted)
+	 */
 	AIStatus status = AIStatus.INIT;
-	QueueController queueController = QueueController.getInstance();
+	
+	/**
+	 * The world singleton needed to get the info on the current state of the world
+	 */
 	World world = World.getInstance();
 
 	Point position1 = new Point(0, 0);
@@ -35,6 +48,10 @@ public class AI {
 	Point position3 = new Point(0, 7);
 	Point position4 = new Point(7, 7);
 
+	/**
+	 * Function call every 30 ms, this is the starting point for the AI
+     * (Cannot be deleted)
+	 */
 	public void tick() {
 		if (status == AIStatus.INIT) {
 			init();
@@ -49,8 +66,11 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Function call for the init state of the AI example
+     * (Can be deleted)
+	 */
 	public void init() {
-		System.out.println("Init");
 		Character king = world.getMyTeam().getCharacter(0);
 		Character soldier = world.getMyTeam().getCharacter(1);
 
@@ -63,12 +83,15 @@ public class AI {
 		status = AIStatus.LOWER_RIGHT;
 	}
 
+	/**
+	 * Function call for the lowerRight state of the AI example
+     * (Can be deleted)
+	 */
 	public void lowerRight() {
 		Character king = world.getMyTeam().getCharacter(0);
 		Character soldier = world.getMyTeam().getCharacter(1);
 
 		if (king.getPosition().equals(position2)) {
-			System.out.println("LR");
 			king.move(position1);
 			soldier.move(position4);
 
@@ -82,12 +105,15 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Function call for the lowerLeft state of the AI example
+     * (Can be deleted)
+	 */
 	public void lowerLeft() {
 		Character king = world.getMyTeam().getCharacter(0);
 		Character soldier = world.getMyTeam().getCharacter(1);
 
 		if (king.getPosition().equals(position1)) {
-			System.out.println("LL");
 			king.move(position4);
 			soldier.move(position1);
 
@@ -101,12 +127,15 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Function call for the upperRight state of the AI example
+     * (Can be deleted)
+	 */
 	public void upperRight() {
 		Character king = world.getMyTeam().getCharacter(0);
 		Character soldier = world.getMyTeam().getCharacter(1);
 
 		if (king.getPosition().equals(position4)) {
-			System.out.println("UR");
 			king.move(position3);
 			soldier.move(position2);
 
@@ -120,12 +149,15 @@ public class AI {
 		}
 	}
 
+	/**
+	 * Function call for the upperLeft state of the AI example
+     * (Can be deleted)
+	 */
 	public void upperLeft() {
 		Character king = world.getMyTeam().getCharacter(0);
 		Character soldier = world.getMyTeam().getCharacter(1);
 
 		if (king.getPosition().equals(position3)) {
-			System.out.println("UL");
 			king.move(position2);
 			soldier.move(position3);
 
