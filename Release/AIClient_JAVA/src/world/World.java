@@ -21,8 +21,14 @@ import java.util.List;
 import event.AddPlayerEvent;
 import event.QueueController;
 
+/**
+ * Class that contain all the informations about the Teams, Characters and Missiles
+ */
 public class World {
 
+	/**
+	 * An Enum that represent all the entity that can be found in the world
+	 */
 	public enum MapEntity {
 		EMPTY, BOX, CHARACTER
 	}
@@ -31,9 +37,16 @@ public class World {
 	private int yourId;
 	private boolean gameIsStarted = false;
 	private boolean gameIsFinished = false;
-	private List<Team> teams = new ArrayList<Team>();
 	private boolean map[][] = null;
 
+	/**
+	 * List of all the teams
+	 */
+	private List<Team> teams = new ArrayList<Team>();
+	
+	/*
+	 * THIS SECTION IS OUT OF ACCESS
+	 */
 	protected World() {
 		// Exists only to defeat instantiation
 	}
@@ -68,6 +81,33 @@ public class World {
 		}
 	}
 
+	public void updateBox(Point position) {
+		map[position.x][position.y] = true;
+	}
+	
+	public void endGame() {
+		System.out.println("End game");
+		gameIsFinished = true;
+	}
+	
+	public boolean isGameIsStarted() {
+		return gameIsStarted;
+	}
+
+	public boolean isGameIsFinished() {
+		return gameIsFinished;
+	}
+	/*
+	 * OUT OF ACCESS
+	 */
+	
+	/**
+	 * Return the team associate with a certain id
+	 * Important : the id of the team are not starting at 0
+	 * 
+	 * @param id the id of the team we want
+	 * @return the team or null if not found
+	 */
 	public Team getTeam(int id) {
 		for (Iterator<Team> iterator = teams.iterator(); iterator.hasNext();) {
 			Team team = iterator.next();
@@ -78,18 +118,31 @@ public class World {
 		return null;
 	}
 
+	/**
+	 * Return the team associate with your id
+	 * 
+	 * @return your team
+	 */
 	public Team getMyTeam() {
 		return getTeam(yourId);
 	}
 
-	public void updateBox(Point position) {
-		map[position.x][position.y] = true;
-	}
-
+	/**
+	 * Check if there's a box at a certain position
+	 * 
+	 * @param position the position to check
+	 * @return True if there's a box, else False
+	 */
 	public boolean isBoxAtPosition(Point position) {
 		return map[position.x][position.y];
 	}
 
+	/**
+	 * check if there's a character at a certain position
+	 * 
+	 * @param position the position to check
+	 * @return True if there's a character, else False
+	 */
 	public boolean isCharacterAtposition(Point position) {
 		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator
 				.hasNext();) {
@@ -106,6 +159,12 @@ public class World {
 		return false;
 	}
 
+	/**
+	 * Return the Entity at a certain position
+	 * 
+	 * @param position the position to check
+	 * @return the entity that is on the specify position
+	 */
 	public MapEntity whatIsAtPosition(Point position) {
 		if (isBoxAtPosition(position)) {
 			return MapEntity.BOX;
@@ -113,18 +172,5 @@ public class World {
 			return MapEntity.CHARACTER;
 		}
 		return MapEntity.EMPTY;
-	}
-
-	public void endGame() {
-		System.out.println("End game");
-		gameIsFinished = true;
-	}
-
-	public boolean isGameIsStarted() {
-		return gameIsStarted;
-	}
-
-	public boolean isGameIsFinished() {
-		return gameIsFinished;
 	}
 }

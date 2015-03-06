@@ -1,7 +1,7 @@
 '''
 Created on Dec 20, 2014
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -30,4 +30,4 @@ class GameStartEvent(IngoingEvent):
             
     def execute(self):
         world = Singleton(World)
-        world.startGame(self.mapWidth, self.mapHeight, self.numberOfTeam, self.numberOfCharacter, self.teamsIds)
+        world._startGame(self.mapWidth, self.mapHeight, self.numberOfTeam, self.numberOfCharacter, self.teamsIds)

@@ -16,8 +16,14 @@ package world;
 
 import java.awt.Point;
 
+/**
+ * Class that contain all the informations about the missile
+ */
 public class Missile {
 
+	/**
+	 * Enum that represent every direction possible
+	 */
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
@@ -45,14 +51,29 @@ public class Missile {
 		this.isReady = true;
 	}
 
+	/**
+	 * Return the position of the missile
+	 * 
+	 * @return the position
+	 */
 	public Point getPosition() {
 		return position;
 	}
 
+	/**
+	 * Return the direction of the missile
+	 * 
+	 * @return the direction
+	 */
 	public Direction getDirection() {
 		return direction;
 	}
 
+	/**
+	 * Check if the missile is ready
+	 * 
+	 * @return true if the missile is ready, else false
+	 */
 	public boolean isReady() {
 		return isReady;
 	}

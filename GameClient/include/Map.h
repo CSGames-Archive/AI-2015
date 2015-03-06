@@ -120,6 +120,9 @@ public:
 	void moveCharacterTile(const Vector2& position, const Vector2& newPosition);
 	void moveMissileTile(const Vector2& position, const Vector2& newPosition);
 	Vector2 getStartingPosition(int teamId, int characterId);
+
+	// Debug functions
+	void print();
 };
 
 #endif // #ifndef __Map_h_

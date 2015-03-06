@@ -1,7 +1,7 @@
 '''
 Created on Dec 15, 2014
 
-@author: samuel
+@author: scarriere
 '''
 from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
@@ -14,7 +14,7 @@ class JoinGameEvent(IngoingEvent):
         
     def execute(self):
         world = Singleton(World)
-        world.joinGame(self.yourId)
+        world._joinGame(self.yourId)
 
     def fillArguments(self, string):
         self.yourId = int(string)

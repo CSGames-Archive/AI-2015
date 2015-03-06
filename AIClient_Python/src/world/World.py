@@ -80,9 +80,22 @@ class World(object):
         
         Exemple::
 
-            myTeam = world.getMyTeam(2)
+            myTeam = world.getMyTeam()
         '''
         return self.getTeam(self._yourId)
+
+    def getOpponentTeam(self) -> Team:
+        '''
+        Return the opponent team
+        
+        Exemple::
+
+            otherTeam = world.getOpponentTeam()
+        '''
+        for team in self.teams:
+            if team._teamId is not self._yourId:
+                return team
+        return None
 
     def isBoxAtPosition(self, position) -> bool:
         '''

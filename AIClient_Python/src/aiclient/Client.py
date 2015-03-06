@@ -40,7 +40,7 @@ class Client(object):
                 ai.tick()
 
             netController.executeOutgoingEvents()
-            time.sleep(0.03)
+            time.sleep(0.033)
 
         netController.closeConnection()
         print(" - end - ")
