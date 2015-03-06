@@ -107,41 +107,43 @@ void Character::updateBody(Ogre::Real deltaTime)
 		
 		if(goalDirection.length() < Ogre::Real(1.0))
 		{
-			if(askForMine)
-			{
-				dropMine();
-			}
-			if(askForMissile)
-			{
-				throwMissile();
-			}
-
 			if(timeToWait > 0)
 			{
 				timeToWait -= deltaTime;
 				goalDirection = Ogre::Vector3::ZERO;
 			}
-			else if(position == targetPosition)
-			{
-				goalDirection = Ogre::Vector3::ZERO;
-			}
 			else
 			{
-				Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position, lastPosition);
-
-				if(newPosition == position)
+				if(askForMine)
+				{
+					dropMine();
+				}
+				else if(askForMissile)
+				{
+					throwMissile();
+				}
+				else if(position == targetPosition)
 				{
 					goalDirection = Ogre::Vector3::ZERO;
 				}
 				else
 				{
-					this->lastPosition = this->position;
-					Map::getInstance().moveCharacterTile(position, newPosition);
-					position = newPosition;
-					sendPosition();
+					Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position, lastPosition);
 
-					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
-					goalDirection = subStepPosition - currentPosition;
+					if(newPosition == position)
+					{
+						goalDirection = Ogre::Vector3::ZERO;
+					}
+					else
+					{
+						this->lastPosition = this->position;
+						Map::getInstance().moveCharacterTile(position, newPosition);
+						position = newPosition;
+						sendPosition();
+
+						subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
+						goalDirection = subStepPosition - currentPosition;
+					}
 				}
 			}
 		}
