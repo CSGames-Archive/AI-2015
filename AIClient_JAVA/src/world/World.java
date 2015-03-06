@@ -158,6 +158,28 @@ public class World {
 		}
 		return false;
 	}
+	
+	/**
+	 * check if there's a missile at a certain position
+	 * 
+	 * @param position the position to check
+	 * @return True if there's a missile, else False
+	 */
+	public boolean isMissileAtPosition(Point position) {
+		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator
+				.hasNext();) {
+			Team team = teamIterator.next();
+
+			for (Iterator<Character> characterIterator = team.getCharacters()
+					.iterator(); characterIterator.hasNext();) {
+				Character character = characterIterator.next();
+				if (character.getMissile().getPosition() == position && character.getMissile().isReady() == false) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Return the Entity at a certain position
