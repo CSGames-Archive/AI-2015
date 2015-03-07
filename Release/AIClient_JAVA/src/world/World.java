@@ -30,7 +30,7 @@ public class World {
 	 * An Enum that represent all the entity that can be found in the world
 	 */
 	public enum MapEntity {
-		EMPTY, BOX, CHARACTER
+		EMPTY, BOX, CHARACTER, MISSILE
 	}
 
 	private static World instance = null;
@@ -72,13 +72,18 @@ public class World {
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
 
-	public void startGame(int mapWidth, int mapHeight, int numberOfTeam,
+	public void sendGameInfos(int mapWidth, int mapHeight, int numberOfTeam,
 			int numberOfCharacter, List<Integer> teamIDs) {
-		gameIsStarted = true;
+		System.out.println("Get game infos");
 		map = new boolean[mapWidth][mapHeight];
 		for (int index = 0; index < numberOfTeam; ++index) {
 			teams.add(new Team(teamIDs.get(index), numberOfCharacter));
 		}
+	}
+
+	public void startGame() {
+		System.out.println("Start game");
+		gameIsStarted = true;
 	}
 
 	public void updateBox(Point position) {
@@ -158,6 +163,28 @@ public class World {
 		}
 		return false;
 	}
+	
+	/**
+	 * check if there's a missile at a certain position
+	 * 
+	 * @param position the position to check
+	 * @return True if there's a missile, else False
+	 */
+	public boolean isMissileAtPosition(Point position) {
+		for (Iterator<Team> teamIterator = teams.iterator(); teamIterator
+				.hasNext();) {
+			Team team = teamIterator.next();
+
+			for (Iterator<Character> characterIterator = team.getCharacters()
+					.iterator(); characterIterator.hasNext();) {
+				Character character = characterIterator.next();
+				if (character.getMissile().getPosition() == position && character.getMissile().isReady() == false) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Return the Entity at a certain position
@@ -170,6 +197,8 @@ public class World {
 			return MapEntity.BOX;
 		} else if (isCharacterAtposition(position)) {
 			return MapEntity.CHARACTER;
+		} else if (isMissileAtPosition(position)) {
+			return MapEntity.MISSILE;
 		}
 		return MapEntity.EMPTY;
 	}

@@ -3,9 +3,11 @@ Created on Dec 20, 2014
 
 @author: scarriere
 '''
+import math
 from event.AddPlayerEvent import AddPlayerEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
+from mathUtils.Vector2 import Vector2
 from world.Team import Team
 from enum import Enum
 
@@ -45,14 +47,16 @@ class World(object):
         event = AddPlayerEvent(teamName, characterNames)
         queueController = Singleton(QueueController)
         queueController.outEvents.put(event)
-        
-    def _startGame(self, mapWidth, mapHeight, numberOfteam, numberOfCharacter, teamIDs):
-        self._gameIsStarted = True
+    
+    def _sendGameInfos(self, mapWidth, mapHeight, numberOfteam, numberOfCharacter, teamIDs):
         for index in range(0, numberOfteam):
             self.teams.insert(index, Team(teamIDs[index], numberOfCharacter))
+
+    def _startGame(self):
+        self._gameIsStarted = True
     
     def _updateBox(self, x, y):
-        self._map[x, y] = 1;
+        self._map[x, y] = 1
 
     def _endGame(self):
         print("End game")
@@ -80,9 +84,22 @@ class World(object):
         
         Exemple::
 
-            myTeam = world.getMyTeam(2)
+            myTeam = world.getMyTeam()
         '''
         return self.getTeam(self._yourId)
+
+    def getOpponentTeam(self) -> Team:
+        '''
+        Return the opponent team
+        
+        Exemple::
+
+            otherTeam = world.getOpponentTeam()
+        '''
+        for team in self.teams:
+            if team._teamId is not self._yourId:
+                return team
+        return None
 
     def isBoxAtPosition(self, position) -> bool:
         '''
@@ -112,6 +129,14 @@ class World(object):
         return False
 
     def isMissileAtPosition(self, position) -> bool:
+        '''
+        Check if there's a missile(:class:`.Missile`)
+        at a certain position(:class:`.Vector2`)
+        
+        Exemple::
+
+            checkMissile = world.isMissileAtPosition(Vector2(5,5))
+        '''
         for team in self.teams:
             for character in team.characters:
                 if character.missile.position == position and character.missile.isReady is False:
@@ -131,5 +156,35 @@ class World(object):
             return Entity.BOX
         if self.isCharacterAtposition(position):
             return Entity.CHARACTER
+        if self.isMissileAtPosition(position):
+            return Entity.MISSILE
         return Entity.EMPTY
+
+    def whatIsInTheWay(self, origin: Vector2, direction: Vector2) -> {}:
+        '''
+        Return a dict[x,y] = mapEntity between a position and a direction
+        vector(:class:`.Vector2`)
+        
+        Exemple::
+
+            objects = world.whatIsInTheWay(origin,
+                            MathUtils.getDirectionVector(origin, toPosition))
+        '''
+        obstacle = {}
+        length = int(math.sqrt(direction.x ** 2 + direction.y ** 2))
+        if length == 0:
+            return obstacle
+        unit_direction = Vector2(direction.x/length, direction.y/length)
+        if math.sqrt(unit_direction.x**2 + unit_direction.y**2) != 1:
+            raise Exception("Non possible path", unit_direction)
+
+        for i in range(1, length - 1):
+            currentPos = Vector2(origin.x + unit_direction.x * i, origin.y + unit_direction.y * i)
+            obj = self.whatIsAtPosition(currentPos)
+            if obj is not Entity.EMPTY:
+                obstacle[currentPos.x, currentPos.y] = obj
+        return obstacle
+
+
+
 

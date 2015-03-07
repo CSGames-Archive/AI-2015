@@ -30,8 +30,10 @@ public class EventFactory {
 	private static IngoingEvent createEvent(String type) {
 		if (type.equals("JoinGame")) {
 			return new JoinGameEvent();
-		} else if (type.equals("GameStart")) {
-			return new GameStartEvent();
+		} else if (type.equals("StartGame")) {
+			return new StartGameEvent();
+		} else if (type.equals("SendGameInfos")) {
+			return new SendGameInfosEvent();
 		} else if (type.equals("UpdateCharacter")) {
 			return new UpdateCharacterEvent();
 		} else if (type.equals("MineHit")) {

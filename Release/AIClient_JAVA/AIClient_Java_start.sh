@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 cd src
-javac aiclient/Client.java
+javac -d ../class aiclient/Client.java
+cd ../class
 java aiclient/Client

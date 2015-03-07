@@ -128,6 +128,21 @@ public class World {
 	 * 
 	 * @return your team
 	 */
+	public Team getOpponentTeam() {
+		for (Iterator<Team> iterator = teams.iterator(); iterator.hasNext();) {
+			Team team = iterator.next();
+			if (team.getId() != yourId) {
+				return team;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return the team associate with your id
+	 * 
+	 * @return your team
+	 */
 	public Team getMyTeam() {
 		return getTeam(yourId);
 	}

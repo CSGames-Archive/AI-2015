@@ -6,21 +6,24 @@
  **  \______  /_______  /     \______  /\____|__  /\____|__  /_______  /_______  /
  **         \/        \/             \/         \/         \/        \/        \/ 
  **
- ** EndGameEvent.java
- ** Event that happen when the game end
+ ** GameStartEvent.java
+ ** Event that happen when a game start
  **
  ** Author: Samuel-Ricardo Carriere
  ** ------------------------------------------------------------------------------*/
 
 package event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import world.World;
 
-public class EndGameEvent extends IngoingEvent {
+public class StartGameEvent extends IngoingEvent {
 
 	@Override
 	public void execute() {
-		World.getInstance().endGame();
+		World.getInstance().startGame();
 	}
 
 	@Override

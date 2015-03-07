@@ -43,7 +43,7 @@ class Client {
 			}
 
 			networkController.executeOutgoingEvents();
-			pause(30);
+			pause(33);
 		}
 
 		NetworkController.getInstance().close();
