@@ -15,8 +15,6 @@
 #ifndef __Character_h_
 #define __Character_h_
 
-#include "stdafx.h"
-
 #include "TextOverlay.h"
 #include "NetUtility.h"
 #include "Map.h"
@@ -54,6 +52,9 @@ private:
 	TextOverlay* nameOverlay;
 	TextOverlay* lifeOverlay;
 
+	//Debug flag
+	bool toggleDebugFlag;
+
 	void updateBody(Ogre::Real deltaTime);
 	void dropMine();
 	void throwMissile();
@@ -84,6 +85,9 @@ public:
 	void hit();
 	void sendPosition();
 	void deactivate();
+
+	// Debug
+	void ToggleDebugFlag();
 };
 
 #endif

@@ -20,14 +20,14 @@ class MyAI(AIDefault):
     oponentLastPosition = None
 
     def initWorld(self):
-        self.tank1 = self.world.getMyTeam().getFirstCharacter()
+        self.tank1 = self.world.getMyTeam().getSecondCharacter()
         ':type tank1: Character'
         self.otherTeam = self.world.getOtherTeam()
         ':type otherTeam: Team'
         self.oponent = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
         self.firstTick = False
-        self.tank1.goTo(Vector2(8, 8))
+        self.tank1.goTo(Vector2(0, 8))
 
     def tick(self):
         if self.world.getMyTeam().getFirstCharacter().getPosition() ==\
@@ -35,8 +35,8 @@ class MyAI(AIDefault):
             return None
         if self.firstTick is True:
             self.initWorld()
-        if self.tank1.getPosition().x > 3:
-            self.tank1.shootMissile(Direction.LEFT)
+        if self.tank1.getPosition().x < 6:
+            self.tank1.shootMissile(Direction.DOWN)
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()

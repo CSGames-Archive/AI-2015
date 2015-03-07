@@ -15,8 +15,6 @@
 #ifndef __EventFactory__
 #define __EventFactory__
 
-#include "stdafx.h"
-
 #include "GameEvent.h"
 #include "NetUtility.h"
 #include "QueueController.h"

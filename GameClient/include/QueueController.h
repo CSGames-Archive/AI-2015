@@ -15,8 +15,6 @@
 #ifndef __QueueController_h_
 #define __QueueController_h_
 
-#include "stdafx.h"
-
 #include "GameEvent.h"
 
 class QueueController

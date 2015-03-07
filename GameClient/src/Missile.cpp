@@ -50,11 +50,11 @@ void Missile::init(Vector2 position, MapDirection::MapDirection direction)
 
 Vector2 Missile::calculateTargetPosition(MapDirection::MapDirection direction)
 {
-	if(direction == MapDirection::UP)
+	if(direction == MapDirection::DOWN)
 	{
 		return Vector2(position.x, MAP_HEIGHT-1);
 	}
-	else if(direction == MapDirection::DOWN)
+	else if(direction == MapDirection::UP)
 	{
 		return Vector2(position.x, 0);
 	}

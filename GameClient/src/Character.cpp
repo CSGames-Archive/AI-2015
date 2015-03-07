@@ -53,6 +53,9 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, Te
 	text += numstr;
 
 	this->lifeOverlay->setText(text);
+
+	//Debug
+	toggleDebugFlag = false;
 }
 
 Character::~Character()
@@ -87,14 +90,21 @@ void Character::addTime(Ogre::Real deltaTime, Ogre::Camera* camera)
 
 void Character::setTargetPosition(int x, int z)
 {
-	if(x > -1 && x < MAP_HEIGHT)
-	{
-		this->targetPosition.x = x;
-	}
+	Vector2 newTarget(x, z);
 
-	if(z > -1 && z < MAP_WIDTH)
+	if(!(newTarget == targetPosition))
 	{
-		this->targetPosition.y = z;
+		if(x > -1 && x < MAP_HEIGHT)
+		{
+			this->targetPosition.x = x;
+		}
+
+		if(z > -1 && z < MAP_WIDTH)
+		{
+			this->targetPosition.y = z;
+		}
+
+		lastPosition = position;
 	}
 }
 
@@ -162,6 +172,12 @@ void Character::updateBody(Ogre::Real deltaTime)
 			bodyNode->yaw(Ogre::Degree(yawToGoal));
 
 			bodyNode->translate(0, 0, deltaTime * CHARACTER_WALK_SPEED, Ogre::Node::TS_LOCAL);
+
+			if(toggleDebugFlag)
+			{
+				std::cout << "yawToGoal:" << Ogre::Degree(yawToGoal) << std::endl;
+				std::cout << "goalDirection:" << goalDirection << std::endl;
+			}
 		}
 	}
 }
@@ -211,11 +227,21 @@ void Character::throwMissile()
 		timeToWait = 1.0;
 		missile->launch();
 
+/*
 		Ogre::Real targetDegree = Ogre::Real(MapDirection::DirectionToDegree(missile->getDirection()));
 		Ogre::Real currentDegree = bodyNode->getOrientation().getYaw().valueDegrees();
 		// The front of the mesh is 90 degree off
 		Ogre::Degree degreeToYaw = Ogre::Degree(targetDegree - currentDegree - 90.0);
 		bodyNode->yaw(degreeToYaw, Ogre::Node::TS_WORLD);
+*/
+
+		Ogre::Vector3 goalDirection = MapDirection::DirectionToVector(missile->getDirection());
+		Ogre::Quaternion currentDirection = bodyNode->getOrientation().zAxis().getRotationTo(goalDirection);
+
+		// Find the rotation in yaw
+		Ogre::Real yawToGoal = currentDirection.getYaw().valueDegrees();
+
+		bodyNode->yaw(Ogre::Degree(yawToGoal));
 	}
 }
 
@@ -286,4 +312,9 @@ void Character::die()
 void Character::deactivate()
 {
 	disable = true;
+}
+
+void Character::ToggleDebugFlag()
+{
+	toggleDebugFlag = !toggleDebugFlag;
 }

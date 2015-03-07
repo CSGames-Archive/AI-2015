@@ -15,8 +15,6 @@
 #ifndef __EventController_h_
 #define __EventController_h_
 
-#include "stdafx.h"
-
 #include "GameEvent.h"
 #include "QueueController.h"
 #include "World.h"

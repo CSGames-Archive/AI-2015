@@ -15,8 +15,6 @@
 #ifndef __Team_h_
 #define __Team_h_
 
-#include "stdafx.h"
-
 #include "Character.h"
 
 class Team
