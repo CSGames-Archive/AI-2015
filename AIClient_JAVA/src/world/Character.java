@@ -16,6 +16,8 @@ package world;
 
 import java.awt.Point;
 
+import mathUtils.Direction;
+
 import event.DropMineEvent;
 import event.MoveCharacterEvent;
 import event.QueueController;
@@ -96,7 +98,7 @@ public class Character {
 	 * Exemple :
 	 *		character.shootMissile(Missile.Direction.UP);
 	 */	
-	public void shootMissile(Missile.Direction direction) {
+	public void shootMissile(Direction direction) {
 		if (missile.isReady()) {
 			QueueController queueController = QueueController.getInstance();
 			ShootMissileEvent event = new ShootMissileEvent(id,
