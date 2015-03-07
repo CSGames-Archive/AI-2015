@@ -72,13 +72,18 @@ public class World {
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
 
-	public void startGame(int mapWidth, int mapHeight, int numberOfTeam,
+	public void sendGameInfos(int mapWidth, int mapHeight, int numberOfTeam,
 			int numberOfCharacter, List<Integer> teamIDs) {
-		gameIsStarted = true;
+		System.out.println("Get game infos");
 		map = new boolean[mapWidth][mapHeight];
 		for (int index = 0; index < numberOfTeam; ++index) {
 			teams.add(new Team(teamIDs.get(index), numberOfCharacter));
 		}
+	}
+
+	public void startGame() {
+		System.out.println("Start game");
+		gameIsStarted = true;
 	}
 
 	public void updateBox(Point position) {

@@ -77,12 +77,6 @@ class World(object):
             if team._teamId == teamId:
                 return team
         return None
-
-    def getOtherTeam(self) -> Team:
-        for team in self.teams:
-            if team._teamId != self._yourId:
-                return team
-        return None
     
     def getMyTeam(self) -> Team:
         '''

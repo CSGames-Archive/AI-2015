@@ -1,3 +1,4 @@
+import copy
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
 from mathUtils.MathUtils import MathUtils
@@ -15,13 +16,13 @@ class MyAI(AIDefault):
     otherTeam = None
     oponent = None
     tank1 = None
-    firstTick = True
     oponentLastPosition = None
+    firstTick = True
 
     def initWorld(self):
         self.tank1 = self.world.getMyTeam().getFirstCharacter()
         ':type tank1: Character'
-        self.otherTeam = self.world.getOtherTeam()
+        self.otherTeam = self.world.getOpponentTeam()
         ':type otherTeam: Team'
         self.oponent = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
@@ -31,13 +32,12 @@ class MyAI(AIDefault):
         if self.firstTick:
             self.initWorld()
 
-        if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()):
+        if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()) and self.oponent.isAlive():
             targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
             self.tank1.shootMissile(targetDirection)
-            print('shoot')
         elif self.oponent.getPosition() != self.oponentLastPosition:
             self.tank1.goTo(self.oponent.getPosition())
-            self.oponentLastPosition = self.oponent.getPosition()
+            self.oponentLastPosition = copy.deepcopy(self.oponent.getPosition())
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()
@@ -48,6 +48,4 @@ class MyAI(AIDefault):
             objects = self.world.whatIsInTheWay(fromposition,
                                                      MathUtils.getDirectionVector(fromposition, toposition))
             ret = len(objects) == 0
-        print("me ({0},{1}) him ({2},{3}) = {4}".format(fromposition.x, fromposition.y, toposition.x,
-                                                        toposition.y, ret))
         return ret

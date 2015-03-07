@@ -20,7 +20,6 @@ public class EndGameEvent extends IngoingEvent {
 
 	@Override
 	public void execute() {
-		System.out.println("Game End");
 		World.getInstance().endGame();
 	}
 
