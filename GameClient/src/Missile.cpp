@@ -39,7 +39,8 @@ void Missile::addTime(Ogre::Real deltaTime)
 void Missile::init(Vector2 position, MapDirection::MapDirection direction)
 {
 	this->position = position;
-	Ogre::Vector3 startingVector(Ogre::Real(position.x*MAP_TILE_SIZE), MISSILE_MESH_HEIGHT, Ogre::Real(position.y*MAP_TILE_SIZE));
+	Ogre::Vector3 startingVector = position.toOgreVector3(MISSILE_MESH_HEIGHT);
+
 	this->bodyNode->setPosition(startingVector);
 	this->subStepPosition = startingVector;
 	this->targetPosition = calculateTargetPosition(direction);
@@ -52,11 +53,11 @@ Vector2 Missile::calculateTargetPosition(MapDirection::MapDirection direction)
 {
 	if(direction == MapDirection::DOWN)
 	{
-		return Vector2(position.x, MAP_HEIGHT-1);
+		return Vector2(position.x, 0);
 	}
 	else if(direction == MapDirection::UP)
 	{
-		return Vector2(position.x, 0);
+		return Vector2(position.x, MAP_HEIGHT-1);
 	}
 	else if(direction == MapDirection::LEFT)
 	{
@@ -106,7 +107,7 @@ void Missile::updateBody(Ogre::Real deltaTime)
 
 					sendPosition();
 
-					subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
+					subStepPosition = position.toOgreVector3(MISSILE_MESH_HEIGHT);
 					goalDirection = subStepPosition - currentPosition;
 				}
 			}

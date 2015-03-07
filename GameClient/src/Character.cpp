@@ -30,7 +30,7 @@ Character::Character(Ogre::SceneNode* bodyNode, Mine* mine, Missile* missile, Te
 	Map::getInstance().setTile(this->position, MapEntity::CHARACTER, this->teamId, this->characterId);
 
 	this->targetPosition = this->position;
-	Ogre::Vector3 startingVector(this->position.x*MAP_TILE_SIZE, TANK_MESH_HEIGHT, this->position.y*MAP_TILE_SIZE);
+	Ogre::Vector3 startingVector = this->position.toOgreVector3(TANK_MESH_HEIGHT);
 	this->bodyNode->setPosition(startingVector);
 	this->subStepPosition = startingVector;
 
@@ -153,7 +153,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 						position = newPosition;
 						sendPosition();
 
-						subStepPosition = Ogre::Vector3(Ogre::Real(position.x*MAP_TILE_SIZE), currentPosition.y, Ogre::Real(position.y*MAP_TILE_SIZE));
+						subStepPosition = position.toOgreVector3(TANK_MESH_HEIGHT);
 						goalDirection = subStepPosition - currentPosition;
 					}
 				}

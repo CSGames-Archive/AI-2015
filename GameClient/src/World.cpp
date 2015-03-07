@@ -235,7 +235,8 @@ void World::generateMap()
 	{
 		for(int y = 0; y < MAP_HEIGHT; ++y)
 		{
-			if(map.getTileType(Vector2(x, y)) == MapEntity::BOX)
+			Vector2 tilePosition(x, y);
+			if(map.getTileType(tilePosition) == MapEntity::BOX)
 			{
 				sprintf(numstr, "%d%d", x, y);
 				std::string name = "box_";
@@ -245,7 +246,7 @@ void World::generateMap()
 				Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 				crateNode->attachObject(crate);
 				crateNode->setScale(scaleVector);
-				crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
+				crateNode->setPosition(tilePosition.toOgreVector3(Ogre::Real(10.0)));
 			}
 		}
 	}
@@ -283,7 +284,7 @@ void World::generateMapDelimiter()
 		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, -MAP_TILE_SIZE);
+		crateNode->setPosition(Vector2(x,-1).toOgreVector3(Ogre::Real(10.0)));
 
 		sprintf(numstr, "%d", x);
 		name = "delimiter_up_";
@@ -293,7 +294,7 @@ void World::generateMapDelimiter()
 		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(x*MAP_TILE_SIZE), 10.0, Ogre::Real(MAP_TILE_SIZE*MAP_HEIGHT));
+		crateNode->setPosition(Vector2(x,MAP_HEIGHT).toOgreVector3(Ogre::Real(10.0)));
 	}
 
 	for(int y = 0; y < MAP_HEIGHT; ++y)
@@ -306,7 +307,7 @@ void World::generateMapDelimiter()
 		Ogre::Entity* crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(-Ogre::Real(MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
+		crateNode->setPosition(Vector2(-1,y).toOgreVector3(Ogre::Real(10.0)));
 
 		sprintf(numstr, "%d", y);
 		name = "delimiter_right_";
@@ -316,7 +317,7 @@ void World::generateMapDelimiter()
 		crate = sceneManager->createEntity(name, "WoodCrate.mesh");
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
-		crateNode->setPosition(Ogre::Real(MAP_WIDTH*MAP_TILE_SIZE), 10.0, Ogre::Real(y*MAP_TILE_SIZE));
+		crateNode->setPosition(Vector2(MAP_WIDTH,y).toOgreVector3(Ogre::Real(10.0)));
 	}
 }
 

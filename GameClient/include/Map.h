@@ -46,9 +46,9 @@ namespace MapDirection
 	static Ogre::Vector3 DirectionToVector(MapDirection direction)
 	{
 		if(direction == MapDirection::UP)
-			return Ogre::Vector3(0, 0, -1);
-		else if(direction == MapDirection::DOWN)
 			return Ogre::Vector3(0, 0, 1);
+		else if(direction == MapDirection::DOWN)
+			return Ogre::Vector3(0, 0, -1);
 		else if(direction == MapDirection::LEFT)
 			return Ogre::Vector3(-1, 0, 0);
 		else if(direction == MapDirection::RIGHT)
@@ -80,6 +80,11 @@ struct Vector2
 			return true;
 		else
 			return false;
+	}
+
+	Ogre::Vector3 toOgreVector3(Ogre::Real z)
+	{
+		return Ogre::Vector3( Ogre::Real(-x*MAP_TILE_SIZE), z, Ogre::Real(y*MAP_TILE_SIZE));
 	}
 };
 

@@ -26,7 +26,7 @@ Mine::Mine(Ogre::SceneNode* bodyNode, std::string mineName)
 
 void Mine::setPosition(Vector2 position)
 {
-	Ogre::Vector3 newposition(position.x * MAP_TILE_SIZE, MINE_MESH_HEIGHT, position.y * MAP_TILE_SIZE);
+	Ogre::Vector3 newposition = position.toOgreVector3(MINE_MESH_HEIGHT);
 	bodyNode->setPosition(newposition);
 }
 
