@@ -1,6 +1,5 @@
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
-from mathUtils.Direction import Direction
 from mathUtils.MathUtils import MathUtils
 from world.Character import Character
 from world.World import World
@@ -20,23 +19,27 @@ class MyAI(AIDefault):
     oponentLastPosition = None
 
     def initWorld(self):
-        self.tank1 = self.world.getMyTeam().getSecondCharacter()
+        self.tank1 = self.world.getMyTeam().getFirstCharacter()
         ':type tank1: Character'
         self.otherTeam = self.world.getOtherTeam()
         ':type otherTeam: Team'
         self.oponent = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
         self.firstTick = False
-        self.tank1.goTo(Vector2(0, 8))
 
     def tick(self):
+        self.initWorld()
         if self.world.getMyTeam().getFirstCharacter().getPosition() ==\
                 self.world.getOtherTeam().getSecondCharacter().getPosition():
             return None
-        if self.firstTick is True:
-            self.initWorld()
-        if self.tank1.getPosition().x < 6:
-            self.tank1.shootMissile(Direction.DOWN)
+
+        if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()):
+            targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
+            self.tank1.shootMissile(targetDirection)
+            print('shoot')
+        elif self.oponent.getPosition() != self.oponentLastPosition:
+            self.tank1.goTo(self.oponent.getPosition())
+            self.oponentLastPosition = self.oponent.getPosition()
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()

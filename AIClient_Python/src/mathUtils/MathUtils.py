@@ -41,6 +41,6 @@ class MathUtils():
                 return Direction.RIGHT
         if direction.x == 0:
             if direction.y > 0:
-                return Direction.UP
-            else:
                 return Direction.DOWN
+            else:
+                return Direction.UP
