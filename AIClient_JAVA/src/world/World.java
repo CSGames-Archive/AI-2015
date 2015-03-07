@@ -30,7 +30,7 @@ public class World {
 	 * An Enum that represent all the entity that can be found in the world
 	 */
 	public enum MapEntity {
-		EMPTY, BOX, CHARACTER
+		EMPTY, BOX, CHARACTER, MISSILE
 	}
 
 	private static World instance = null;
@@ -197,6 +197,8 @@ public class World {
 			return MapEntity.BOX;
 		} else if (isCharacterAtposition(position)) {
 			return MapEntity.CHARACTER;
+		} else if (isMissileAtPosition(position)) {
+			return MapEntity.MISSILE;
 		}
 		return MapEntity.EMPTY;
 	}

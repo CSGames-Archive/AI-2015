@@ -129,6 +129,14 @@ class World(object):
         return False
 
     def isMissileAtPosition(self, position) -> bool:
+        '''
+        Check if there's a missile(:class:`.Missile`)
+        at a certain position(:class:`.Vector2`)
+        
+        Exemple::
+
+            checkMissile = world.isMissileAtPosition(Vector2(5,5))
+        '''
         for team in self.teams:
             for character in team.characters:
                 if character.missile.position == position and character.missile.isReady is False:
@@ -153,13 +161,21 @@ class World(object):
         return Entity.EMPTY
 
     def whatIsInTheWay(self, origin: Vector2, direction: Vector2) -> {}:
+        '''
+        Return a dict[x,y] = mapEntity between a position and a direction
+        vector(:class:`.Vector2`)
+        
+        Exemple::
+
+            objects = world.whatIsInTheWay(fromPosition,
+                            MathUtils.getDirectionVector(fromposition, toposition))
+        '''
         obstacle = {}
         length = int(math.sqrt(direction.x ** 2 + direction.y ** 2))
         if length == 0:
             return obstacle
         unit_direction = Vector2(direction.x/length, direction.y/length)
         if math.sqrt(unit_direction.x**2 + unit_direction.y**2) != 1:
-            print(unit_direction.x,unit_direction.y)
             raise Exception("Non possible path", unit_direction)
 
         for i in range(1, length - 1):
