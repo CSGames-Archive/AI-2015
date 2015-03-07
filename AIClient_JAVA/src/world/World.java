@@ -16,8 +16,13 @@ package world;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import mathUtils.Vector2;
+
 import event.AddPlayerEvent;
 import event.QueueController;
 
@@ -201,5 +206,30 @@ public class World {
 			return MapEntity.MISSILE;
 		}
 		return MapEntity.EMPTY;
+	}
+	
+	/**
+	 * Return a MAP <[x,y],mapEntity> between a position and a direction
+	 * @param origin
+	 * @param direction
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<Vector2, MapEntity> whatIsInTheWay(Vector2 origin, Vector2 direction) throws Exception{
+		Map<Vector2, MapEntity> map = new HashMap<Vector2, MapEntity>();
+		float length = (float) Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+		if(length==0f) return map;
+		Vector2 unitDirection = new Vector2((int)(direction.x/length),(int)(direction.y/length));
+		if (Math.sqrt(Math.pow(unitDirection.x, 2) + Math.pow(unitDirection.y, 2))!= 1){
+			throw new Exception("impossible path");
+		}
+		for (int i=1; i<(int)length;++i){
+			Vector2 currentPosition = new Vector2(origin.x + unitDirection.x * i, origin.y + unitDirection.y * i);
+			MapEntity objectAtPosition = this.whatIsAtPosition(currentPosition);
+			if(objectAtPosition != MapEntity.EMPTY){
+				map.put(currentPosition, objectAtPosition);
+			}
+		}
+		return map;
 	}
 }
