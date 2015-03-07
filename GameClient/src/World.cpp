@@ -396,3 +396,17 @@ void World::printMap()
 {
 	Map::getInstance().print();
 }
+
+void World::toggleDebugFlag()
+{
+	teams[0]->getCharacter(0)->ToggleDebugFlag();
+	/*
+	for(int teamIndex = 0; teamIndex < MAX_TEAM; ++teamIndex)
+	{
+		for(int characterIndex = 0; characterIndex < MAX_CHARACTER_PER_TEAM; ++characterIndex)
+		{
+			teams[teamIndex]->getCharacter(characterIndex)->toggleDebugFlag();
+		}
+	}
+	*/
+}

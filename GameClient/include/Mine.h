@@ -15,8 +15,6 @@
 #ifndef __Mine_h_
 #define __Mine_h_
 
-#include "stdafx.h"
-
 #include "Map.h"
 
 class Mine

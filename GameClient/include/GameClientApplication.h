@@ -15,8 +15,6 @@
 #ifndef __GameClientApplication_h_
 #define __GameClientApplication_h_
 
-#include "stdafx.h"
-
 #include "BaseApplication.h"
 
 #include "NetworkController.h"

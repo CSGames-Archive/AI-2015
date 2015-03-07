@@ -18,8 +18,6 @@ http://www.ogre3d.org/wiki/
 #ifndef __BaseApplication_h_
 #define __BaseApplication_h_
 
-#include "stdafx.h"
-
 #include <SdkTrays.h>
 #include "SdkCameraMan.h"
 

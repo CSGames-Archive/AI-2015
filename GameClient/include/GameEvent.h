@@ -15,8 +15,6 @@
 #ifndef __GameEvent_h_
 #define __GameEvent_h_
 
-#include "stdafx.h"
-
 #include "NetUtility.h"
 
 namespace EventType

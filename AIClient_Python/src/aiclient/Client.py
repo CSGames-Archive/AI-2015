@@ -9,7 +9,8 @@ from event.EventController import EventController
 from network.NetworkController import NetworkController
 from aiclient.Singleton import Singleton
 from world.World import World
-from aiclient.MyAI import MyAI
+# from aiclient.MyAI import MyAI
+from aiclient.AI_Felix import MyAI
 
 eventController = Singleton(EventController)
 world = Singleton(World)

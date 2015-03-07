@@ -15,8 +15,6 @@
 #ifndef __NetworkController_h_
 #define __NetworkController_h_
 
-#include "stdafx.h"
-
 #include "EventFactory.h"
 #include "NetUtility.h"
 #include "QueueController.h"

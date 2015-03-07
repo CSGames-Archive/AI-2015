@@ -15,8 +15,6 @@
 #ifndef __Missile_h_
 #define __Missile_h_
 
-#include "stdafx.h"
-
 #include "Map.h"
 
 class Missile

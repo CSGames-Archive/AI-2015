@@ -3,9 +3,11 @@ Created on Dec 20, 2014
 
 @author: scarriere
 '''
+import math
 from event.AddPlayerEvent import AddPlayerEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
+from mathUtils.Vector2 import Vector2
 from world.Team import Team
 from enum import Enum
 
@@ -71,6 +73,12 @@ class World(object):
         '''
         for team in self.teams:
             if team._teamId == teamId:
+                return team
+        return None
+
+    def getOtherTeam(self) -> Team:
+        for team in self.teams:
+            if team._teamId != self._yourId:
                 return team
         return None
     
@@ -144,5 +152,27 @@ class World(object):
             return Entity.BOX
         if self.isCharacterAtposition(position):
             return Entity.CHARACTER
+        if self.isMissileAtPosition(position):
+            return Entity.MISSILE
         return Entity.EMPTY
+
+    def whatIsInTheWay(self, origin: Vector2, direction: Vector2) -> {}:
+        obstacle = {}
+        length = int(math.sqrt(direction.x ** 2 + direction.y ** 2))
+        if length == 0:
+            return obstacle
+        unit_direction = Vector2(direction.x/length, direction.y/length)
+        if math.sqrt(unit_direction.x**2 + unit_direction.y**2) != 1:
+            print(unit_direction.x,unit_direction.y)
+            raise Exception("Non possible path", unit_direction)
+
+        for i in range(1, length - 1):
+            currentPos = Vector2(origin.x + unit_direction.x * i, origin.y + unit_direction.y * i)
+            obj = self.whatIsAtPosition(currentPos)
+            if obj is not Entity.EMPTY:
+                obstacle[currentPos.x, currentPos.y] = obj
+        return obstacle
+
+
+
 

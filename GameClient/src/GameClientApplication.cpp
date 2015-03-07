@@ -128,9 +128,13 @@ bool GameClientApplication::keyPressed( const OIS::KeyEvent &arg )
 		networkController->close();
 		mShutDown = true;
 	}
-	else if (arg.key == OIS::KC_P)
+	else if (arg.key == OIS::KC_M)
 	{
 		World::getInstance().printMap();
+	}
+	else if (arg.key == OIS::KC_P)
+	{
+		World::getInstance().toggleDebugFlag();
 	}
 
 	return true;

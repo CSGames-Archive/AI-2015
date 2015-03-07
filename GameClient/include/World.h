@@ -15,8 +15,6 @@
 #ifndef __World_h_
 #define __World_h_
 
-#include "stdafx.h"
-
 #include "TextOverlay.h"
 #include "Team.h"
 #include "QueueController.h"
@@ -77,6 +75,7 @@ public:
 
 	//Debug functions
 	void printMap();
+	void toggleDebugFlag();
 };
 
 #endif // #ifndef __World_h_

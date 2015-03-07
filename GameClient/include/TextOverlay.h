@@ -15,8 +15,6 @@
 #ifndef __TextOverlay_h_
 #define __TextOverlay_h_
 
-#include "stdafx.h"
-
 #include <OgreOverlay.h>
 #include <OgreOverlayContainer.h>
 #include <OgreOverlayManager.h>
