@@ -47,11 +47,13 @@ class World(object):
         event = AddPlayerEvent(teamName, characterNames)
         queueController = Singleton(QueueController)
         queueController.outEvents.put(event)
-        
-    def _startGame(self, mapWidth, mapHeight, numberOfteam, numberOfCharacter, teamIDs):
-        self._gameIsStarted = True
+    
+    def _sendGameInfos(self, mapWidth, mapHeight, numberOfteam, numberOfCharacter, teamIDs):
         for index in range(0, numberOfteam):
             self.teams.insert(index, Team(teamIDs[index], numberOfCharacter))
+
+    def _startGame(self):
+        self._gameIsStarted = True
     
     def _updateBox(self, x, y):
         self._map[x, y] = 1;
@@ -73,12 +75,6 @@ class World(object):
         '''
         for team in self.teams:
             if team._teamId == teamId:
-                return team
-        return None
-
-    def getOtherTeam(self) -> Team:
-        for team in self.teams:
-            if team._teamId != self._yourId:
                 return team
         return None
     

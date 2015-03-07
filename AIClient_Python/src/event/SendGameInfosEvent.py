@@ -7,7 +7,7 @@ from event.IngoingEvent import IngoingEvent
 from aiclient.Singleton import Singleton
 from world.World import World
 
-class GameStartEvent(IngoingEvent):
+class SendGameInfosEvent(IngoingEvent):
 
     def __init__(self):
         self.mapWidth = 0
@@ -30,4 +30,4 @@ class GameStartEvent(IngoingEvent):
             
     def execute(self):
         world = Singleton(World)
-        world._startGame(self.mapWidth, self.mapHeight, self.numberOfTeam, self.numberOfCharacter, self.teamsIds)
+        world._sendGameInfos(self.mapWidth, self.mapHeight, self.numberOfTeam, self.numberOfCharacter, self.teamsIds)

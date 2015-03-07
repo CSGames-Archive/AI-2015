@@ -1,6 +1,6 @@
+import copy
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
-from mathUtils.Direction import Direction
 from mathUtils.MathUtils import MathUtils
 from world.Character import Character
 from world.World import World
@@ -16,27 +16,28 @@ class MyAI(AIDefault):
     otherTeam = None
     oponent = None
     tank1 = None
-    firstTick = True
     oponentLastPosition = None
+    firstTick = True
 
     def initWorld(self):
-        self.tank1 = self.world.getMyTeam().getSecondCharacter()
+        self.tank1 = self.world.getMyTeam().getFirstCharacter()
         ':type tank1: Character'
-        self.otherTeam = self.world.getOtherTeam()
+        self.otherTeam = self.world.getOpponentTeam()
         ':type otherTeam: Team'
         self.oponent = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
         self.firstTick = False
-        self.tank1.goTo(Vector2(0, 8))
 
     def tick(self):
-        if self.world.getMyTeam().getFirstCharacter().getPosition() ==\
-                self.world.getOtherTeam().getSecondCharacter().getPosition():
-            return None
-        if self.firstTick is True:
+        if self.firstTick:
             self.initWorld()
-        if self.tank1.getPosition().x < 6:
-            self.tank1.shootMissile(Direction.DOWN)
+
+        if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()) and self.oponent.isAlive():
+            targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
+            self.tank1.shootMissile(targetDirection)
+        elif self.oponent.getPosition() != self.oponentLastPosition:
+            self.tank1.goTo(self.oponent.getPosition())
+            self.oponentLastPosition = copy.deepcopy(self.oponent.getPosition())
 
     def getOponent(self) -> Character:
         return self.otherTeam.getFirstCharacter()
@@ -47,6 +48,4 @@ class MyAI(AIDefault):
             objects = self.world.whatIsInTheWay(fromposition,
                                                      MathUtils.getDirectionVector(fromposition, toposition))
             ret = len(objects) == 0
-        print("me ({0},{1}) him ({2},{3}) = {4}".format(fromposition.x, fromposition.y, toposition.x,
-                                                        toposition.y, ret))
         return ret

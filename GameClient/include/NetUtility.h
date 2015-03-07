@@ -15,6 +15,8 @@
 #ifndef __NetUtility_h_
 #define __NetUtility_h_
 
+#include "stdafx.h"
+
 #include <iostream>
 
 namespace NetUtility
@@ -39,6 +41,42 @@ namespace NetUtility
 		token = message.substr(0, index);
 		message.erase(0, index+1);
 		return token;
+	}
+
+	static std::string generateSendGameInfosMessage(int teamsId[MAX_TEAM])
+	{
+		char numstr[21]; // Enough to hold all numbers up to 64-bits
+		std::string message = "Game:SendGameInfos";
+
+		message += ":";
+		sprintf(numstr, "%d", MAP_WIDTH);
+		message += numstr;
+
+		message += ":";
+		sprintf(numstr, "%d", MAP_HEIGHT);
+		message += numstr;
+
+		message += ":";
+		sprintf(numstr, "%d", MAX_TEAM);
+		message += numstr;
+
+		message += ":";
+		sprintf(numstr, "%d", MAX_CHARACTER_PER_TEAM);
+		message += numstr;
+
+		for(int i = 0; i < MAX_TEAM; ++i)
+		{
+			message += ":";
+			sprintf(numstr, "%d", teamsId[i]);
+			message += numstr;
+		}
+
+		return message;
+	}
+
+	static std::string generateStartGameMessage()
+	{
+		return "Game:StartGame";
 	}
 
 	static std::string generateMoveCharacterMessage(int teamId, int characterId, double x, double z)

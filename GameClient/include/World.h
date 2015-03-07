@@ -38,7 +38,8 @@ private:
     void operator=(World const&);
 
 	void generateMapDelimiter();
-	void gameStart();
+	void sendGameInfos();
+	void startGame();
 	void sendAllPosition();
 	void generateMap();
 	void sendMap();
