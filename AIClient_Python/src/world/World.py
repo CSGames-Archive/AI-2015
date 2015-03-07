@@ -56,7 +56,7 @@ class World(object):
         self._gameIsStarted = True
     
     def _updateBox(self, x, y):
-        self._map[x, y] = 1;
+        self._map[x, y] = 1
 
     def _endGame(self):
         print("End game")
@@ -167,8 +167,8 @@ class World(object):
         
         Exemple::
 
-            objects = world.whatIsInTheWay(fromPosition,
-                            MathUtils.getDirectionVector(fromposition, toposition))
+            objects = world.whatIsInTheWay(origin,
+                            MathUtils.getDirectionVector(origin, toPosition))
         '''
         obstacle = {}
         length = int(math.sqrt(direction.x ** 2 + direction.y ** 2))

@@ -7,7 +7,7 @@ Created on Jan 6, 2015
 
 class Vector2(object):
     '''
-    2D Vector, usefull to keep a position or to calculate a direction
+    2D Vector, useful to keep a position or to calculate a direction
     '''
 
     def __init__(self, x, y):
