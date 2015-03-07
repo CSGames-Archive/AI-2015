@@ -15,19 +15,12 @@
 package world;
 
 import java.awt.Point;
+import mathUtils.Direction;
 
 /**
  * Class that contain all the informations about the missile
  */
 public class Missile {
-
-	/**
-	 * Enum that represent every direction possible
-	 */
-	public enum Direction {
-		UP, DOWN, LEFT, RIGHT
-	}
-
 	private Point position;
 	private Direction direction;
 	private boolean isReady;

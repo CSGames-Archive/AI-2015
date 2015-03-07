@@ -16,8 +16,8 @@ package aiclient;
 
 import java.awt.Point;
 
+import mathUtils.Direction;
 import world.Character;
-import world.Missile;
 import world.World;
 
 /**
@@ -77,8 +77,8 @@ public class AI {
 		king.move(position2);
 		soldier.move(position3);
 
-		king.shootMissile(Missile.Direction.RIGHT);
-		soldier.shootMissile(Missile.Direction.LEFT);
+		king.shootMissile(Direction.RIGHT);
+		soldier.shootMissile(Direction.LEFT);
 
 		status = AIStatus.LOWER_RIGHT;
 	}
@@ -98,8 +98,8 @@ public class AI {
 			king.dropMine();
 			soldier.dropMine();
 
-			king.shootMissile(Missile.Direction.LEFT);
-			soldier.shootMissile(Missile.Direction.RIGHT);
+			king.shootMissile(Direction.LEFT);
+			soldier.shootMissile(Direction.RIGHT);
 
 			status = AIStatus.LOWER_LEFT;
 		}
@@ -117,8 +117,8 @@ public class AI {
 			king.move(position4);
 			soldier.move(position1);
 
-			king.shootMissile(Missile.Direction.UP);
-			soldier.shootMissile(Missile.Direction.DOWN);
+			king.shootMissile(Direction.UP);
+			soldier.shootMissile(Direction.DOWN);
 
 			king.dropMine();
 			soldier.dropMine();
@@ -139,8 +139,8 @@ public class AI {
 			king.move(position3);
 			soldier.move(position2);
 
-			king.shootMissile(Missile.Direction.DOWN);
-			soldier.shootMissile(Missile.Direction.UP);
+			king.shootMissile(Direction.DOWN);
+			soldier.shootMissile(Direction.UP);
 
 			king.dropMine();
 			soldier.dropMine();
@@ -164,8 +164,8 @@ public class AI {
 			king.dropMine();
 			soldier.dropMine();
 
-			king.shootMissile(Missile.Direction.RIGHT);
-			soldier.shootMissile(Missile.Direction.LEFT);
+			king.shootMissile(Direction.RIGHT);
+			soldier.shootMissile(Direction.LEFT);
 
 			status = AIStatus.LOWER_RIGHT;
 		}
