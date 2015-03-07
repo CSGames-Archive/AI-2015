@@ -37,7 +37,7 @@ GameClientApplication::~GameClientApplication()
 
 void GameClientApplication::createScene()
 {
-	mCameraMan->getCamera()->setPosition(87.5, 300.0, 87.5);
+	mCameraMan->getCamera()->setPosition(Vector2(4, 4).toOgreVector3(Ogre::Real(300.0)));
 	mCameraMan->getCamera()->pitch(Ogre::Radian(Ogre::Degree(-90)));
 	World::getInstance().createScene();
 }

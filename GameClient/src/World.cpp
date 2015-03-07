@@ -56,16 +56,16 @@ void World::createScene()
 
 	// Create a Light and set its position
 	Ogre::Light* light = sceneManager->createLight("MainLight");
-	light->setPosition(Ogre::Real(-2.0*MAP_TILE_SIZE), 80.0, Ogre::Real(-2.0*MAP_TILE_SIZE));
+	light->setPosition(Vector2(-2, -2).toOgreVector3(Ogre::Real(80.0)));
 
 	light = sceneManager->createLight("MainLight2");
-	light->setPosition(Ogre::Real(-2.0*MAP_TILE_SIZE), 80.0, Ogre::Real(9.0*MAP_TILE_SIZE));
+	light->setPosition(Vector2(-2, MAP_HEIGHT).toOgreVector3(Ogre::Real(80.0)));
 
 	light = sceneManager->createLight("MainLight3");
-	light->setPosition(Ogre::Real(9.0*MAP_TILE_SIZE), 80.0f, Ogre::Real(-2.0*MAP_TILE_SIZE));
+	light->setPosition(Vector2(MAP_WIDTH, -2).toOgreVector3(Ogre::Real(80.0)));
 
 	light = sceneManager->createLight("MainLight4");
-	light->setPosition(Ogre::Real(9.0*MAP_TILE_SIZE), 80.0f, Ogre::Real(9.0*MAP_TILE_SIZE));
+	light->setPosition(Vector2(MAP_WIDTH, MAP_HEIGHT).toOgreVector3(Ogre::Real(80.0)));
 
 	sceneManager->setSkyDome(true, "Examples/CloudySky", 5, 8);
 

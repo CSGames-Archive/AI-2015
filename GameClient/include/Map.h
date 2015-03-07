@@ -50,9 +50,9 @@ namespace MapDirection
 		else if(direction == MapDirection::DOWN)
 			return Ogre::Vector3(0, 0, -1);
 		else if(direction == MapDirection::LEFT)
-			return Ogre::Vector3(-1, 0, 0);
-		else if(direction == MapDirection::RIGHT)
 			return Ogre::Vector3(1, 0, 0);
+		else if(direction == MapDirection::RIGHT)
+			return Ogre::Vector3(-1, 0, 0);
 		return Ogre::Vector3(0, 0, 0);
 	}
 }
