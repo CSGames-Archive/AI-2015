@@ -6,7 +6,8 @@ Created on Dec 16, 2014
 from event.JoinGameEvent import JoinGameEvent
 from aiclient.Singleton import Singleton
 from event.QueueController import QueueController
-from event.GameStartEvent import GameStartEvent
+from event.StartGameEvent import StartGameEvent
+from event.SendGameInfosEvent import SendGameInfosEvent
 from event.UpdateCharacterEvent import UpdateCharacterEvent
 from event.MineHitEvent import MineHitEvent
 from event.MissileHitEvent import MissileHitEvent
@@ -28,8 +29,10 @@ class EventFactory(object):
     def createEvent(eventType):
         if eventType == "JoinGame":
             return JoinGameEvent()
-        elif eventType == "GameStart":
-            return GameStartEvent()
+        elif eventType == "StartGame":
+            return StartGameEvent()
+        elif eventType == "SendGameInfos":
+            return SendGameInfosEvent()
         elif eventType == "UpdateCharacter":
             return UpdateCharacterEvent()
         elif eventType == "MineHit":

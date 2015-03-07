@@ -28,10 +28,8 @@ class MyAI(AIDefault):
         self.firstTick = False
 
     def tick(self):
-        self.initWorld()
-        if self.world.getMyTeam().getFirstCharacter().getPosition() ==\
-                self.world.getOtherTeam().getSecondCharacter().getPosition():
-            return None
+        if self.firstTick:
+            self.initWorld()
 
         if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()):
             targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())

@@ -124,9 +124,10 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	if(teamCount == MAX_TEAM)
 	{
-		gameStart();
+		sendGameInfos();
 		sendMap();
 		sendAllPosition();
+		startGame();
 	}
 }
 
@@ -163,35 +164,25 @@ void World::addTime(Ogre::Real deltaTime)
 	}
 }
 
-void World::gameStart()
+void World::sendGameInfos()
 {
 	gameStarted = true;
 
-	char numstr[21]; // Enough to hold all numbers up to 64-bits
-	std::string message = "Game:GameStart";
-
-	message += ":";
-	sprintf(numstr, "%d", MAP_WIDTH);
-	message += numstr;
-
-	message += ":";
-	sprintf(numstr, "%d", MAP_HEIGHT);
-	message += numstr;
-
-	message += ":";
-	sprintf(numstr, "%d", MAX_TEAM);
-	message += numstr;
-
-	message += ":";
-	sprintf(numstr, "%d", MAX_CHARACTER_PER_TEAM);
-	message += numstr;
-
+	int teamsId[MAX_TEAM];
 	for(int i = 0; i < MAX_TEAM; ++i)
 	{
-		message += ":";
-		sprintf(numstr, "%d", teams[i]->getId());
-		message += numstr;
+		teamsId[i] = teams[i]->getId();
 	}
+
+	std::string message = NetUtility::generateSendGameInfosMessage(teamsId);
+	QueueController::getInstance().addMessage(message);
+}
+
+void World::startGame()
+{
+	gameStarted = true;
+
+	std::string message = NetUtility::generateStartGameMessage();
 	QueueController::getInstance().addMessage(message);
 }
 
