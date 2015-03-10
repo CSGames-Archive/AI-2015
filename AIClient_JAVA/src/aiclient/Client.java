@@ -33,6 +33,7 @@ class Client {
 		World world = World.getInstance();
 		AI ai = new AI();
 
+		ai.setNames();
 		networkController.init();
 
 		while (networkController.isConnected() && !world.isGameIsFinished()) {

@@ -44,9 +44,14 @@ public class AI {
 	World world = World.getInstance();
 
 	Point position1 = new Point(0, 0);
-	Point position2 = new Point(7, 0);
-	Point position3 = new Point(0, 7);
-	Point position4 = new Point(7, 7);
+	Point position2 = new Point(8, 0);
+	Point position3 = new Point(0, 8);
+	Point position4 = new Point(8, 8);
+
+	public void setNames() {
+		String[] characternames = {"WALL-E", "Eve"};
+		world.setNames("Java Team", characternames);
+	}
 
 	/**
 	 * Function call every 30 ms, this is the starting point for the AI
