@@ -26,6 +26,7 @@ class Client(object):
         '''
         Main loop
         '''
+        ai.setNames()
         netController.init()
 
         while netController.connected and not world._gameIsFinished:

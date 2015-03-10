@@ -34,7 +34,15 @@ class AIDefault(object):
     position2 = Vector2(7,0)
     position3 = Vector2(0,7)
     position4 = Vector2(7,7)
-    
+
+    '''
+    Set all the name for your team
+    '''    
+    def setNames(self):
+        teamName = "Team python"
+        characterNames = ["Python character1", "Python character2"]
+        self.world._setNames(teamName, characterNames)
+
     def tick(self):
         '''
         Function call every 30 ms, this is the starting point for the AI

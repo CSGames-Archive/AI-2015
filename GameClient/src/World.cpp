@@ -95,18 +95,22 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 	for(int i = 0; i < MAX_CHARACTER_PER_TEAM; ++i)
 	{
+		char idstr[21];
+		sprintf(idstr, "%d%d", teamId, i);
+		
+		std::string characterName = characterNames[i] + idstr;
 		Ogre::SceneNode* bodyNode = sceneManager->getRootSceneNode()->createChildSceneNode();
-		Ogre::Entity* entity = sceneManager->createEntity(characterNames[i], TANK_MESH_NAME);
+		Ogre::Entity* entity = sceneManager->createEntity(characterName, TANK_MESH_NAME);
 		bodyNode->attachObject(entity);
 
-		std::string mineName = "mine_" + characterNames[i];
+		std::string mineName = "mine_" + characterNames[i] + idstr;
 		Ogre::SceneNode* mineNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 		Ogre::Entity* mineEntity = sceneManager->createEntity(mineName, MINE_MESH_NAME);
 		mineNode->attachObject(mineEntity);
 		mineNode->setScale(Ogre::Vector3(2.0, 2.0, 2.0));
 		mineNode->setVisible(false);
 
-		std::string missileName = "missile_" + characterNames[i];
+		std::string missileName = "missile_" + characterNames[i] + idstr;
 		Ogre::SceneNode* missileNode = sceneManager->getRootSceneNode()->createChildSceneNode();
 		Ogre::Entity* missileEntity = sceneManager->createEntity(missileName, MISSILE_MESH_NAME);
 		missileNode->attachObject(missileEntity);
@@ -114,8 +118,8 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 		Mine* mine = new Mine(mineNode, mineName);
 		Missile* missile = new Missile(missileNode, missileName, teamId, i);
-		TextOverlay* nameOverlay = new TextOverlay(labelOverlay, characterNames[i], characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport());
-		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life: ", "Life_" + characterNames[i], bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
+		TextOverlay* nameOverlay = new TextOverlay(labelOverlay, characterNames[i], characterName, bodyNode, sceneManager->getCamera("PlayerCam")->getViewport());
+		TextOverlay* lifeOverlay = new TextOverlay(labelOverlay, "Life: ", "Life_" + characterNames[i]+ idstr, bodyNode, sceneManager->getCamera("PlayerCam")->getViewport(), Ogre::Vector3::UNIT_Y*15.0);
 		lifeOverlay->setColors(Ogre::ColourValue(1.0, 0.25, 0.25), Ogre::ColourValue(1.0, 0.25, 0.25));
 
 		Character* character = new Character(bodyNode, mine, missile, nameOverlay, lifeOverlay, characterNames[i], teamId, i);

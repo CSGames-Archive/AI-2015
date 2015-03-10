@@ -19,6 +19,11 @@ class MyAI(AIDefault):
     oponentLastPosition = None
     firstTick = True
 
+    def setNames(self):
+        teamName = "Felix team"
+        characterNames = ["Batman", "Robin"]
+        self.world._setNames(teamName, characterNames)
+
     def initWorld(self):
         self.tank1 = self.world.getMyTeam().getFirstCharacter()
         ':type tank1: Character'

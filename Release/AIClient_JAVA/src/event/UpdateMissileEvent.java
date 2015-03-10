@@ -16,12 +16,13 @@ package event;
 
 import java.awt.Point;
 
-import world.Missile;
+import mathUtils.Direction;
+
 import world.World;
 
 public class UpdateMissileEvent extends IngoingEvent {
 	private int teamID, characterID;
-	private Missile.Direction direction;
+	private Direction direction;
 	private Point position = new Point();
 
 	@Override
@@ -42,7 +43,7 @@ public class UpdateMissileEvent extends IngoingEvent {
 		characterID = convertCharToNumeral(messageParts[1]);
 		position.x = convertCharToNumeral(messageParts[2]);
 		position.y = convertCharToNumeral(messageParts[3]);
-		direction = Missile.Direction.values()[convertCharToNumeral(messageParts[4])];
+		direction = Direction.values()[convertCharToNumeral(messageParts[4])];
 		return true;
 	}
 }
