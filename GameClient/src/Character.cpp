@@ -310,3 +310,8 @@ void Character::ToggleDebugFlag()
 {
 	toggleDebugFlag = !toggleDebugFlag;
 }
+
+Vector2 Character::getPosition()
+{
+	return position;
+}

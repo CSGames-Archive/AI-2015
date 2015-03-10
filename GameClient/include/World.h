@@ -33,6 +33,8 @@ private:
 	Ogre::OverlayContainer* panel;
 	Ogre::TextAreaOverlayElement* textElement;
 
+	TextOverlay* nameOverlay[3];
+
 	// Don't implement for singleton
 	World(World const&);
     void operator=(World const&);

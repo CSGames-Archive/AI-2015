@@ -42,6 +42,14 @@ World::~World()
 			delete teams[i];
 		}
 	}
+
+	for(int x = 0; x < 3; ++x)
+	{
+		if(nameOverlay[x])
+		{
+			delete nameOverlay[x];
+		}
+	}
 }
 
 void World::init(Ogre::SceneManager* sceneManager)
@@ -166,6 +174,14 @@ void World::addTime(Ogre::Real deltaTime)
 			teams[i]->addTime(deltaTime, sceneManager->getCamera("PlayerCam"));
 		}
 	}
+
+	for(int x = 0; x < 3; ++x)
+	{
+		if(nameOverlay[x])
+		{
+			nameOverlay[x]->update(sceneManager->getCamera("PlayerCam"));
+		}
+	}
 }
 
 void World::sendGameInfos()
@@ -225,7 +241,15 @@ void World::mineHit(int mineTeamId, int mineCharacterId)
 
 void World::missileHit(int missileTeamId, int missileCharacterId)
 {
-	getTeam(missileTeamId)->getCharacter(missileCharacterId)->getMissile()->setVisible(false);
+	Character* character = getTeam(missileTeamId)->getCharacter(missileCharacterId);
+	Missile* missile = character->getMissile();
+	missile->setVisible(false);
+
+	// We shot near our position
+	if(missile->getPosition().distance(character->getPosition()) < 2)
+	{
+		characterHit(missileTeamId, missileCharacterId);
+	}
 }
 
 void World::generateMap()
@@ -290,6 +314,11 @@ void World::generateMapDelimiter()
 		crateNode->setScale(scaleVector);
 		crateNode->setPosition(Vector2(x,-1).toOgreVector3(Ogre::Real(10.0)));
 
+		if(x == -1)
+			nameOverlay[0] = new TextOverlay(labelOverlay, "O", "axes_origin", crateNode, sceneManager->getCamera("PlayerCam")->getViewport());
+		if(x == MAP_WIDTH -1)
+			nameOverlay[1] = new TextOverlay(labelOverlay, "X = 8", "X = 8", crateNode, sceneManager->getCamera("PlayerCam")->getViewport());
+
 		sprintf(numstr, "%d", x);
 		name = "delimiter_up_";
 		name += numstr;
@@ -312,6 +341,9 @@ void World::generateMapDelimiter()
 		crateNode->attachObject(crate);
 		crateNode->setScale(scaleVector);
 		crateNode->setPosition(Vector2(-1,y).toOgreVector3(Ogre::Real(10.0)));
+
+		if(y == MAP_HEIGHT -1)
+			nameOverlay[2] = new TextOverlay(labelOverlay, "Y = 8", "Y = 8", crateNode, sceneManager->getCamera("PlayerCam")->getViewport());
 
 		sprintf(numstr, "%d", y);
 		name = "delimiter_right_";
@@ -365,27 +397,30 @@ Team* World::findWiningTeam()
 
 void World::showMessage(std::string message)
 {
-	this->panel = static_cast<Ogre::OverlayContainer*>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "MainPanel"));
-	this->panel->setMetricsMode(Ogre::GMM_PIXELS);
-	this->panel->setPosition(300, 100);
-	this->panel->setDimensions(300, 120);
+	if(!this->panel)
+	{
+		this->panel = static_cast<Ogre::OverlayContainer*>(Ogre::OverlayManager::getSingleton().createOverlayElement("Panel", "MainPanel"));
+		this->panel->setMetricsMode(Ogre::GMM_PIXELS);
+		this->panel->setPosition(300, 100);
+		this->panel->setDimensions(300, 120);
 
-	this->textElement = new Ogre::TextAreaOverlayElement("Label_MainPanel");
+		this->textElement = new Ogre::TextAreaOverlayElement("Label_MainPanel");
+		this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
+		this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Center);
+		this->textElement->setCharHeight(40);
+		this->textElement->setFontName("SdkTrays/Caption");
+		this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));
+		this->textElement->setColourTop(Ogre::ColourValue(0.25, 1.0, 0.25));
+		this->textElement->setDimensions(300, 120);
+		this->textElement->setPosition(0, 0);
+
+		Ogre::Overlay* labelOverlay = Ogre::OverlayManager::getSingleton().create("main_label");
+
+		this->panel->addChild(this->textElement);
+		labelOverlay->add2D(this->panel);
+		labelOverlay->show();
+	}
 	this->textElement->setCaption(message);
-	this->textElement->setMetricsMode(Ogre::GMM_PIXELS);
-	this->textElement->setAlignment(Ogre::TextAreaOverlayElement::Center);
-	this->textElement->setCharHeight(40);
-	this->textElement->setFontName("SdkTrays/Caption");
-	this->textElement->setColourBottom(Ogre::ColourValue(0.25, 1.0, 0.25));
-	this->textElement->setColourTop(Ogre::ColourValue(0.25, 1.0, 0.25));
-	this->textElement->setDimensions(300, 120);
-	this->textElement->setPosition(0, 0);
-
-	Ogre::Overlay* labelOverlay = Ogre::OverlayManager::getSingleton().create("main_label");
-
-	this->panel->addChild(this->textElement);
-	labelOverlay->add2D(this->panel);
-	labelOverlay->show();
 }
 
 void World::printMap()

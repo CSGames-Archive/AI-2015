@@ -5,6 +5,7 @@ from mathUtils.MathUtils import MathUtils
 from world.Character import Character
 from world.World import World
 from mathUtils.Vector2 import Vector2
+from mathUtils.Direction import Direction
 from aiclient.AIDefault import AIDefault
 
 '''
@@ -36,7 +37,7 @@ class MyAI(AIDefault):
     def tick(self):
         if self.firstTick:
             self.initWorld()
-
+    
         if self.isAttackable(self.tank1.getPosition(), self.oponent.getPosition()) and self.oponent.isAlive():
             targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent.getPosition())
             self.tank1.shootMissile(targetDirection)

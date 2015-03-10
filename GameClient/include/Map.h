@@ -86,6 +86,11 @@ struct Vector2
 	{
 		return Ogre::Vector3( Ogre::Real(-x*MAP_TILE_SIZE), z, Ogre::Real(y*MAP_TILE_SIZE));
 	}
+
+	int distance(Vector2 const& vector)
+	{
+		return std::abs(vector.x - this->x) + std::abs(vector.y - this->y); 
+	}
 };
 
 struct MapTile

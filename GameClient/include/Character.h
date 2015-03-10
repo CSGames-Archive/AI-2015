@@ -75,6 +75,7 @@ public:
 	Missile* getMissile();
 	bool isVisible();
 	bool isAlive();
+	Vector2 getPosition();
 
 	// Setters
 	void setTargetPosition(int x, int z);
