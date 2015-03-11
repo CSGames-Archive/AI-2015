@@ -14,9 +14,6 @@
 
 package event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import world.World;
 
 public class StartGameEvent extends IngoingEvent {
