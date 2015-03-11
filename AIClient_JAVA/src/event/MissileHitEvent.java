@@ -23,6 +23,7 @@ public class MissileHitEvent extends IngoingEvent {
 	private int hitCharacterId;
 	private int originTeamId;
 	private int originCharacterId;
+	private int backfire;
 
 	@Override
 	public void execute() {
@@ -39,11 +40,17 @@ public class MissileHitEvent extends IngoingEvent {
 			World.getInstance().getTeam(hitTeamId).getCharacter(hitCharacterId)
 					.missileHit();
 		}
+		
+		if(backfire == 1)
+		{
+			World.getInstance().getTeam(originTeamId)
+			.getCharacter(originCharacterId).hitByMissile();
+		}
 	}
 
 	@Override
 	public boolean fillArguments(String message) {
-		String[] messageParts = message.split(SEPARATOR, 6);
+		String[] messageParts = message.split(SEPARATOR, 7);
 
 		hitEntity = convertCharToNumeral(messageParts[0]);
 		hitTeamId = convertCharToNumeral(messageParts[1]);
@@ -54,7 +61,7 @@ public class MissileHitEvent extends IngoingEvent {
 			return false;
 		}
 		originCharacterId = convertCharToNumeral(messageParts[4]);
-
+		backfire = convertCharToNumeral(messageParts[5]);
 		return true;
 	}
 

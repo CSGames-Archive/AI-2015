@@ -239,14 +239,14 @@ void World::mineHit(int mineTeamId, int mineCharacterId)
 	getTeam(mineTeamId)->getCharacter(mineCharacterId)->getMine()->setVisible(false);
 }
 
-void World::missileHit(int missileTeamId, int missileCharacterId)
+void World::missileHit(int missileTeamId, int missileCharacterId, bool backfire)
 {
 	Character* character = getTeam(missileTeamId)->getCharacter(missileCharacterId);
 	Missile* missile = character->getMissile();
 	missile->setVisible(false);
 
 	// We shot near our position
-	if(missile->getPosition().distance(character->getPosition()) < 2)
+	if(backfire)
 	{
 		characterHit(missileTeamId, missileCharacterId);
 	}

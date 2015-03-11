@@ -136,25 +136,48 @@ void EventController::throwMissile(GameEvent* gameEvent)
 void EventController::missileHit(GameEvent* gameEvent)
 {
 	MissileHitEvent* missileHitEvent = static_cast<MissileHitEvent*>(gameEvent);
+	World& world = World::getInstance();
+
 	if(missileHitEvent->entity == HitEntity::CHARACTER)
 	{
-		World::getInstance().characterHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
+		world.characterHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
 	else if(missileHitEvent->entity == HitEntity::MINE)
 	{
-		World::getInstance().mineHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
+		world.mineHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
 	}
 	else if(missileHitEvent->entity == HitEntity::MISSILE)
 	{
-		World::getInstance().missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId);
+		Character* character = world.getTeam(missileHitEvent->hitTeamId)->getCharacter(missileHitEvent->hitCharacterId);
+		Missile* missile = character->getMissile();
+
+		bool backfire = false;
+		// We shot near our position
+		if(missile->getPosition().distance(character->getPosition()) < 2)
+		{
+			backfire = true;
+		}
+
+
+		world.missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, backfire);
 	}
 	else if(missileHitEvent->entity == HitEntity::NONE)
 	{
 		//TODO: add something with the point sytem
 	}
 
-	World::getInstance().missileHit(missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+	Character* character = world.getTeam(missileHitEvent->originTeamId)->getCharacter(missileHitEvent->originCharacterId);
+	Missile* missile = character->getMissile();
 
-	std::string message = NetUtility::generateMissileHitMessage(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId);
+	bool backfire = false;
+	// We shot near our position
+	if(missile->getPosition().distance(character->getPosition()) < 2)
+	{
+		backfire = true;
+	}
+
+	World::getInstance().missileHit(missileHitEvent->originTeamId, missileHitEvent->originCharacterId, backfire);
+
+	std::string message = NetUtility::generateMissileHitMessage(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId, backfire);
 	QueueController::getInstance().addMessage(message);
 }

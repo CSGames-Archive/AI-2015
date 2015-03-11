@@ -43,14 +43,14 @@ class MyAI(AIDefault):
         if self.firstTick:
             self.initWorld()
     
-        if self.isAttackable(self.tank1.getPosition(), self.oponent1.getPosition()) and self.oponent1.isAlive():
+        if self.isAttackable(self.tank1.getPosition(), self.oponent1.getPosition()) and self.oponent1.isAlive() and self.tank1.isAlive():
             targetDirection = MathUtils.getDirectionFromPositions(self.tank1.getPosition(), self.oponent1.getPosition())
             self.tank1.shootMissile(targetDirection)
         elif self.oponent1.getPosition() != self.oponentLastPosition1:
             self.tank1.goTo(self.oponent1.getPosition())
             self.oponentLastPosition1 = copy.deepcopy(self.oponent1.getPosition())
 
-        if self.isAttackable(self.tank2.getPosition(), self.oponent2.getPosition()) and self.oponent2.isAlive():
+        if self.isAttackable(self.tank2.getPosition(), self.oponent2.getPosition()) and self.oponent2.isAlive() and self.tank2.isAlive():
             targetDirection = MathUtils.getDirectionFromPositions(self.tank2.getPosition(), self.oponent2.getPosition())
             self.tank2.shootMissile(targetDirection)
         elif self.oponent2.getPosition() != self.oponentLastPosition2:

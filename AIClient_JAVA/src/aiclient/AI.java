@@ -87,9 +87,6 @@ public class AI {
 		king.move(position2);
 		soldier.move(position3);
 
-		king.shootMissile(Direction.RIGHT);
-		soldier.shootMissile(Direction.LEFT);
-
 		status = AIStatus.LOWER_RIGHT;
 	}
 
