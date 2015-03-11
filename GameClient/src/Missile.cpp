@@ -53,19 +53,19 @@ Vector2 Missile::calculateTargetPosition(MapDirection::MapDirection direction)
 {
 	if(direction == MapDirection::DOWN)
 	{
-		return Vector2(position.x, 0);
+		return Vector2(position.x, -1);
 	}
 	else if(direction == MapDirection::UP)
 	{
-		return Vector2(position.x, MAP_HEIGHT-1);
+		return Vector2(position.x, MAP_HEIGHT);
 	}
 	else if(direction == MapDirection::LEFT)
 	{
-		return Vector2(0, position.y);
+		return Vector2(-1, position.y);
 	}
 	else if(direction == MapDirection::RIGHT)
 	{
-		return Vector2(MAP_WIDTH-1, position.y);
+		return Vector2(MAP_WIDTH, position.y);
 	}
 	else
 	{
@@ -176,15 +176,16 @@ MapDirection::MapDirection Missile::getDirection()
 void Missile::hitWall()
 {
 	MapTile* tile = Map::getInstance().getTile(position);
+	
+	MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
+	QueueController::getInstance().addEvent(newEvent);
+
 	if(tile->type == MapEntity::CHARACTER || tile->type == MapEntity::CHARACTER_MINE)
 	{
-		MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::CHARACTER, tile->teamId, tile->characterId, tile->teamId, tile->characterId);
-		QueueController::getInstance().addEvent(newEvent);
+
 	}
 	else
 	{
-		MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
-		QueueController::getInstance().addEvent(newEvent);
 		Map::getInstance().setTile(position, MapEntity::EMPTY,0, 0);
 	}
 }

@@ -26,6 +26,7 @@ class GameClientApplication : public BaseApplication
 private:
 	NetworkController* networkController;
 	EventController* eventController;
+	Ogre::Real cumulateTime;
 
 public:
     GameClientApplication();

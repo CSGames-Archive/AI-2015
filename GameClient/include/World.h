@@ -69,7 +69,7 @@ public:
 	void removeTeam(int teamId);
 
 	void mineHit(int mineTeamId, int mineCharacterId);
-	void missileHit(int missileTeamId, int missileCharacterId);
+	void missileHit(int missileTeamId, int missileCharacterId, bool backfire);
 	void characterHit(int hitTeamId, int hitCharacterId);
 
 	// Getters

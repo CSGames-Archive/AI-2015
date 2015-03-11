@@ -17,6 +17,7 @@
 
 GameClientApplication::GameClientApplication()
 {
+	cumulateTime = 0.0;
 }
 
 GameClientApplication::~GameClientApplication()
@@ -97,10 +98,12 @@ bool GameClientApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	if(World::getInstance().isGameStarted())
 	{
-		Ogre::Real timeSinceLastFrame = evt.timeSinceLastFrame;
-		if(timeSinceLastFrame > Ogre::Real(0.033))
-			timeSinceLastFrame = Ogre::Real(0.033);
-		World::getInstance().addTime(timeSinceLastFrame);
+		cumulateTime += evt.timeSinceLastFrame;
+		while(cumulateTime > Ogre::Real(0.033))
+		{
+			World::getInstance().addTime(Ogre::Real(0.033));
+			cumulateTime -= Ogre::Real(0.033);
+		}
 	}
 
     mCameraMan->frameRenderingQueued(evt);

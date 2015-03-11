@@ -298,7 +298,15 @@ void Character::die()
 	bodyNode->setVisible(false);
 	lifeOverlay->hide();
 	nameOverlay->hide();
-	Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
+	
+	if(Map::getInstance().getTileType(position) == MapEntity::CHARACTER_MINE)
+	{
+		Map::getInstance().getTile(position)->type = MapEntity::MINE;
+	}
+	else
+	{
+		Map::getInstance().setTile(position, MapEntity::EMPTY, 0, 0);
+	}
 }
 
 void Character::deactivate()

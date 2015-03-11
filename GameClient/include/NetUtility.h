@@ -117,7 +117,7 @@ namespace NetUtility
 		return message;
 	}
 
-	static std::string generateMissileHitMessage(int hitEntity, int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId)
+	static std::string generateMissileHitMessage(int hitEntity, int hitTeamId, int hitCharacterId, int originTeamId, int originCharacterId, bool backfire)
 	{
 		char numstr[21]; // Enough to hold all numbers up to 64-bits
 		std::string message = "Game:MissileHit";
@@ -140,6 +140,10 @@ namespace NetUtility
 
 		message += ":";
 		sprintf(numstr, "%d", originCharacterId);
+		message += numstr;
+
+		message += ":";
+		sprintf(numstr, "%d", backfire);
 		message += numstr;
 
 		return message;
