@@ -35,10 +35,11 @@ class AIDefault(object):
     position3 = Vector2(0,7)
     position4 = Vector2(7,7)
 
-    '''
-    Set all the name for your team
-    '''    
     def setNames(self):
+        '''
+        Function call to set the name of the team and characters
+        (Cannot be deleted)
+        '''
         teamName = "Team python"
         characterNames = ["Python character1", "Python character2"]
         self.world._setNames(teamName, characterNames)

@@ -48,9 +48,14 @@ public class AI {
 	Point position3 = new Point(0, 8);
 	Point position4 = new Point(8, 8);
 
+	/**
+	 * Function call to set the name of the team and characters
+     * (Cannot be deleted)
+	 */
 	public void setNames() {
+		String teamName = "Java Team";
 		String[] characternames = {"WALL-E", "Eve"};
-		world.setNames("Java Team", characternames);
+		world.setNames(teamName, characternames);
 	}
 
 	/**
