@@ -23,6 +23,7 @@ private:
 	// Missile Infos
 	Ogre::Real MISSILE_MESH_HEIGHT;
 	std::string name;
+	Vector2 lastPosition;
 	Vector2 position;
 	Vector2 targetPosition;
 	Ogre::Vector3 subStepPosition;
@@ -48,6 +49,7 @@ public:
 
 	Vector2 calculateNextStep();
 	MapDirection::MapDirection getDirection();
+	Vector2 getPosition();
 	void hitWall();
 };
 

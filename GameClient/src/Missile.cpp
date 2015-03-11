@@ -188,3 +188,8 @@ void Missile::hitWall()
 		Map::getInstance().setTile(position, MapEntity::EMPTY,0, 0);
 	}
 }
+
+Vector2 Missile::getPosition()
+{
+	return position;
+}

@@ -28,7 +28,9 @@ class World(object):
     _map = {}
     _gameIsStarted = False
     _gameIsFinished = False
-    
+    _teamName = "No name"
+    _characterNames = ["No name", "No name"]
+
     teams = []
     '''
     List of all the teams
@@ -42,9 +44,7 @@ class World(object):
         self._yourId = yourId
         print("JoinGameEvent: {}".format(self._yourId))
         
-        teamName = "python team (" + str(yourId) + ")"
-        characterNames = ["python king (" + str(yourId) + ")", "python soldier (" + str(yourId) + ")"]
-        event = AddPlayerEvent(teamName, characterNames)
+        event = AddPlayerEvent(self._teamName, self._characterNames)
         queueController = Singleton(QueueController)
         queueController.outEvents.put(event)
     
@@ -61,6 +61,10 @@ class World(object):
     def _endGame(self):
         print("End game")
         self._gameIsFinished = True
+
+    def _setNames(self, teamName, characterNames):
+        self._teamName = teamName
+        self._characterNames = characterNames
 
     def getTeam(self, teamId) -> Team:
         '''

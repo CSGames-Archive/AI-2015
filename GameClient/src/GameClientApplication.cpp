@@ -39,6 +39,7 @@ void GameClientApplication::createScene()
 {
 	mCameraMan->getCamera()->setPosition(Vector2(4, 4).toOgreVector3(Ogre::Real(300.0)));
 	mCameraMan->getCamera()->pitch(Ogre::Radian(Ogre::Degree(-90)));
+	mCameraMan->getCamera()->yaw(Ogre::Radian(Ogre::Degree(180)));
 	World::getInstance().createScene();
 }
 

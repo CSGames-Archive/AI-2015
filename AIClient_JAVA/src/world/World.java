@@ -43,6 +43,8 @@ public class World {
 	private boolean gameIsStarted = false;
 	private boolean gameIsFinished = false;
 	private boolean map[][] = null;
+	private String teamName = "No name";
+	private String[] characterNames = {"No name", "No name"};
 
 	/**
 	 * List of all the teams
@@ -63,6 +65,11 @@ public class World {
 		return instance;
 	}
 
+	public void setNames(String teamName, String[] characterNames) {
+		this.teamName = teamName;
+		this.characterNames = characterNames;
+	}
+
 	public void error(String message) {
 		System.out.println(message);
 	}
@@ -71,8 +78,6 @@ public class World {
 		yourId = id;
 		System.out.println("Join game with id:" + yourId);
 
-		String teamName = "java team" + id;
-		String[] characterNames = { "java king" + id, "java soldier" + id };
 		AddPlayerEvent event = new AddPlayerEvent(teamName, characterNames);
 		QueueController.getInstance().addOutgoingEvent(event);
 	}
