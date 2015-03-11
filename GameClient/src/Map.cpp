@@ -101,10 +101,9 @@ Vector2 downPosition(const Vector2& position)
 	return Vector2(position.x, position.y-1);
 }
 
-Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& currentPosition, const Vector2& lastPosition)
+Vector2 Map::calculateNextStep(const Vector2& currentPosition, const Vector2& targetPosition, const Vector2& lastPosition)
 {
 	int scores[4];
-	Vector2 positions[4];
 
 	// Init scores
 	for(int index = 0; index < 4; ++index)
@@ -112,52 +111,35 @@ Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& cur
 		scores[index] = 0;
 	}
 
+	Vector2 positions[4];
+
 	// Generate position
 	positions[0] = leftPosition(currentPosition);
 	positions[1] = rightPosition(currentPosition);
 	positions[2] = upPosition(currentPosition);
 	positions[3] = downPosition(currentPosition);
 
-	//Remove old position from choice
-	if(lastPosition.x < currentPosition.x)
+	for(int index = 0; index < 4; ++index)
 	{
-		scores[0] = MAP_WIDTH + MAP_HEIGHT -1;
-	}
-	else if(lastPosition.x > currentPosition.x)
-	{
-		scores[1] = MAP_WIDTH + MAP_HEIGHT -1;
-	}
-	else if(lastPosition.y > currentPosition.y)
-	{
-		scores[2] = MAP_WIDTH + MAP_HEIGHT -1;
-	}
-	else if(lastPosition.y < currentPosition.y)
-	{
-		scores[3] = MAP_WIDTH + MAP_HEIGHT -1;
+		scores[index] = calculateScore(positions[index], targetPosition, lastPosition);
+		if(scores[index] != -1)
+		{
+			scores[index] += calculateLowestDirectionScore(positions[index], targetPosition, lastPosition);
+		}
 	}
 
-	//Check all suround tile if empty
-	if(scores[0] == 0)
-		scores[0] = calculateScore(positions[0], targetPosition);
-
-	if(scores[1] == 0)
-		scores[1] = calculateScore(positions[1], targetPosition);
-
-	if(scores[2] == 0)
-		scores[2] = calculateScore(positions[2], targetPosition);
-
-	if(scores[3] == 0)
-		scores[3] = calculateScore(positions[3], targetPosition);
-
-	int lowestScore = MAP_HEIGHT + MAP_WIDTH;
+	int lowestScore = -1;
 	int lowestScoreIndex = -1;
 
 	for(int index = 0; index < 4; ++index)
 	{
-		if(scores[index] < lowestScore)
+		if(scores[index] != -1)
 		{
-			lowestScore = scores[index];
-			lowestScoreIndex = index;
+			if(scores[index] < lowestScore || lowestScore == -1)
+			{
+				lowestScore = scores[index];
+				lowestScoreIndex = index;
+			}
 		}
 	}
 
@@ -167,10 +149,38 @@ Vector2 Map::calculateNextStep(const Vector2& targetPosition, const Vector2& cur
 	return positions[lowestScoreIndex];
 }
 
-int Map::calculateScore(const Vector2& position, const Vector2& targetPosition)
+int Map::calculateLowestDirectionScore(const Vector2& position, const Vector2& targetPosition, const Vector2& lastPosition)
+{
+	int scores[4];
+
+	scores[0] = calculateScore(leftPosition(position), targetPosition, lastPosition);
+	scores[1] = calculateScore(rightPosition(position), targetPosition, lastPosition);
+	scores[2] = calculateScore(upPosition(position), targetPosition, lastPosition);
+	scores[3] = calculateScore(downPosition(position), targetPosition, lastPosition);
+
+	int lowestScore = -1;
+
+	for(int index = 0; index < 4; ++index)
+	{
+		if(scores[index] != -1)
+		{
+			if(scores[index] < lowestScore || lowestScore == -1)
+			{
+				lowestScore = scores[index];
+			}
+		}
+	}
+
+	return lowestScore;
+}
+
+int Map::calculateScore(const Vector2& position, const Vector2& targetPosition, const Vector2& lastPosition)
 {
 	if(!isTileEmpty(position))
-		return MAP_HEIGHT + MAP_WIDTH;
+		return -1;
+
+	if(position == lastPosition)
+		return HIGHEST_SCORE;
 
 	return std::abs(position.x - targetPosition.x) + std::abs(position.y - targetPosition.y);
 }
@@ -260,20 +270,20 @@ Vector2 Map::getStartingPosition(int teamId, int characterId)
 		else if(characterId == 1)
 		{
 			startingPosition.x = MAP_WIDTH-1;
-			startingPosition.y = MAP_WIDTH-1;
+			startingPosition.y = 0;
 		}
 	}
 	else if(teamId == 3)
 	{
 		if(characterId == 0)
 		{
-			startingPosition.x = 0;
+			startingPosition.x = MAP_WIDTH-1;
 			startingPosition.y = MAP_WIDTH-1;
 		}
 		else if(characterId == 1)
 		{
-			startingPosition.x = MAP_WIDTH-1;
-			startingPosition.y = 0;
+			startingPosition.x = 0;
+			startingPosition.y = MAP_WIDTH-1;
 		}
 	}
 	return startingPosition;

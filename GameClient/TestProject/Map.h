@@ -19,6 +19,7 @@
 
 #define MAP_TILE_SIZE 20
 
+#define HIGHEST_SCORE MAP_HEIGHT + MAP_WIDTH
 
 namespace MapEntity
 {
@@ -111,7 +112,8 @@ public:
 	void setTile(const Vector2& position, MapEntity::MapEntity value, int teamId, int characterId);
 	
 	Vector2 calculateNextStep(const Vector2& currentPosition, const Vector2& targetPosition, const Vector2& lastPosition);
-	int calculateScore(const Vector2& position, const Vector2& targetPosition);
+	int calculateLowestDirectionScore(const Vector2& position, const Vector2& targetPosition, const Vector2& lastPosition);
+	int calculateScore(const Vector2& position, const Vector2& targetPosition, const Vector2& lastPosition);
 	bool isTileEmpty(const Vector2& position);
 	bool isPositionValid(const Vector2& position);
 	Vector2 leftTile(const Vector2& position);

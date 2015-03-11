@@ -140,7 +140,7 @@ void Character::updateBody(Ogre::Real deltaTime)
 				}
 				else
 				{
-					Vector2 newPosition = Map::getInstance().calculateNextStep(targetPosition, position, lastPosition);
+					Vector2 newPosition = Map::getInstance().calculateNextStep(position, targetPosition, lastPosition);
 
 					if(newPosition == position)
 					{

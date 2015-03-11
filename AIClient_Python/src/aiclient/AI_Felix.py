@@ -34,8 +34,8 @@ class MyAI(AIDefault):
         ':type tank1: Character'
         self.otherTeam = self.world.getOpponentTeam()
         ':type otherTeam: Team'
-        self.oponent1 = self.otherTeam.getSecondCharacter()
-        self.oponent2 = self.otherTeam.getFirstCharacter()
+        self.oponent1 = self.otherTeam.getFirstCharacter()
+        self.oponent2 = self.otherTeam.getSecondCharacter()
         ':type oponent: Character'
         self.firstTick = False
 
