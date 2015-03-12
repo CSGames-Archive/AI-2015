@@ -175,19 +175,8 @@ MapDirection::MapDirection Missile::getDirection()
 
 void Missile::hitWall()
 {
-	MapTile* tile = Map::getInstance().getTile(position);
-	
-	MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, 0, 0, tile->teamId, tile->characterId);
+	MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, 0, 0, teamId, characterId);
 	QueueController::getInstance().addEvent(newEvent);
-
-	if(tile->type == MapEntity::CHARACTER || tile->type == MapEntity::CHARACTER_MINE)
-	{
-
-	}
-	else
-	{
-		Map::getInstance().setTile(position, MapEntity::EMPTY,0, 0);
-	}
 }
 
 Vector2 Missile::getPosition()

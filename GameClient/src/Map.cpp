@@ -216,35 +216,38 @@ void Map::moveCharacterTile(const Vector2& position, const Vector2& newPosition)
 void Map::moveMissileTile(const Vector2& position, const Vector2& newPosition)
 {
 	MapTile* oldTile = getTile(position);
-	MapTile* newTile = getTile(newPosition);
-
-	if(oldTile->teamId != 0)
+	if(isPositionValid(newPosition))
 	{
-		if (newTile->type == MapEntity::CHARACTER || newTile->type == MapEntity::CHARACTER_MINE)
+		MapTile* newTile = getTile(newPosition);
+
+		if(oldTile->teamId != 0)
 		{
-			MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::CHARACTER, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
-			QueueController::getInstance().addEvent(newEvent);
-		}
-		else if (newTile->type == MapEntity::MINE)
-		{
-			MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::MINE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
-			QueueController::getInstance().addEvent(newEvent);
-			setTile(newPosition, MapEntity::EMPTY, 0, 0);
-		}
-		else if (newTile->type == MapEntity::MISSILE)
-		{
-			MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::MISSILE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
-			QueueController::getInstance().addEvent(newEvent);
-			setTile(newPosition, MapEntity::EMPTY, 0, 0);
-		}
-		else if (newTile->type == MapEntity::BOX)
-		{
-			MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
-			QueueController::getInstance().addEvent(newEvent);
-		}
-		else
-		{
-			setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
+			if (newTile->type == MapEntity::CHARACTER || newTile->type == MapEntity::CHARACTER_MINE)
+			{
+				MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::CHARACTER, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+				QueueController::getInstance().addEvent(newEvent);
+			}
+			else if (newTile->type == MapEntity::MINE)
+			{
+				MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::MINE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+				QueueController::getInstance().addEvent(newEvent);
+				setTile(newPosition, MapEntity::EMPTY, 0, 0);
+			}
+			else if (newTile->type == MapEntity::MISSILE)
+			{
+				MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::MISSILE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+				QueueController::getInstance().addEvent(newEvent);
+				setTile(newPosition, MapEntity::EMPTY, 0, 0);
+			}
+			else if (newTile->type == MapEntity::BOX)
+			{
+				MissileHitEvent* newEvent = new MissileHitEvent(HitEntity::NONE, newTile->teamId, newTile->characterId, oldTile->teamId, oldTile->characterId);
+				QueueController::getInstance().addEvent(newEvent);
+			}
+			else
+			{
+				setTile(newPosition, MapEntity::MISSILE, oldTile->teamId, oldTile->characterId);
+			}
 		}
 	}
 
