@@ -122,13 +122,13 @@ net.createServer(function (socket) {
 			if (client === sender) return;
 			client.write(message + endline);
 		});
-		print('Broadcast - ' + message);
+		// print('Broadcast - ' + message);
 	}
 
 	function send(message, socket) 
 	{
 		socket.write(message + endline)
-		print('Send - ' + message)
+		// print('Send - ' + message)
 	}
 
 	function removeSocket(socket)
