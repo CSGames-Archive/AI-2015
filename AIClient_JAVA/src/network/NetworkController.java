@@ -41,8 +41,7 @@ public class NetworkController {
 			readerThead = new ReaderThread();
 			connected = true;
 		} catch (Exception e) {
-			// TODO make some retry for server connection
-			e.printStackTrace();
+			System.out.println("Error : the GameClient is not started");
 		}
 	}
 

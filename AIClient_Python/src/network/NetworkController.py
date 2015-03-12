@@ -25,20 +25,20 @@ class NetworkController(object):
             self.webSocket.connect((self.HOST, self.PORT))
             self.connected = True
         except:
-            print("Cannot connect to server", sys.exc_info()[0])
+            print("Error the GameClient is not started")
 
     def sendMessage(self, message):
         try:
             self.webSocket.sendall(message.encode())
         except:
-            print("Error while sending to the socket", sys.exc_info()[0])
+            print("Error while sending to the socket")
         
     def readMessage(self):
         try:
             message = self.webSocket.recv(1024)
             return message
         except:
-            print("Error while reading from the socket", sys.exc_info()[0])
+            print("Error while reading from the socket")
             return "".encode()
         
     def init(self):
