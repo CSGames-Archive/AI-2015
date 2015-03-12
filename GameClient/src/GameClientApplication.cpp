@@ -75,7 +75,7 @@ bool GameClientApplication::setup()
 	createScene();
 	createFrameListener();
 
-	//mTrayMgr->hideAll();
+	mTrayMgr->hideAll();
 
 	return true;
 };
