@@ -92,18 +92,10 @@ void Character::setTargetPosition(int x, int z)
 {
 	Vector2 newTarget(x, z);
 
-	if(!(newTarget == targetPosition))
+	if(Map::getInstance().isPositionValid(newTarget) && !(newTarget == targetPosition))
 	{
-		if(x > -1 && x < MAP_HEIGHT)
-		{
-			this->targetPosition.x = x;
-		}
-
-		if(z > -1 && z < MAP_WIDTH)
-		{
-			this->targetPosition.y = z;
-		}
-
+		this->targetPosition.x = x;
+		this->targetPosition.y = z;
 		lastPosition = position;
 	}
 }

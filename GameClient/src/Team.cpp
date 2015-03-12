@@ -81,7 +81,7 @@ bool Team::isAlive()
 void Team::characterHit(int characterId)
 {
 	Character* hitCharacter = getCharacter(characterId);
-	if(hitCharacter->isAlive())
+	if(hitCharacter && hitCharacter->isAlive())
 	{
 		hitCharacter->hit();
 		if(!hitCharacter->isAlive())

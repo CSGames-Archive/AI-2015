@@ -40,7 +40,6 @@ void EventController::dispatchEvent(GameEvent* gameEvent)
 	{
 		error(gameEvent);
 	}
-	//check if game is not started
 	else if(gameEvent->getType() == EventType::DISCONNECT)
 	{
 		disconnect(gameEvent);
@@ -49,7 +48,6 @@ void EventController::dispatchEvent(GameEvent* gameEvent)
 	{
 		addTeam(gameEvent);
 	}
-	//check if game is started
 	else if(gameEvent->getType() == EventType::MOVE_CHARACTER)
 	{
 		moveCharacter(gameEvent);
@@ -104,7 +102,16 @@ void EventController::moveCharacter(GameEvent* gameEvent)
 	std::cout << "Team " << moveEvent->teamId << " move character " << moveEvent->characterId << 
 				 " to (" << moveEvent->positionX << "," << moveEvent->positionZ << ")" << std::endl;
 
-	World::getInstance().getTeam(moveEvent->teamId)->getCharacter(moveEvent->characterId)->setTargetPosition(moveEvent->positionX, moveEvent->positionZ);
+	Team* team = World::getInstance().getTeam(moveEvent->teamId);
+
+	if (team)
+	{
+		Character* character= team->getCharacter(moveEvent->characterId);
+		if(character)
+		{
+			character->setTargetPosition(moveEvent->positionX, moveEvent->positionZ);
+		}
+	}
 }
 
 void EventController::dropMine(GameEvent* gameEvent)
@@ -112,7 +119,15 @@ void EventController::dropMine(GameEvent* gameEvent)
 	DropMineEvent* dropMineEvent = static_cast<DropMineEvent*>(gameEvent);
 	std::cout << "Team " << dropMineEvent->teamId << " character " << dropMineEvent->characterId << " drop a mine" << std::endl;
 
-	World::getInstance().getTeam(dropMineEvent->teamId)->getCharacter(dropMineEvent->characterId)->askMine();
+	Team* team = World::getInstance().getTeam(dropMineEvent->teamId);
+	if(team)
+	{
+		Character* character = team->getCharacter(dropMineEvent->characterId);
+		if(character)
+		{
+			character->askMine();
+		}
+	}
 }
 
 void EventController::mineHit(GameEvent* gameEvent)
@@ -130,7 +145,15 @@ void EventController::throwMissile(GameEvent* gameEvent)
 	ThrowMissileEvent* throwMissileEvent = static_cast<ThrowMissileEvent*>(gameEvent);
 	std::cout << "Team " << throwMissileEvent->teamId << " character " << throwMissileEvent->characterId << " throw a missile" << std::endl;
 
-	World::getInstance().getTeam(throwMissileEvent->teamId)->getCharacter(throwMissileEvent->characterId)->askMissile(throwMissileEvent->direction);
+	Team* team = World::getInstance().getTeam(throwMissileEvent->teamId);
+	if(team)
+	{
+		Character* character = team->getCharacter(throwMissileEvent->characterId);
+		if(character)
+		{
+			character->askMissile(throwMissileEvent->direction);
+		}
+	}
 }
 
 void EventController::missileHit(GameEvent* gameEvent)
@@ -148,35 +171,51 @@ void EventController::missileHit(GameEvent* gameEvent)
 	}
 	else if(missileHitEvent->entity == HitEntity::MISSILE)
 	{
-		Character* character = world.getTeam(missileHitEvent->hitTeamId)->getCharacter(missileHitEvent->hitCharacterId);
-		Missile* missile = character->getMissile();
-
-		bool backfire = false;
-		// We shot near our position
-		if(missile->getPosition().distance(character->getPosition()) < 2)
+		Team* team = world.getTeam(missileHitEvent->hitTeamId);
+		if(team)
 		{
-			backfire = true;
+			Character* character = team->getCharacter(missileHitEvent->hitCharacterId);
+			if(character)
+			{
+				Missile* missile = character->getMissile();
+				if(missile)
+				{
+					bool backfire = false;
+					// We shot near our position
+					if(missile->getPosition().distance(character->getPosition()) < 2)
+					{
+						backfire = true;
+					}
+					world.missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, backfire);
+				}
+			}
 		}
-
-
-		world.missileHit(missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, backfire);
 	}
 	else if(missileHitEvent->entity == HitEntity::NONE)
 	{
 		//TODO: add something with the point sytem
 	}
 
-	Character* character = world.getTeam(missileHitEvent->originTeamId)->getCharacter(missileHitEvent->originCharacterId);
-	Missile* missile = character->getMissile();
-
 	bool backfire = false;
-	// We shot near our position
-	if(missile->getPosition().distance(character->getPosition()) < 2)
-	{
-		backfire = true;
-	}
 
-	World::getInstance().missileHit(missileHitEvent->originTeamId, missileHitEvent->originCharacterId, backfire);
+	Team* team = world.getTeam(missileHitEvent->originTeamId);
+	if(team)
+	{
+		Character* character = team->getCharacter(missileHitEvent->originCharacterId);
+		if(character)
+		{
+			Missile* missile = character->getMissile();
+			if(missile)
+			{
+				// We shot near our position
+				if(missile->getPosition().distance(character->getPosition()) < 2)
+				{
+					backfire = true;
+				}
+				World::getInstance().missileHit(missileHitEvent->originTeamId, missileHitEvent->originCharacterId, backfire);
+			}
+		}
+	}
 
 	std::string message = NetUtility::generateMissileHitMessage(int(missileHitEvent->entity), missileHitEvent->hitTeamId, missileHitEvent->hitCharacterId, missileHitEvent->originTeamId, missileHitEvent->originCharacterId, backfire);
 	QueueController::getInstance().addMessage(message);

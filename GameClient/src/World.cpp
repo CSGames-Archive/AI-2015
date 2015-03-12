@@ -98,6 +98,9 @@ void World::createScene()
 
 void World::addTeam(int teamId, std::string teamName, std::string characterNames[MAX_CHARACTER_PER_TEAM])
 {
+	if(teamId == 0 || teamCount > 1)
+		return;
+
 	Team* team = new Team(teamName, teamId);
 	teams[teamCount++] = team;
 
@@ -145,12 +148,7 @@ void World::addTeam(int teamId, std::string teamName, std::string characterNames
 
 void World::removeTeam(int teamId)
 {
-	//TODO: dont delete just disable and kill it
-	Team* team = getTeam(teamId);
-	if(team)
-	{
-		delete team;
-	}
+	//Do nothing just wait for the game to end
 }
 
 Team* World::getTeam(int teamId)
@@ -220,7 +218,7 @@ void World::sendAllPosition()
 void World::characterHit(int hitTeamId, int hitCharacterId)
 {
 	Team* hitTeam = getTeam(hitTeamId);
-	if(hitTeam->isAlive())
+	if(hitTeam && hitTeam->isAlive())
 	{
 		hitTeam->characterHit(hitCharacterId);
 		if(!hitTeam->isAlive())
@@ -236,7 +234,15 @@ void World::characterHit(int hitTeamId, int hitCharacterId)
 
 void World::mineHit(int mineTeamId, int mineCharacterId)
 {
-	getTeam(mineTeamId)->getCharacter(mineCharacterId)->getMine()->setVisible(false);
+	Team* team = getTeam(mineTeamId);
+	if(team)
+	{
+		Character* character = team->getCharacter(mineCharacterId);
+		if(character)
+		{
+			character->getMine()->setVisible(false);
+		}
+	}
 }
 
 void World::missileHit(int missileTeamId, int missileCharacterId, bool backfire)
