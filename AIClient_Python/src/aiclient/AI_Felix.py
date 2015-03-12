@@ -12,7 +12,6 @@ from aiclient.AIDefault import AIDefault
 Attack and follow strategy
 '''
 class MyAI(AIDefault):
-    queueController = Singleton(QueueController)
     world = Singleton(World)
     otherTeam = None
     oponent1 = None

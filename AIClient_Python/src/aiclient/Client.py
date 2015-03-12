@@ -14,7 +14,11 @@ from aiclient.AI_Felix import MyAI
 eventController = Singleton(EventController)
 world = Singleton(World)
 netController = Singleton(NetworkController)
+
 ai = MyAI()
+'''
+If your create a new class for the ai, replace it here
+'''
 
 class Client(object):
     '''

@@ -58,4 +58,24 @@ public class Team {
 	public List<Character> getCharacters() {
 		return characters;
 	}
+	
+	/**
+	 * Return the first character of the team
+	 * Exemple:
+	 * aCharacter = aTeam.getFirstCharacter()
+	 * @return Character
+	 */
+	public Character getFirstCharacter() {
+        return getCharacter(0);
+	}
+
+	/**
+	 * Return the second character of the team
+	 * Exemple:
+	 * aCharacter = aTeam.getFirstCharacter()
+	 * @return Character
+	 */
+	public Character getSecondCharacter() {
+        return getCharacter(1);
+	}
 }

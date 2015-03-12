@@ -31,7 +31,11 @@ class Client {
 		NetworkController networkController = NetworkController.getInstance();
 		EventController eventController = EventController.getInstance();
 		World world = World.getInstance();
-		AI ai = new AI();
+		
+		/**
+		 * If your create a new class for the ai, replace it here
+		 */
+		SamAI ai = new SamAI();
 
 		ai.setNames();
 		networkController.init();

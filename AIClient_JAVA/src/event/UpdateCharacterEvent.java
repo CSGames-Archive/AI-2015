@@ -14,8 +14,7 @@
 
 package event;
 
-import java.awt.Point;
-
+import mathUtils.Vector2;
 import world.World;
 
 public class UpdateCharacterEvent extends IngoingEvent {
@@ -26,7 +25,7 @@ public class UpdateCharacterEvent extends IngoingEvent {
 	public void execute() {
 		//System.out.println("Move character:" + characterID + " from " + teamID
 		//		+ " to " + positionX + "," + positionY);
-		Point position = new Point(positionX, positionY);
+		Vector2 position = new Vector2(positionX, positionY);
 		World.getInstance().getTeam(teamID).getCharacter(characterID)
 				.updateInfo(position);
 	}

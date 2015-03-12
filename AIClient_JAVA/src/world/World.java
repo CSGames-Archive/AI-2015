@@ -181,7 +181,7 @@ public class World {
 			for (Iterator<Character> characterIterator = team.getCharacters()
 					.iterator(); characterIterator.hasNext();) {
 				Character character = characterIterator.next();
-				if (character.getPosition() == position) {
+				if (character.getPosition().equals(position)) {
 					return true;
 				}
 			}
@@ -203,7 +203,7 @@ public class World {
 			for (Iterator<Character> characterIterator = team.getCharacters()
 					.iterator(); characterIterator.hasNext();) {
 				Character character = characterIterator.next();
-				if (character.getMissile().getPosition() == position && character.getMissile().isReady() == false) {
+				if (character.getMissile().getPosition().equals(position) && character.getMissile().isReady() == false) {
 					return true;
 				}
 			}

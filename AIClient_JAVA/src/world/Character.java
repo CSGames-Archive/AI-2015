@@ -14,10 +14,8 @@
 
 package world;
 
-import java.awt.Point;
-
 import mathUtils.Direction;
-
+import mathUtils.Vector2;
 import event.DropMineEvent;
 import event.MoveCharacterEvent;
 import event.QueueController;
@@ -27,7 +25,7 @@ import event.ShootMissileEvent;
  * Class that contain all the information about the character
  */
 public class Character {
-	private Point position;
+	private Vector2 position;
 	private int id;
 	private int life;
 	private Mine mine = new Mine();
@@ -35,11 +33,11 @@ public class Character {
 
 	public Character(int id) {
 		this.id = id;
-		this.position = new Point(0, 0);
+		this.position = new Vector2(0, 0);
 		this.life = 3;
 	}
 
-	public void updateInfo(Point position) {
+	public void updateInfo(Vector2 position) {
 		this.position = position;
 	}
 	
@@ -69,7 +67,7 @@ public class Character {
 	 * Exemple :
 	 *		character.move(new Point(5,5));
 	 */	
-	public void move(Point position) {
+	public void move(Vector2 position) {
 		QueueController queueController = QueueController.getInstance();
 		MoveCharacterEvent event = new MoveCharacterEvent(id, position);
 		queueController.addOutgoingEvent(event);
@@ -113,7 +111,7 @@ public class Character {
 	 * 
 	 * @return the id of this team
 	 */
-	public Point getPosition() {
+	public Vector2 getPosition() {
 		return position;
 	}
 

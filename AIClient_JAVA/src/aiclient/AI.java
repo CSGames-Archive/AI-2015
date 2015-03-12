@@ -14,9 +14,8 @@
 
 package aiclient;
 
-import java.awt.Point;
-
 import mathUtils.Direction;
+import mathUtils.Vector2;
 import world.Character;
 import world.World;
 
@@ -43,18 +42,18 @@ public class AI {
 	 */
 	World world = World.getInstance();
 
-	Point position1 = new Point(0, 0);
-	Point position2 = new Point(8, 0);
-	Point position3 = new Point(0, 8);
-	Point position4 = new Point(8, 8);
+	Vector2 position1 = new Vector2(0, 0);
+	Vector2 position2 = new Vector2(8, 0);
+	Vector2 position3 = new Vector2(0, 8);
+	Vector2 position4 = new Vector2(8, 8);
 
 	/**
 	 * Function call to set the name of the team and characters
      * (Cannot be deleted)
 	 */
 	public void setNames() {
-		String teamName = "Java Team";
-		String[] characternames = {"WALL-E", "Eve"};
+		String teamName = "No name";
+		String[] characternames = {"No name", "No name"};
 		world.setNames(teamName, characternames);
 	}
 
