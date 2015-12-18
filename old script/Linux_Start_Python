@@ -1,8 +1,0 @@
-#!/bin/bash
-# Startup script for linux
-
-export PYTHONPATH=${PYTHONPATH}:~/Coding/ai_cs_games/AIClient_Python/src/
-
-cd AIClient_Python/src/aiclient 
-gnome-terminal -x python3 -u Client.py
-

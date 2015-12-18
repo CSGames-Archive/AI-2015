@@ -1,8 +1,0 @@
-#!/bin/bash
-# Startup script for linux
-
-cd AIClient
-gnome-terminal -x ./AIClient
-gnome-terminal -x ./AIClient
-cd ..
-
