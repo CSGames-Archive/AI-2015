@@ -1,6 +1,8 @@
 # Readme
 This contains the source for the CS Games 2015 AI competition which was a tank battle. It has a game server 'GameClient' developped in C++ along with clients developped in both Python and Java.
 
+It's shared for educationnal purpose and for fun.
+
 ## Structure
 
 * *AIClient* Old client developped in C++, not maintained
@@ -18,7 +20,7 @@ Some years ago this competition was one of the fierce one. Computer science guy 
 Languages: Java, Python
 
 ## What does it looks like ?
-[Sample screenshot](screenshot.png)
+![Sample screenshot](screenshot.png)
 
 ## User manual
 
